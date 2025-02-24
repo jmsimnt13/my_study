@@ -242,3 +242,147 @@ case 7:
 default:
     print("Меня компилятор заставил...")
 }
+
+
+// lvl_3
+// 1. Классификаиця чисел - положительное/отрицательнное, четное/нечетное, простое/составное
+
+print("Введи число для его классификации: ", terminator: "")
+if let inputNum = readLine(), let num = Int(inputNum)
+{
+    if num > 0 && num != 0
+    {
+        print("Положительное, ", terminator: "")
+    }
+    else
+    {
+        print("Отрицательное, ", terminator: "")
+    }
+    if num % 2 == 0
+    {
+        print("четное, ", terminator: "")
+    }
+    else
+    {
+        print("нечетное, ", terminator: "")
+    }
+    
+    // без темы циклы сложно представить как реализовать проверку на простоту числа, пока оставил как есть
+}
+
+// 2. Угадай число
+
+print("""
+Попробуйте угадать число которое я загадал от 1 до 10,
+а я подскажу угадали ли вы!
+""")
+// Генерирую случайное число
+let randomNumber = Int.random(in: 1...10)
+// Прошу пользователя ввести число
+if let input = readLine(), let guessNumber = Int(input)
+{
+    if guessNumber == randomNumber
+    {
+        print("Вы угадали!")
+    }
+    else if guessNumber < randomNumber
+    {
+        print("Меньше")
+    }
+    else
+    {
+        print("Больше")
+    }
+}
+
+// 3. Кассовый аппарат
+
+print("Введите сумму покупки: ", terminator: "")
+guard let inputTotal = readLine(), let total = Int(inputTotal) else
+{
+    print("То, что введено, не подходит...")
+    exit(0)
+}
+print("Введите переданную клиентом сумму: ", terminator: "")
+guard let inputCash = readLine(), let cash = Int(inputCash) else
+{
+    print("То, что введено, не подходит...")
+    exit(0)
+}
+if cash >= total
+{
+    print("Сумма сдачи с \(cash) : \(cash - total)")
+}
+else
+{
+    print("Клиент внес недостаточно!")
+}
+
+// 4. Определние знака зодиака
+/*
+ Овен: 21 марта — 19 апреля. 2
+ Телец: 20 апреля — 20 мая. 2
+ Близнецы: 21 мая — 20 июня. 2
+ Рак: 21 июня — 22 июля. 2
+ Лев: 23 июля — 22 августа. 2
+ Дева: 23 августа — 22 сентября. 2
+ Весы: 23 сентября — 22 октября. 2
+ Скорпион: 23 октября — 21 ноября. 2
+ Стрелец: 22 ноября — 21 декабря. 2
+ Козерог: 22 декабря — 19 января. 2
+ Водолей: 20 января — 18 февраля. 2
+ Рыбы: 19 февраля — 20 марта. 2
+ */
+
+print("Введите число дня своего рождения: ", terminator: "")
+guard let inputDay = readLine(), let dayOfBirth = Int(inputDay), (dayOfBirth > 0 && dayOfBirth <= 31) else
+{
+    print("То, что ты ввел не подходит...")
+    exit(0)
+}
+print("Введите число месяца своего рождения: ", terminator: "")
+guard let inputMonth = readLine(), let monthOfBirth = Int(inputMonth), (monthOfBirth > 0 && monthOfBirth <= 12) else
+{
+    print("То, что ты ввел не подходит...")
+    exit(0)
+}
+switch (dayOfBirth, monthOfBirth)
+{
+case (21...31, 3), (1...19, 4): print("Вы Овен")
+case (20...30, 4), (1...20, 5): print("Вы Телец")
+case (21...31, 5), (1...20, 6): print("Вы Близнецы")
+case (21...30, 6), (1...22, 7): print("Вы Рак")
+case (23...31, 7), (1...22, 8): print("Вы Лев")
+case (23...31, 8), (1...22, 9): print("Вы Дева")
+case (23...30, 9), (1...22, 10): print("Вы Весы")
+case (23...31, 10), (1...21, 11): print("Вы Скорпион")
+case (22...30, 11), (1...21, 12): print("Вы Стрелец")
+case (22...31, 12), (1...19, 1): print("Вы Козерог")
+case (20...31, 1), (1...18, 2): print("Вы Водолей")
+case (19...29, 2), (1...20, 3): print("Вы Рыбы")
+default: print("Дата некорректна")
+}
+
+// 5. Определение високосного года
+
+print("Введите число года для проверки его на високосность: ", terminator: "")
+if let inputYear = readLine(), let year = Int(inputYear), year > 0
+{
+    if year % 400 == 0
+    {
+        print("\(year) високосный!")
+    }
+    else if year % 4 == 0
+    {
+        print("\(year) високосный!")
+    }
+    else if year % 100 == 0
+    {
+        print("\(year) не високосный!")
+    }
+    else
+    {
+        print("\(year) не високосный")
+    }
+}
+
