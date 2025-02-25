@@ -386,3 +386,158 @@ if let inputYear = readLine(), let year = Int(inputYear), year > 0
     }
 }
 
+
+// lvl_dop
+// 1. Классификация треугольника по углам
+
+// Запрашиваем значения для углов
+// 1 угол
+print("Введите первый угол треугольника: ", terminator: "")
+guard let inputAngle = readLine(), let angleOne = Int(inputAngle), (angleOne > 0 && angleOne < 180 ) else
+{
+    print("То, что ты ввел не подходит...")
+    exit(0)
+}
+// 2 угол
+print("Введите первый угол треугольника: ", terminator: "")
+guard let inputAngle = readLine(), let angleTwo = Int(inputAngle), (angleTwo > 0 && angleTwo < 180 ) else
+{
+    print("То, что ты ввел не подходит...")
+    exit(0)
+}
+// 3 угол
+print("Введите первый угол треугольника: ", terminator: "")
+guard let inputAngle = readLine(), let angleThree = Int(inputAngle), (angleThree > 0 && angleThree < 180 ) else
+{
+    print("То, что ты ввел не подходит...")
+    exit(0)
+}
+
+// Определяем существование введенного треугольника
+let triangle = angleOne + angleTwo + angleThree
+if triangle <= 180
+{
+    switch (angleOne, angleTwo, angleThree)
+    {
+    case (1..<90, 1..<90, 1..<90): print("Треугольник остроугольный!")
+    case (90,_,_), (_,90,_), (_,_,90): print("Треугольник прямоугольный!")
+    case (91..<180,_,_), (_,91..<180,_), (_,_,91..<180): print("Треугольник тупой!")
+    default: print("Затрудняюсь определить такой треугольник!")
+    }
+}
+else
+{
+    print("Треугольник не существует!!!")
+    exit(0)
+}
+
+// 2. Опредление дня недели по дате
+
+// print("Введите дату в формате д.м.г: ", terminator: "")
+// if let inputDate = readLine(), let date =
+// Испытываю небольшой затуп с работой с внутренними методами для работы с датой
+// upd 25/02/25 попытка номер два
+
+print("Я помогу определить день недели по дате, которую вы введете!")
+print("Для начала введите год: ", terminator: "")
+if let inputYear = readLine(), let year = Int(inputYear), year > 0
+{
+    print("Теперь введите месяц года от 1 до 12: ", terminator: "")
+    if let inputMonth = readLine(), let month = Int(inputMonth), (month >= 1 && month <= 12)
+    {
+        print("Теперь введите день от 1 до 31: ", terminator: "")
+        if let inputDay = readLine(), let day = Int(inputDay), (day >= 1 && day <= 31)
+        {
+            var dateParts = DateComponents()
+            dateParts.year = year
+            dateParts.month = month
+            dateParts.day = day
+            
+            // Из введенных компонентов получаем дату в необходимом для обработки формате
+            if let date = Calendar.current.date(from: dateParts)
+            {
+                // Запрашиваем и получаем с помощью этой даты день недели
+                let dayOfWeek = Calendar.current.component(.weekday, from: date)
+                // Создаем массив с днями недели для сопоставления полученного значения от 0 до 7 с
+                // названием дня недели для вывода на экран пользователю
+                // по григориански неделя начинается с воскресенья
+                let wholeWeek = ["", "Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"]
+                // Вывод результата
+                print("День недели, соответствующий введенной дате: \(wholeWeek[dayOfWeek])")
+                
+            }
+        }
+    }
+}
+
+// 3. Проверка полиндрома
+
+print("Введите строку для проверки на полиндром: ", terminator: "")
+if let inputStr = readLine()
+{
+    let str = inputStr
+    if str == String(str.reversed())
+    {
+        print("Это полиндром!")
+    }
+    else
+    {
+        print("Это не полиндром!")
+    }
+}
+
+// 4. Определение максимального числа
+
+print("Я определю, какое из трех чисел максимальное!")
+print("Введите первое число: ", terminator: "")
+if let inputNum1 = readLine(), let num1 = Int(inputNum1)
+{
+    print("Введите второе число: ", terminator: "")
+    if let inputNum2 = readLine(), let num2 = Int(inputNum2)
+    {
+        print("Введите третье число: ", terminator: "")
+        if let inputNum3 = readLine(), let num3 = Int(inputNum3)
+        {
+            if num1 >= num2 && num1 >= num3
+            {
+                print("Максимальное число \(num1)")
+            }
+            else if num2 >= num1 && num2 >= num3
+            {
+                print("Максимальное число \(num2)")
+            }
+            else
+            {
+                print("Максимальное число \(num3)")
+            }
+        }
+    }
+}
+
+// 5. Конвертер валют (RUB, USD, EUR)
+
+let exchValues: [String: [String: Double]] =
+[
+    "RUB": ["USD": 0.011, "EUR": 0.010],
+    "USD": ["RUB": 86.63, "EUR": 0.95],
+    "EUR": ["USD": 1.04, "RUB": 90.94]
+]
+
+print("Введите сумму для конвертации: ", terminator: "")
+if let inputTotal = readLine(), let total = Double(inputTotal), total > 0
+{
+    print("Введите исходную валюту из USD, EUR, RUB: ", terminator: "")
+    if let inputSourceCurrency = readLine(), !inputSourceCurrency.isEmpty
+    {
+        print("Введите валюту, в которую требуется перевод (USD, EUR, RUB):", terminator: "")
+        if let inputTargetCurrency = readLine(), !inputTargetCurrency.isEmpty
+        {
+            if let variantsForSource = exchValues[inputSourceCurrency.uppercased()],
+               let variantToTarget = variantsForSource[inputTargetCurrency.uppercased()]
+            {
+                let converted = total * variantToTarget
+                print("\(total) \(inputSourceCurrency) = \(converted) \(inputTargetCurrency)")
+            }
+        }
+    }
+}
