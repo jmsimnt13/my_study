@@ -655,7 +655,7 @@ for number in 2...100
 }
 print("")
 
-// 4.
+// 4. Обратный отсчет
 
 print("Введите число до 50 и я нарисую обратный отсчет:", terminator: " ")
 if let inputNum = readLine(), let num = Int(inputNum), (num > 1 && num <= 50)
@@ -667,7 +667,7 @@ if let inputNum = readLine(), let num = Int(inputNum), (num > 1 && num <= 50)
     print("")
 }
 
-// 5.
+// 5. Сумма цифр числа
 
 print("Введите число и я вычислю сумму его цифр:", terminator: " ")
 if let inputNum = readLine(), let num = Int(inputNum)
@@ -682,4 +682,110 @@ if let inputNum = readLine(), let num = Int(inputNum)
         absoluteNum /= 10
     }
     print(sum)
+}
+
+// lvl_3
+// 1. Числа Фибоначчи
+
+print("Введите сколько чисел Фибоначчи хотите вывести: ", terminator: "")
+if let inputNum = readLine(), let num = Int(inputNum), (num > 0 && num <= 20)
+{
+    var fiboPrev = 1
+    var fiboActual = 0
+    
+    for _ in 1...num
+    {
+        let temp = fiboPrev + fiboActual
+        fiboPrev = fiboActual
+        fiboActual = temp
+        print(fiboActual)
+    }
+}
+
+// 2. Генерация случайных чисел без повторения
+
+print("Введите сколько уникальных чисел от 1 до 100 нужно сгенерировать")
+if let inputNum = readLine(), let num = Int(inputNum)
+{
+    var uniqueNumbers = [Int]()
+    
+    while uniqueNumbers.count < num
+    {
+        let randNum = Int.random(in: 1...100)
+        
+        if !uniqueNumbers.contains(randNum)
+        {
+            uniqueNumbers.append(randNum)
+        }
+    }
+    
+    print(uniqueNumbers)
+}
+
+// 3. Поиск максимального элемента в массиве
+
+// Создадим массив и заполним его случайными числами
+let arSize = 20
+var numbers = [Int]()
+for _ in 0..<arSize
+{
+    let randomValue = Int.random(in: 1...1000)
+    numbers.append(randomValue)
+}
+
+print("У нас получился массив: \(numbers)")
+
+// С помощью цикла определим максимальное значение в массиве
+var maxNum = numbers[0] // пусть первый элемент будет максиамльным
+for number in numbers
+{
+    if number > maxNum
+    {
+        maxNum = number
+    }
+}
+print("Найденное максиамльное значение: \(maxNum)")
+
+// 4. Переворот строки
+
+print("Введите строку для переворота:")
+if let inputStr = readLine(), !inputStr.isEmpty
+{
+    var reversedStr = "" // Строка для сохранения результата
+    
+    // Цикл для прохода строки
+    for char in inputStr.reversed()
+    {
+        reversedStr.append(char) // Добавляем каждый символ в новую строку
+    }
+    
+    print("Ваша строка наоборот: \(reversedStr)")
+}
+else
+{
+    print("Пустой ввод?")
+}
+
+// 5. Проверка на полиндром
+
+print("Введите строку для проверки на полиндром: ", terminator: "")
+if let inputStr = readLine(), !inputStr.isEmpty
+{
+    var reversedStr = "" // Сохраняем исходную строку для посимвольного сравнения
+    
+    // Цикл для прохода строки и записи ее наоборот
+    for char in inputStr.reversed()
+    {
+        reversedStr.append(char) // Формируем посимвольно строку наоборот
+    }
+    
+    if inputStr == reversedStr
+    {
+        print("Поздравляем! У вас полиндром!")
+    }
+    else
+    {
+        print("Увы, это не полиндром!")
+    }
+    
 }
