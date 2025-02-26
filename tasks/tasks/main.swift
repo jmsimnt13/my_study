@@ -604,20 +604,82 @@ print("Выводим все нечетные числа до 50:")
 
 
 // lvl_2
-// 1.
+// 1. Таблица умножения до 10
 
+print("Таблица умножения:")
+for index1 in 1...10
+{
+    for index2 in 1...10
+    {
+        let result = index1 * index2
+        print("\(index1) * \(index2) = \(result)")
+    }
+}
 
+// 2. Поиск делителей числа
 
-// 2.
+print("Введите число N до 100, а я найду все его делители: ", terminator: "")
+if let inputNumber = readLine(), let num = Int(inputNumber), (num > 1 && num <= 100)
+{
+    print("Число \(num) делится на:")
+    for index in 2...num
+    {
+        if num % index == 0
+        {
+            print(index)
+        }
+    }
+}
 
+// 3. Поиск простых чисел
 
-
-// 3.
-
-
+print("Простые числа до 100")
+for number in 2...100
+{
+    var isPrime = true
+    // Проверим делители числа
+    for divider in 2..<number // ищем делители исключая 1 и само число
+    {
+        if number % divider == 0 // и если нашли, то число точно не простое
+        {
+            isPrime = false
+            break // прерываем дальнешие поиски
+        }
+    }
+    
+    // при это если флаг не поменялся за время цикла выводим полученное число
+    if isPrime
+    {
+        print(number, terminator: " ")
+    }
+}
+print("")
 
 // 4.
 
-
+print("Введите число до 50 и я нарисую обратный отсчет:", terminator: " ")
+if let inputNum = readLine(), let num = Int(inputNum), (num > 1 && num <= 50)
+{
+    for index in (1...num).reversed()
+    {
+        print(index, terminator: " ")
+    }
+    print("")
+}
 
 // 5.
+
+print("Введите число и я вычислю сумму его цифр:", terminator: " ")
+if let inputNum = readLine(), let num = Int(inputNum)
+{
+    var absoluteNum = abs(num)
+    var sum = 0
+    
+    while absoluteNum > 0
+    {
+        let digit = absoluteNum % 10
+        sum += digit
+        absoluteNum /= 10
+    }
+    print(sum)
+}
