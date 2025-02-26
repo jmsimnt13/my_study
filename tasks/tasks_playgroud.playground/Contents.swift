@@ -2,10 +2,17 @@ import Cocoa
 
 var str = "Hello, playground"
 
-// Conditions_lvl_1
-print("Введите ваш возраст: ", terminator: "")
-if let input = readLine(), let age = Int(input), age >= 18
-{
-    print("\(age)")
+// Циклы в Swift
+
+/*
+ for переменная in последовательность
+ {
+    блок кода
+ }
+ */
+
+let count = 10
+for number in 1...count {
+    print("\(number)")
 }
 

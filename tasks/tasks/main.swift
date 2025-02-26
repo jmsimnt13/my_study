@@ -10,6 +10,7 @@ import Foundation
 print("Hello, World! Here's my tasks")
 
 // Conditions
+/*
 // lvl_1
 // 1.
 print("Введите ваш возраст: ", terminator: "")
@@ -541,3 +542,82 @@ if let inputTotal = readLine(), let total = Double(inputTotal), total > 0
         }
     }
 }
+
+*/
+
+
+// Loops
+// lvl_1
+// 1.
+
+print("Введите до какого числа мы считаем (не более 20): ", terminator: "")
+if let inputCount = readLine(), let count = Int(inputCount), (count > 0 && count <= 20)
+{
+    for number in 1...count {
+        print("\(number)")
+    }
+}
+
+// 2.
+
+print("Введите до какого числа мы считаем и складываем (не более 20): ", terminator: "")
+if let inputCount = readLine(), let count = Int(inputCount), (count > 0 && count <= 20)
+{
+    var sum = 0
+    for number in 1...count {
+        sum += number
+        print("\(number). \(sum)")
+    }
+}
+
+// 3.
+
+print("Введите для какого числа мы вычисляем факториал (не более 20): ", terminator: "")
+if let inputNumber = readLine(), let number = Int(inputNumber), (number > 0 && number <= 20)
+{
+    var factorial = 1
+    for index in 1...number {
+        factorial *= index
+        print("\(index). \(factorial)")
+    }
+}
+
+// 4.
+
+print("Выводим все четные числа до 50:")
+    for number in 2...50{
+        if number % 2 == 0
+        {
+            print("\(number)")
+        }
+    }
+            
+// 5.
+
+print("Выводим все нечетные числа до 50:")
+    for number in 2...50{
+        if number % 2 != 0
+        {
+            print("\(number)")
+        }
+    }
+
+
+// lvl_2
+// 1.
+
+
+
+// 2.
+
+
+
+// 3.
+
+
+
+// 4.
+
+
+
+// 5.
