@@ -789,3 +789,192 @@ if let inputStr = readLine(), !inputStr.isEmpty
     }
     
 }
+
+
+// lvl_dop
+// 1. Подсчет количества простых чисел
+
+print("Простые числа до N, мне нужно N:", terminator: " ")
+if let inputNum = readLine(), let num = Int(inputNum), (num > 1 && num <= 10000)
+{
+    var count = 0
+    
+    for number in 2...num
+    {
+        var isPrime = true
+        // Проверим делители числа
+        for divider in 2..<number // ищем делители исключая 1 и само число
+        {
+            if number % divider == 0 // и если нашли, то число точно не простое
+            {
+                isPrime = false
+                break // прерываем дальнешие поиски
+            }
+        }
+        
+        // при это если флаг не поменялся за время цикла учитываем полученное число
+        if isPrime
+        {
+            count += 1
+        }
+    }
+    print("Насчитал \(count) простых чисел от 2 до \(num)")
+}
+
+
+// 2. Поиск счастливого билета
+
+print("Привет! Я могу определить счастливый ли твой билет, просто введи его 6-значный номер:", terminator: " ")
+if let inputNum = readLine(), let ticketNum = Int(inputNum), (ticketNum >= 100_000 && ticketNum <= 999_999)
+{
+    var tempNum = ticketNum
+    var sumHalfOne = 0
+    var sumHalfTwo = 0
+    
+    // Последние три цифры
+    for _ in 1...3
+    {
+        let digit = tempNum % 10
+        sumHalfTwo += digit
+        tempNum /= 10
+    }
+    
+    // Первые три цифры
+    for _ in 1...3
+    {
+        let digit = tempNum % 10
+        sumHalfOne += digit
+        tempNum /= 10
+    }
+    
+    if sumHalfOne == sumHalfTwo
+    {
+        print("У вас счастливый билет!!!")
+    }
+    else
+    {
+        print("Билет несчастливый!")
+    }
+}
+else
+{
+    print("Номер билета должен состоять из 6 цифр!")
+}
+
+// 3. Удаление дубликатов из массива
+
+var arrOrig = [1, 3, 5, 2, 5, 7, 8, 1, 2, 4, 3, 3, 5, 2]
+print("Найдем дубликаты в массиве \(arrOrig)")
+
+// Создаем новый для хранения уникальных значений
+var arrUniq = [Int]()
+// Проходим по исходному массиву
+for item in arrOrig
+{
+    var isDuplicate = false // считаем что дубликатов пока нет
+    
+    for itemUniq in arrUniq
+    {
+        if item == itemUniq
+        {
+            isDuplicate = true
+            break
+        }
+    }
+    
+    // если после прохода циклов флаг не поменялся значит значение уникальное
+    // => размещаем его в массив с уникальными значениями
+    if !isDuplicate
+    {
+        arrUniq.append(item)
+    }
+}
+
+print("Итоговый массив без дублей: \(arrUniq)")
+
+// 4. Поиск числа в массиве
+
+var arrTest = [1, 3, 5, 2, 5, 7, 8, 1, 2, 4, 3, 3, 5, 2]
+print("Готов найти заданное положительнеое целое число в массиве (если получится...):", terminator: "")
+if let inputNum = readLine(), let num = Int(inputNum), num > 0
+{
+    var isFound = false // считаем что не содержится при начале поисков
+    var count = 0
+    
+    for found in arrTest
+    {
+        if num == found
+        {
+            isFound = true
+            break
+        }
+        count += 1
+    }
+    
+    //если не нашлось выводим сообщение
+    if !isFound
+    {
+        print("Введенного значения в массиве нет!")
+    }
+    else
+    {
+        print("Нашел \(num) в массиве под индексом \(count): \(arrTest[count])")
+    }
+}
+else
+{
+    print("Принимаю положительные целые числа!")
+}
+
+
+// 5. Максимальная серия
+
+var arrRange = [1, 3, 3, 3, 5, 2, 5, 5, 5, 5, 7, 8, 1, 2, 4, 3, 3, 5, 2]
+
+print("Представляю исходный массив \(arrRange)")
+print("Сейчас я найду самую длинную серию (или нет)")
+
+var currentNum = arrRange[0] // Начинаем предполагаемую серию
+var currentCount = 0
+var maxiNum = arrRange[0] // Число с максимальной серией
+var maxCount = 1 // Максимальная длина серии
+
+// проходим предполагаемую серию со 2 элемента массива
+for i in 1..<arrRange.count
+{
+    if arrRange[i] == currentNum
+    {
+        // если такое же как предыдущее, то накапливаем статистику
+        currentCount += 1
+    }
+    else
+    {
+        // если нет, то проверяем максимальная ли она была
+        if currentCount > maxCount
+        {
+            maxCount = currentCount
+            maxiNum = currentNum
+        }
+        
+        // обнуляем результаты и идем дальше
+        currentNum = arrRange[i]
+        currentCount = 1
+    }
+}
+
+// надо проверить последнюю серию до выхода их цикла
+if currentCount > maxCount
+{
+    maxCount = currentCount
+    maxiNum = currentNum
+}
+
+// таким образом получаем исчерпывающую информацию о сериях
+if maxCount > 1
+{
+    print("Самая длинная серия: \(maxCount), состоящая из \(maxiNum)")
+}
+else
+{
+    print("В этом массиве не нашлось серий из чисел(")
+}
