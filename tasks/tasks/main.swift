@@ -545,7 +545,7 @@ if let inputTotal = readLine(), let total = Double(inputTotal), total > 0
 
 */
 
-
+/*
 // Loops
 // lvl_1
 // 1.
@@ -978,3 +978,107 @@ else
 {
     print("В этом массиве не нашлось серий из чисел(")
 }
+*/
+
+
+// Functions
+// lvl_1
+// 1. Приветствие
+
+func greet(name: String) {
+    print("Привет, \(name)!")
+}
+
+print("Привет! Введите свое имя:", terminator: " ")
+if let inputStr = readLine(), !inputStr.isEmpty {
+    greet(name: inputStr)
+}
+else {
+    print("Ошибка ввода или пустая строка!")
+}
+
+// 2. Сумма двух чисел (я должен строго следовать требованиям задачи или можно называть фукнции/переменные по-своему? )
+
+func sumForTwo(memberOne: Int, memberTwo: Int) {
+    print("Вот их сумма: \(memberOne) + \(memberTwo) = \(memberOne + memberTwo)")
+}
+
+print("Привет, я умею вычислять сумму двух целых чисел!")
+print("Прошу ввести первое число:", terminator: " ")
+if let inputNumOne = readLine(), let numOne = Int(inputNumOne) {
+    print("Прошу ввести второе число:", terminator: " ")
+    if let inputNumTwo = readLine(), let numTwo = Int(inputNumTwo) {
+        sumForTwo(memberOne: numOne, memberTwo: numTwo)
+    }
+    else {
+        print("Упс... получится в следующий раз")
+    }
+}
+else {
+    print("Упс... что то пошло не так")
+}
+
+// 3. Площадь прямоугольника
+
+func rectangleArea(width: Double, height: Double) {
+    let result = width * height
+    print("У прямоугольника с введенными сторонами площадь составляет:")
+    print("\(width) * \(height) = \(result)")
+}
+
+print("Привет! Я умею вычислять площадь прямоугольника, для этого мне понадобится две стороны")
+print("Введите ширину прямоугольника:", terminator: " ")
+if let inputWidth = readLine(), let width = Double(inputWidth), (width > 0) {
+    print("Введите длину прямоугольника:", terminator: " ")
+    if let inputHeight = readLine(), let height = Double(inputHeight), (height > 0) {
+        rectangleArea(width: width, height: height)
+    }
+    else {
+        print("Сторона не может быть отрицательной!")
+    }
+}
+else {
+    print("Сторона не может быть отрицательной!")
+}
+
+// 4. Факториал числа
+
+func factorial(of: Int) {
+    var factorial = 1
+    for number in 1...of {
+        factorial *= number
+    }
+    print("Факториал для числа \(of)! = \(factorial)")
+}
+
+print("Привет! Я умею вычислять факториалы, для какого числа ты бы хотел узнать факториал?")
+print("Введи положительное целое число:", terminator: " ")
+if let inputNum = readLine(), let num = Int(inputNum), (num > 0) {
+    factorial(of: num)
+}
+else {
+    print("Требуется ввести целое положительное число!")
+}
+
+// 5. Проверка четности
+
+func isEven(number: Int) {
+    if number % 2 == 0 {
+        print("Число \(number) четное!")
+    }
+    else {
+        print("Число \(number) нечетное!")
+    }
+}
+
+print("Привет! Я умею определять четность чисел!")
+print("Введи число, которые бы ты хотел проверить на четность:", terminator: " ")
+if let inputNum = readLine(), let num = Int(inputNum) {
+    isEven(number: num)
+}
+else {
+    print("Введено что-то не то...")
+}
+
+
+
