@@ -29,3 +29,8 @@ func substraction(first: Int, second: Int) -> Int {
 
 let result = substraction(first: 100, second: 239)
 print(result)
+
+var foundedPrimes = [Int](arrayLiteral: 2)
+print(foundedPrimes)
+foundedPrimes.append(4)
+print(foundedPrimes)

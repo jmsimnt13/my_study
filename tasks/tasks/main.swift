@@ -985,7 +985,7 @@ else
 // Functions
 // lvl_1
 // 1. Приветствие
-
+/*
 func greet(name: String) {
     print("Привет, \(name)!")
 }
@@ -1224,4 +1224,127 @@ if let inputStr = readLine(), !inputStr.isEmpty {
 else {
     print("Упс... Введено что-то не то...")
 }
+*/
 
+// lvl_3
+// 1. Функция по возврату N чисел Фибоначчи
+
+func fibonacciSequence(count: Int) {
+    var fiboPrev = 1
+    var fiboActual = 0
+    
+    for index in 1...count
+    {
+        let temp = fiboPrev + fiboActual
+        fiboPrev = fiboActual
+        fiboActual = temp
+        print("\(index). \(fiboActual)")
+    }
+}
+
+print("Привет, я умею вычислять числа Фибоначчи")
+print("Укажите, сколько чисел Фибоначчи требуется вывести:", terminator: " ")
+if let inputNum = readLine(), let num = Int(inputNum), num > 0 {
+    fibonacciSequence(count: num)
+}
+else {
+    print("Упс... что-то пошло не так...")
+}
+
+// 2. Поиск простых чисел // например, до 40 у нас 12 простых чисел
+
+// потно......
+func findPrimes(upTo: Int) -> [Int] {
+    var foundedPrimes = [Int](arrayLiteral: 2) // массив для найденных простых чисел
+    var count = 1 // счетчик для найденных простых чисел
+    
+    for number in 3...upTo // проверяем числа с 3 (2 уже в массиве учтено)
+    {
+        var isPrime = true // считаем число предвариетльно простым
+        // Проверим делители числа
+        for primeNum in foundedPrimes // делим потенциальное простое на найденные простые из массива
+        {
+            // если проверили все значения меньше корня потенциального простого числа
+            if (primeNum * primeNum) <= number {
+                if number % primeNum == 0 {
+                    // то оно точно не простое
+                    isPrime = false
+                    break // прерываем дальнешие поиски
+                }
+            }
+        }
+        // если флаг isPrime остался истинным, то добавляем число в массив
+        if isPrime
+        {
+            foundedPrimes.append(number)
+            count += 1
+        }
+    }
+    print("Насчитал \(count) простых чисел от 2 до \(upTo)")
+    return foundedPrimes
+}
+
+print("Привет, я умею выводить список простых чисел до заданного предела (не больше 1000)")
+print("Пожалуйста, введите до какого числа мы ищем:", terminator: " ")
+if let inputNum = readLine(), let num = Int(inputNum), (num > 0 && num <= 1000) {
+    let foundPrimes = findPrimes(upTo: num)
+    print("Вот итоговый массив:")
+    print(foundPrimes)
+}
+else {
+    print("Что-то пошло не так...")
+    print("Возможно введенное значение вне допустимого диапазона")
+}
+
+// 3. Рекурсивный факториал
+
+func factorialRecursive(of: Int) -> Int {
+    var next = of - 1
+    var res = 1
+    // если дошли до единицы, значит можно больше не вызывать
+    if next > 1 {
+        res = factorialRecursive(of: next)
+    }
+    // осталось каскадно все это дело перемножить
+    // 1 *= 2
+    // 2 *= 3 и т.д...
+    res *= of
+    return res
+}
+
+print("Привет! Я умею вычислять факториалы, для какого числа ты бы хотел узнать факториал?")
+print("Введи положительное целое число:", terminator: " ")
+if let inputNum = readLine(), let num = Int(inputNum), (num > 0) {
+    let result = factorialRecursive(of: num)
+    print("Факториал числа \(num)! = \(result)")
+}
+else {
+    print("Требуется ввести целое положительное число!")
+}
+
+// 4. Разбиение строки (у меня вопрос, можно ли как то по Character сделать by? пока не разобрался как)
+
+func splitString(by: String) -> [Substring] {
+    var splittedStrArr = [Substring]()
+    switch by {
+    case ",":
+        splittedStrArr = by.split(separator: ",")
+        return splittedStrArr
+    case " ":
+        splittedStrArr = by.split(separator: " ")
+        return splittedStrArr
+    default:
+        print("Я не знаю такого разделителя...")
+        splittedStrArr.append("Error!")
+        return splittedStrArr
+    }
+}
+
+print("Я могу разделить введенную строку по разделителям ' ' и ','")
+print("Введите строку, содержащую пробелы или запятые в качестве разделителя")
+
+// 5. Подсчет букв и цифр
+
+// func countLettersAndDigits(_ :) {
+    
+// }
