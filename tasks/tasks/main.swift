@@ -545,8 +545,9 @@ if let inputTotal = readLine(), let total = Double(inputTotal), total > 0
 
 */
 
-/*
 // Loops
+/*
+
 // lvl_1
 // 1.
 
@@ -1081,4 +1082,146 @@ else {
 }
 
 
+// lvl_2
+// 1. Реализация калькулятора с помощью фукнции
+
+func calculate(a: Double, b: Double, operation: String) {
+    switch operation {
+    case "+": print("Результат: \(a) + \(b) = \(a + b)")
+    case "-": print("Результат: \(a) - \(b) = \(a - b)")
+    case "*": print("Результат: \(a) * \(b) = \(a * b)")
+    case "/":
+        if b != 0 {
+            print("Результат: \(a) / \(b) = \(a / b)")
+        }
+        else {
+            print("Результат: \(a) / \(b) = 0")
+        }
+    default: print("Unknown operation")
+    }
+}
+
+print("Привет, я калькулятор с четырьмя операциями: +, -, *, /")
+print("Введите первый операнд:", terminator: " ")
+if let inputNum1 = readLine(), let num1 = Double(inputNum1) {
+    print("Введите второй операнд:", terminator: " ")
+    if let inputNum2 = readLine(), let num2 = Double(inputNum2) {
+        print("Введите операцию:", terminator: " ")
+        if let inputOp = readLine(), !inputOp.isEmpty {
+            calculate(a: num1, b: num2, operation: inputOp)
+        }
+        else {
+            print("Уточните операцию...")
+        }
+    }
+    else {
+        print("Уточните операнд...")
+    }
+}
+else {
+    print("Уточните операнд...")
+}
+
+// 2. Поиск максимального числа
+
+func findMax(numbers: [Int]) -> Int? {
+    if !numbers.isEmpty {
+        var foundedMax = -1; // Заведомо самое маленькое значение
+        for (index, number) in numbers.enumerated() {
+            if number >= foundedMax {
+                foundedMax = numbers[index]
+            }
+        }
+        return foundedMax
+    }
+    else {
+        return nil
+    }
+}
+
+print("Привет, я умею находить максимальное значение в введенном массиве!")
+print("Прошу ввести некоторый набор целочисленных значений через пробел для анализа:", terminator: " ")
+if let inputArr = readLine() {
+    let splitParts = inputArr.split(separator: " ")
+    
+    var numbers: [Int] = []
+    for splitPart in splitParts {
+        if let number = Int(splitPart) {
+            numbers.append(number)
+        }
+    }
+    
+    let result = findMax(numbers: numbers)
+    if result != nil {
+        print("Максимальный элемент введенного массива = \(result!)") // я уверен что опционал не nil, поэтому его распаковываю явно
+    }
+    else {
+        print("Кажется введенный массив пустой...")
+    }
+}
+else {
+    print("Ошибка ввода")
+}
+
+// 3. Генерация таблицы умножения
+
+func multiplicationTable(for: Int) {
+    for multiplicator in 1...10 {
+        let index = multiplicator
+        print("\(index). \(`for`) * \(multiplicator) = \(`for` * multiplicator)")
+    }
+}
+
+print("Привет, я умею выводить таблицу умножения для введенного целого числа!")
+print("Прошу ввести число:", terminator: " ")
+if let inputNum = readLine(), let num = Int(inputNum) {
+    multiplicationTable(for: num)
+}
+else {
+    print("Ошибка ввода...")
+}
+
+// 4. Переворот строки
+
+func reverseString(_ stringToReverse: String) {
+    for char in stringToReverse.reversed() {
+        print(char, terminator: "")
+    }
+    print("")
+}
+
+print("Привет! Я умею переворачивать строки!")
+print("Напиши строку:", terminator: " ")
+if let inputStr = readLine(), !inputStr.isEmpty {
+    reverseString(inputStr)
+}
+else {
+    print("Упс... введено что-то не то...")
+}
+
+// 5. Проверка палиндрома
+
+func isPalindrome(_ isPalindrome: String) {
+    var reversedStr = ""
+    
+    for char in isPalindrome.reversed() {
+        reversedStr.append(char)
+    }
+    
+    if isPalindrome == reversedStr {
+        print("Слово '\(isPalindrome)' является палиндромом!")
+    }
+    else {
+        print("Слово '\(isPalindrome)' не является палиндромом!")
+    }
+}
+
+print("Привет, я умею проверять палиндром ли введенное слово!")
+print("Введи слово для проверки:", terminator: " ")
+if let inputStr = readLine(), !inputStr.isEmpty {
+    isPalindrome(inputStr)
+}
+else {
+    print("Упс... Введено что-то не то...")
+}
 
