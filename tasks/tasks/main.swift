@@ -1286,7 +1286,7 @@ func findPrimes(upTo: Int) -> [Int] {
 
 print("Привет, я умею выводить список простых чисел до заданного предела (не больше 1000)")
 print("Пожалуйста, введите до какого числа мы ищем:", terminator: " ")
-if let inputNum = readLine(), let num = Int(inputNum), (num > 0 && num <= 1000) {
+if let inputNum = readLine(), let num = Int(inputNum), (num > 2 && num <= 1000) {
     let foundPrimes = findPrimes(upTo: num)
     print("Вот итоговый массив:")
     print(foundPrimes)
@@ -1299,7 +1299,7 @@ else {
 // 3. Рекурсивный факториал
 
 func factorialRecursive(of: Int) -> Int {
-    var next = of - 1
+    let next = of - 1
     var res = 1
     // если дошли до единицы, значит можно больше не вызывать
     if next > 1 {
@@ -1322,29 +1322,82 @@ else {
     print("Требуется ввести целое положительное число!")
 }
 
-// 4. Разбиение строки (у меня вопрос, можно ли как то по Character сделать by? пока не разобрался как)
+// 4. Разбиение строки
 
-func splitString(by: String) -> [Substring] {
-    var splittedStrArr = [Substring]()
-    switch by {
-    case ",":
-        splittedStrArr = by.split(separator: ",")
-        return splittedStrArr
-    case " ":
-        splittedStrArr = by.split(separator: " ")
-        return splittedStrArr
-    default:
-        print("Я не знаю такого разделителя...")
-        splittedStrArr.append("Error!")
-        return splittedStrArr
+func splitString(by: Character) -> [Substring] {
+    var resultStrArr = [Substring]()
+    
+    print("Введите строку, содержащую пробелы или запятые в качестве разделителя:")
+    if let inputStr = readLine() {
+        switch by {
+        case ",":
+            resultStrArr = inputStr.split(separator: ",")
+        case " ":
+            resultStrArr = inputStr.split(separator: " ")
+        default:
+            print("Я не знаю такого разделителя...")
+        }
     }
+    return resultStrArr
 }
 
 print("Я могу разделить введенную строку по разделителям ' ' и ','")
-print("Введите строку, содержащую пробелы или запятые в качестве разделителя")
+print("Введите используемый разделитель - пробел или запятая")
+if let inputChar = readLine(), !inputChar.isEmpty {
+    let separator = Character(inputChar)
+    let separatedStr = splitString(by: separator)
+    if !separatedStr.isEmpty {
+        print(separatedStr)
+    }
+    else {
+        print("Что-пошло не так, возможно строка была пустой")
+    }
+}
+else {
+    print("Кажется был введена пустота...")
+}
 
-// 5. Подсчет букв и цифр
+// 5. Подсчет букв и цифр (решил реализовать через словарь, так вообще делают??)
 
-// func countLettersAndDigits(_ :) {
-    
-// }
+func countLettersAndDigits(_ inputStr: String) -> (letters: Int, digits: Int) {
+    var countTuple = (letters: 0, digits: 0)
+    for char in inputStr {
+        if char.isLetter {
+            countTuple.letters += 1
+        }
+        else if char.isNumber {
+            countTuple.digits += 1
+        }
+    }
+    return countTuple
+}
+
+print("Привет, я могу подсчитать колиество букв и цифр в введенной строке!")
+print("Мне всего лишь требуется какая нибудь строка:")
+if let inputStr = readLine(), !inputStr.isEmpty {
+    let resultTuple = countLettersAndDigits(inputStr)
+    print("letters: \(resultTuple.letters), digits: \(resultTuple.digits)")
+}
+else {
+    print("Кажется была введена пустая строка...")
+}
+
+
+// lvl_dop
+// 1. 
+
+
+
+// 2.
+
+
+
+// 3.
+
+
+
+// 4.
+
+
+
+// 5.

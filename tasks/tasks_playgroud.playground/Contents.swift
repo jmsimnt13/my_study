@@ -34,3 +34,4 @@ var foundedPrimes = [Int](arrayLiteral: 2)
 print(foundedPrimes)
 foundedPrimes.append(4)
 print(foundedPrimes)
+
