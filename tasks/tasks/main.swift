@@ -10,8 +10,8 @@ import Foundation
 print("Hello, World! Here's my tasks")
 
 // Conditions
-/*
 // lvl_1
+/*
 // 1.
 print("Введите ваш возраст: ", terminator: "")
 if let input = readLine(), let age = Int(input), age >= 18
@@ -83,8 +83,10 @@ if let input = readLine(), let score = Int(input)
     default:        print("Полученные баллые выходят за допустимый диапозон")
     }
 }
+*/
 
 // lvl_2
+/*
 // 1. Калькулятор
 
 print("Привет! Я калькулятор, введи мне два числа и операцию с ними, и я посчитаю")
@@ -243,9 +245,10 @@ case 7:
 default:
     print("Меня компилятор заставил...")
 }
-
+*/
 
 // lvl_3
+/*
 // 1. Классификаиця чисел - положительное/отрицательнное, четное/нечетное, простое/составное
 
 print("Введи число для его классификации: ", terminator: "")
@@ -386,9 +389,10 @@ if let inputYear = readLine(), let year = Int(inputYear), year > 0
         print("\(year) не високосный")
     }
 }
-
+*/
 
 // lvl_dop
+/*
 // 1. Классификация треугольника по углам
 
 // Запрашиваем значения для углов
@@ -546,9 +550,9 @@ if let inputTotal = readLine(), let total = Double(inputTotal), total > 0
 */
 
 // Loops
-/*
 
 // lvl_1
+/*
 // 1.
 
 print("Введите до какого числа мы считаем (не более 20): ", terminator: "")
@@ -602,9 +606,10 @@ print("Выводим все нечетные числа до 50:")
             print("\(number)")
         }
     }
-
+*/
 
 // lvl_2
+/*
 // 1. Таблица умножения до 10
 
 print("Таблица умножения:")
@@ -684,8 +689,10 @@ if let inputNum = readLine(), let num = Int(inputNum)
     }
     print(sum)
 }
-
+*/
+ 
 // lvl_3
+/*
 // 1. Числа Фибоначчи
 
 print("Введите сколько чисел Фибоначчи хотите вывести: ", terminator: "")
@@ -790,9 +797,10 @@ if let inputStr = readLine(), !inputStr.isEmpty
     }
     
 }
-
+*/
 
 // lvl_dop
+/*
 // 1. Подсчет количества простых чисел
 
 print("Простые числа до N, мне нужно N:", terminator: " ")
@@ -984,8 +992,8 @@ else
 
 // Functions
 // lvl_1
-// 1. Приветствие
 /*
+// 1. Приветствие
 func greet(name: String) {
     print("Привет, \(name)!")
 }
@@ -1080,10 +1088,11 @@ if let inputNum = readLine(), let num = Int(inputNum) {
 else {
     print("Введено что-то не то...")
 }
-
+*/
 
 // lvl_2
-// 1. Реализация калькулятора с помощью фукнции
+/*
+ // 1. Реализация калькулятора с помощью фукнции
 
 func calculate(a: Double, b: Double, operation: String) {
     switch operation {
@@ -1227,6 +1236,7 @@ else {
 */
 
 // lvl_3
+/*
 // 1. Функция по возврату N чисел Фибоначчи
 
 func fibonacciSequence(count: Int) {
@@ -1381,19 +1391,131 @@ if let inputStr = readLine(), !inputStr.isEmpty {
 else {
     print("Кажется была введена пустая строка...")
 }
-
+*/
 
 // lvl_dop
-// 1. 
+// место для /*
+// 1. Перевод температуры
 
+func convertTemperature(value: Double, from: Character, to: Character) -> Double {
+    let fromToTempTuple = (from, to)
+    /*
+     ("K", "K") ("K", "C") ("K", "F")
+     ("C", "K") ("C", "C") ("C", "F")
+     ("F", "K") ("F", "C") ("F", "F")
+     */
+    var resValue = value
+    
+    switch fromToTempTuple {
+    case ("K", "K"): break
+    case ("K", "C"): resValue -= 273.15
+    case ("K", "F"): resValue = (resValue * 1.8) - 459.67
+    case ("C", "K"): resValue += 273.15
+    case ("C", "C"): break
+    case ("C", "F"): resValue = (resValue * 1.8) + 32
+    case ("F", "K"): resValue = (resValue + 459.67) / 1.8
+    case ("F", "C"): resValue = (resValue - 32) / 1.8
+    case ("F", "F"): break
+    default: print("Я такой шкалы не знаю...")
+    }
+    
+    return resValue
+}
 
+print("Привет! Я умею переводить температуру, давай начнем")
+print("Введите значение температуры:", terminator: " ")
+if let inputValue = readLine(), let value = Double(inputValue) {
+    print("Теперь введите шкалу, в которой вы указали температуру (C, K, F):", terminator: " ")
+    if let inputFrom = readLine(), !inputFrom.isEmpty {
+        let from = Character(inputFrom.uppercased())
+        print("Отлично! Теперь введите шкалу, в которую мы переводим (C, K, F):", terminator: " ")
+        if let inputTo = readLine(), !inputTo.isEmpty {
+            let to = Character(inputTo.uppercased())
+            let convertedTemperature = convertTemperature(value: value, from: from, to: to)
+            if convertedTemperature != value {
+                print("\(value)\(from) это \(convertedTemperature)\(to)")
+            }
+            else {
+                print("Вы ввели \(value) \(from), но что-то пошло не так...")
+            }
+        }
+        else {
+            print("Что-то пошло не так при вводе шкалы перевода...")
+        }
+    }
+    else {
+        print("Что-то пошло не так при вводе шкалы...")
+    }
+}
+else {
+    print("Что-то произошло при вводе температуры...")
+}
 
-// 2.
+// 2. Поиск общих элементов
 
+func commonElements(array1: [Int], array2: [Int]) -> [Int] {
+    var resultArray = [Int]()
+    for item1 in array1 {
+        for item2 in array2 {
+            if item1 == item2 {
+                resultArray.append(item1)
+            }
+        }
+    }
+    return resultArray
+}
 
+print("Привет, я могу найти общие элементы двух введенных массивов и вернуть массив общих элементов!")
+print("Прошу ввести первый массив через пробел:", terminator: " ")
+if let inputArr1 = readLine(), !inputArr1.isEmpty {
+    let splitParts1 = inputArr1.split(separator: " ")
+    var array1 = [Int]() // хочу обсудить разницу между array1: [Int] = []
+    for splitPart in splitParts1 {
+        if let number = Int(splitPart) {
+            array1.append(number)
+        }
+        else {
+            print("Похоже это не число...")
+        }
+    }
+    
+    print("Прошу ввести второй массив через пробел:", terminator: " ")
+    if let inputArr2 = readLine(), !inputArr2.isEmpty {
+        let splitParts2 = inputArr2.split(separator: " ")
+        var array2 = [Int]()
+        for splitPart in splitParts2 {
+            if let number = Int(splitPart) {
+                array2.append(number)
+            }
+            else {
+                print("Похоже это не число...")
+            }
+        }
+        let resultArray = commonElements(array1: array1, array2: array2)
+        print("Массив общих элементов: \(resultArray)")
+    }
+    else {
+        print("Похоже, введен пустой массив...")
+    }
+}
+else {
+    print("Похоже, введен пустой массив...")
+}
 
-// 3.
+// 3. Удаление дубликатов
 
+func removeDuplicates(_ arrWithDuplicates: [Int]) {
+    var resultArray = [Int]()
+    let tempArr = arrWithDuplicates
+    for item1 in arrWithDuplicates {
+        for item2 in tempArr {
+            if item1 != item2 {
+                resultArray.append(item1)
+            }
+        }
+    }
+    print("Массив, без дубликтов: \(resultArray)")
+}
 
 
 // 4.

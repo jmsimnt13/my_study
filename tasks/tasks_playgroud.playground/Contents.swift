@@ -1,37 +1,20 @@
-let greeting = "Hi, Poosay Queen!!"
-func sayHello() {
-    print(greeting)
+
+
+var arrWithDuplicates = [1, 2, 2, 1, 3, 4, 4, 5, 1]
+arrWithDuplicates.remove(at: 0)
+var arrWithOutDuplicates = arrWithDuplicates
+var count = 0
+var resultArray = [Int]()
+for (index1, potentialDoubleur) in arrWithDuplicates.enumerated() { // [1, 2, 2, 1, 3, 4, 4, 5, 1]
+    for (index2, item) in arrWithOutDuplicates.enumerated() {
+        if (potentialDoubleur == item) && (index1 != index2){
+            count += 1
+        }
+    }
+    if count > 0 {
+        resultArray.append(potentialDoubleur)
+        arrWithDuplicates.
+        count = 0
+    }
 }
-
-//
-sayHello()
-
-func addition(x: Int, y: Int) {
-    print(x + y)
-}
-
-addition(x: 5, y: 4)
-addition(x: 10, y: 34)
-
-addition(x: 2241, y: 12380972)
-
-func someFunc(firstNum: Double) {
-    let c = firstNum
-    print(c)
-}
-
-someFunc(firstNum: 5.5)
-
-func substraction(first: Int, second: Int) -> Int {
-    let third = first - second
-    return third
-}
-
-let result = substraction(first: 100, second: 239)
-print(result)
-
-var foundedPrimes = [Int](arrayLiteral: 2)
-print(foundedPrimes)
-foundedPrimes.append(4)
-print(foundedPrimes)
-
+print(resultArray)
