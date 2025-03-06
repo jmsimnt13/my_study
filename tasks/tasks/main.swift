@@ -1506,20 +1506,120 @@ else {
 
 func removeDuplicates(_ arrWithDuplicates: [Int]) {
     var resultArray = [Int]()
-    let tempArr = arrWithDuplicates
-    for item1 in arrWithDuplicates {
-        for item2 in tempArr {
-            if item1 != item2 {
-                resultArray.append(item1)
-            }
+    
+    for item in arrWithDuplicates {
+        if !resultArray.contains(item) {
+            resultArray.append(item)
         }
     }
     print("Массив, без дубликтов: \(resultArray)")
 }
 
+print("Привет, я могу найти дубликаты внутри введенного массива и вернуть массив уникальных элементов!")
+print("Прошу массив через пробел:", terminator: " ")
+if let inputArr = readLine(), !inputArr.isEmpty {
+    let splitParts = inputArr.split(separator: " ")
+    var array = [Int]() // хочу обсудить разницу между array1: [Int] = []
+    for splitPart in splitParts {
+        if let number = Int(splitPart) {
+            array.append(number)
+        }
+        else {
+            print("Похоже это не число...")
+        }
+    }
+    removeDuplicates(array)
+}
+else {
+    print("Похоже, введен пустой массив...")
+}
 
-// 4.
+// 4. Счастливый билет
+
+func isLuckyTicket(_ maybeLuckyTicket: Int) {
+    var tempNum = maybeLuckyTicket
+    var sumHalfOne = 0
+    var sumHalfTwo = 0
+    
+    // Последние три цифры, отрезаем по одной цифре путем нахождения остатка от деления на 10
+    for _ in 1...3
+    {
+        let digit = tempNum % 10
+        sumHalfTwo += digit
+        tempNum /= 10
+    }
+    
+    // Первые три цифры, также накапливает сумму цифр путем нахождения остатка от деления на 10
+    for _ in 1...3
+    {
+        let digit = tempNum % 10
+        sumHalfOne += digit
+        tempNum /= 10
+    }
+    
+    if sumHalfOne == sumHalfTwo
+    {
+        print("Билет '\(maybeLuckyTicket)' счастливый!!!")
+    }
+    else
+    {
+        print("Билет '\(maybeLuckyTicket)' несчастливый!")
+    }
+}
+
+print("Привет! Я могу определить счастливый ли твой билет, просто введи его 6-значный номер:", terminator: " ")
+if let inputNum = readLine(), let ticketNum = Int(inputNum), (ticketNum >= 100_000 && ticketNum <= 999_999)
+{
+    isLuckyTicket(ticketNum)
+}
+else
+{
+    print("Номер билета должен состоять из 6 цифр!")
+}
 
 
+// 5. Вычисление среднего значения
 
-// 5.
+func average(numbers: [Int]) -> Double? {
+    var average: Double = 0.0
+    var count = 0
+    for number in numbers {
+        average += Double(number)
+        count += 1
+    }
+    
+    if numbers.isEmpty {
+        return nil
+    }
+    else {
+        return average
+    }
+}
+
+print("Привет, я могу вычислить среднее значение введенного массива")
+print("Введите массив через пробел:", terminator: " ")
+if let inputArr = readLine() {
+    
+    // Обработка введененой строки
+    let splitParts = inputArr.split(separator: " ")
+    var array = [Int]() // хочу обсудить разницу между array1: [Int] = []
+    for splitPart in splitParts {
+        if let number = Int(splitPart) {
+            array.append(number)
+        }
+        else {
+            print("Похоже это не число...")
+        }
+    }
+    
+    // Обработка возвращаемого функцией значения
+    if let average = average(numbers: array) {
+        print("Среднее значение введенного массива: \(average)")
+    }
+    else {
+        print("Был введен пустой массив!")
+    }
+}
+else {
+    print("Похоже что-то пошло не так...")
+}
