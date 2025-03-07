@@ -549,8 +549,8 @@ if let inputTotal = readLine(), let total = Double(inputTotal), total > 0
 
 */
 
-// Loops
 
+// Loops
 // lvl_1
 /*
 // 1.
@@ -1394,7 +1394,7 @@ else {
 */
 
 // lvl_dop
-// место для /*
+/*
 // 1. Перевод температуры
 
 func convertTemperature(value: Double, from: Character, to: Character) -> Double {
@@ -1623,3 +1623,125 @@ if let inputArr = readLine() {
 else {
     print("Похоже что-то пошло не так...")
 }
+*/
+
+
+// Enumerations
+// lvl_1
+// /*
+// 1. Дни недели
+
+enum Weekday: String {
+    case monday
+    case tuesday
+    case wednesday
+    case thursday
+    case friday
+    case saturday
+    case sunday
+}
+
+func printDayOfWeek(_ dayOfWeek: Weekday) {
+    switch dayOfWeek {
+    case .monday    : print("Понедельник")
+    case .tuesday   : print("Вторник")
+    case .wednesday : print("Среда")
+    case .thursday  : print("Четверг")
+    case .friday    : print("Пятница")
+    case .saturday  : print("Суббота")
+    case .sunday    : print("Воскресенье")
+        
+    }
+}
+
+let currentDayOfWeek = Weekday.friday
+
+print("Сегодня:", terminator: " ")
+printDayOfWeek(currentDayOfWeek)
+print("Вызвал функцию без дополнительного диалога")
+
+// 2.
+
+
+
+// 3.
+
+
+
+// 4.
+
+
+
+// 5.
+
+
+// */
+
+// lvl_2
+// /*
+// 1.
+
+
+// 2.
+
+
+
+// 3.
+
+
+
+// 4.
+
+
+
+// 5.
+
+
+
+// */
+
+// lvl_3
+// /*
+// 1.
+
+
+// 2.
+
+
+
+// 3.
+
+
+
+// 4.
+
+
+
+// 5.
+
+
+
+// */
+
+// lvl_dop
+// /*
+// 1.
+
+
+// 2.
+
+
+
+// 3.
+
+
+
+// 4.
+
+
+
+// 5.
+
+
+
+// */
