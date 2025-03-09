@@ -1631,7 +1631,7 @@ else {
 // /*
 // 1. Дни недели
 
-enum Weekday: String {
+enum Weekday {
     case monday
     case tuesday
     case wednesday
@@ -1660,21 +1660,168 @@ print("Сегодня:", terminator: " ")
 printDayOfWeek(currentDayOfWeek)
 print("Вызвал функцию без дополнительного диалога")
 
-// 2.
+// 2. Сезоны года
 
+enum Season: String {
+    case winter = "Зима"
+    case spring = "Весна"
+    case summer = "Лето"
+    case autumn = "Осень"
+}
 
+extension Season {
+    func desciption() -> String {
+        print("Привожу описание сезона '\(self.rawValue)':")
+        switch self {
+        case .winter :
+            return """
+                  Зима - характеризуется отрицательными температурами,
+                  отсутсвием роста растений, суровыми условиями окружающей среды.
+                  Включает месяцы: декабрь, янаварь, фераль.
+                  """
+        case .spring :
+            return """
+                  Весна - характеризуется положительными температурами,
+                  цветением природы, постепенным улучшением условий 
+                  окружающей среды.
+                  Включает месяцы: март, апрель, май.
+                  """
+        case .summer :
+            return """
+                   Лето - характеризуется самыми высокими температурами,
+                   наличием растений и плодов, благоприятными условиями 
+                   окружающей среды.
+                   Включает месяцы: июнь, июль, август.
+                   """
+        case .autumn :
+            return """
+                   Осень - характеризуется снижением температуры,
+                   сбором урожая, опадением листвы, ухудшением
+                   условий окружающей среды.
+                   Включает месяцы: сентябрь, октябрь, ноябрь.
+                   """
+        }
+    }
+}
 
-// 3.
+let seasonDef = Season.spring
+print(seasonDef.desciption())
 
+// 3. Цвета светофора
 
+enum TrafficLight: String {
+    case red = "Красный"
+    case yellow = "Желтый"
+    case green = "Зеленый"
+}
 
-// 4.
+extension TrafficLight {
+    func next() -> TrafficLight {
+        print("Следующий цвет в цикле:", terminator: " ")
+        switch self {
+        case .red       : return .yellow
+        case .yellow    : return .green
+        case .green     : return .red
+        }
+    }
+}
 
+let currentTrafficLight = TrafficLight.red
+print("Текущий сигнал светофора: \(currentTrafficLight.rawValue)")
+print("За ним следует: \(currentTrafficLight.next().rawValue)")
 
+// 4. Типы треугольников
 
-// 5.
+enum TriangleType: String {
+    case equalateral = "Равносторонний"
+    case isosceles = "Равнобедренный"
+    case scalene = "Разносторонний"
+}
 
+func typeOfTriangle(a: Double, b: Double, c: Double) -> TriangleType {
+    var resType = TriangleType.equalateral
+    if (a == b && a == c && b == c) {
+        resType = TriangleType.equalateral
+    }
+    if (a == b && a != c) {
+        resType = TriangleType.isosceles
+    }
+    if (a != b && a != c && b != c) {
+        resType = TriangleType.scalene
+    }
+    return resType
+}
 
+print("Привет, я умею определять тип треугольника по его сторонам!")
+print("Для этого мне нужно получить три стороны")
+// Запрашиваем значения для сторон
+// 1 сторона
+print("Введите первую сторону треугольника:", terminator: " ")
+guard let inputSide = readLine(), let sideOne = Double(inputSide), sideOne > 0 else
+{
+    print("Сторона должны быть положительной...")
+    exit(0)
+}
+// 2 сторона
+print("Введите вторую сторну треугольника:", terminator: " ")
+guard let inputSide = readLine(), let sideTwo = Double(inputSide), sideTwo > 0 else
+{
+    print("Сторона должны быть положительной...")
+    exit(0)
+}
+// 3 сторона
+print("Введите третью сторону треугольника:", terminator: " ")
+guard let inputSide = readLine(), let sideThree = Double(inputSide), sideThree > 0 else
+{
+    print("Сторона должны быть положительной...")
+    exit(0)
+}
+
+let myTriangle = typeOfTriangle(a: sideOne, b: sideTwo, c: sideThree)
+print("Треугольник \(myTriangle.rawValue)")
+
+// 5. Направления компаса
+
+enum CompassDirection: String {
+    case north = "Север"
+    case south = "Юг"
+    case west = "Запад"
+    case east = "Восток"
+}
+
+func oppositeDirection(_ direction: CompassDirection) -> CompassDirection {
+    switch direction {
+    case .north : return .south
+    case .west  : return .east
+    case .south : return .north
+    case .east  : return .west
+    }
+}
+
+print("Привет, я умею выводить противоположную сторону света")
+print("Чтобы в этом убедиться, введите сторону света:", terminator: " ")
+if let inputSide = readLine(), !inputSide.isEmpty {
+    // создаем сторону котороую пока еще не назначили ни одной стороне света
+    // такой подход норм?? или лучше присвоить ей какой нибудь член перечисления сразу??
+    // (как я сделал в треугольниках?)
+    var side: CompassDirection?
+    // принимаем сторону от пользователя и проверяем что там
+    switch inputSide.lowercased() {
+    case "север"    : side = .north
+    case "юг"       : side = .south
+    case "запад"    : side = .west
+    case "восток"   : side = .east
+    default : print("Такой стороны света не существует!")
+    }
+    // если введена корректная сторона света вызываем функция по нахождению ее противоположности
+    if side != nil {
+        let oppositeSide = oppositeDirection(side!)
+        print("Противоположная сторона света для '\(side!.rawValue)': '\(oppositeSide.rawValue)'")
+    }
+}
+else {
+    print("Мне не подойдет пустая строка...")
+}
 // */
 
 // lvl_2
