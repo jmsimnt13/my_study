@@ -53,3 +53,20 @@ enum Phone: String {
 var myPhone = Phone.Apple
 print(myPhone)
 print(myPhone.rawValue)
+
+
+enum Barcode {
+    case upc(Int, Int, Int, Int)
+    case qrCode(String)
+}
+
+var productBarcode = Barcode.upc(8, 1223, 234, 4124)
+
+//productBarcode = .qrCode("abcdefghi")
+
+switch productBarcode {
+case let .upc(numberSys, manufacturer, product, check) :
+    print("UPC: \(numberSys) \(manufacturer) \(product) \(check)")
+case .qrCode(let productCode) :
+    print("QR Code: \(productCode)")
+}

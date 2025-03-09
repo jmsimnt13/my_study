@@ -1628,7 +1628,7 @@ else {
 
 // Enumerations
 // lvl_1
-// /*
+/*
 // 1. Дни недели
 
 enum Weekday {
@@ -1822,49 +1822,216 @@ if let inputSide = readLine(), !inputSide.isEmpty {
 else {
     print("Мне не подойдет пустая строка...")
 }
-// */
+*/
 
 // lvl_2
 // /*
-// 1.
+// 1. Перечисления с raw значениями
 
+enum Month: Int {
+    case january = 1, february, march, april, may,
+         june, july, august, september, october,
+         november, december
+}
 
-// 2.
+func whichMonth(_ numberOfMonth: Month) -> String {
+    var nameOfMonth = ""
+    switch numberOfMonth {
+    case .january   : nameOfMonth = "Январь" //
+        return nameOfMonth
+    case .february  : nameOfMonth = "Февраль"
+        return nameOfMonth
+    case .march     : nameOfMonth = "Март"
+        return nameOfMonth
+    case .april     : nameOfMonth = "Апрель"
+        return nameOfMonth
+    case .may       : nameOfMonth = "Май"
+        return nameOfMonth
+    case .june      : nameOfMonth = "Июнь"
+        return nameOfMonth
+    case .july      : nameOfMonth = "Июль"
+        return nameOfMonth
+    case .august    : nameOfMonth = "Август"
+        return nameOfMonth
+    case .september : nameOfMonth = "Сентябрь"
+        return nameOfMonth
+    case .october   : nameOfMonth = "Октябрь"
+        return nameOfMonth
+    case .november  : nameOfMonth = "Ноябрь"
+        return nameOfMonth
+    case .december  : nameOfMonth = "Декабрь"
+        return nameOfMonth
+    }
+}
 
+print("Я умею выводить имя месяца по его порядковому номеру!")
+print("Название какого из 12 месяцев вы хотите узнать?:", terminator: " ")
+if let inputNum = readLine(), let numOfMonth = Int(inputNum), (numOfMonth >= 1 && numOfMonth <= 12) {
+    let month = Month.init(rawValue: numOfMonth)
+    let strOfMonth = whichMonth(month!)
+    print("\(numOfMonth)-й месяц называется \(strOfMonth)")
+}
+else {
+    print("Такого месяца нет!")
+}
 
+// 2. HTTP методы
 
-// 3.
+enum HTTPMetod {
+    // Перечисляю методы HTTP
+    case GET, POST, PUT, DELETE
+    // Создаю описание для каждого метода HTTP
+    func description() {
+        switch self {
+        case .GET    :  print("""
+                              Метод GET запрашивает представление ресурса. 
+                              Запросы с использованием этого метода могут только извлекать данные.
+                              """)
+        case .POST   :  print("""
+                              Метод POST используется для отправки сущностей к определённому ресурсу. 
+                              Часто вызывает изменение состояния или какие-то побочные эффекты на сервере.
+                              """)
+        case .PUT    :  print("""
+                              Метод PUT заменяет все текущие представления ресурса данными запроса.
+                              """)
+        case .DELETE :  print("""
+                              Метод DELETE удаляет указанный ресурс.
+                              """)
+        }
+    }
+}
 
+let aboutMethod = HTTPMetod.GET
+aboutMethod.description()
 
+// 3. Координаты точек
 
-// 4.
+enum Point {
+    case coordinates(x: Double, y: Double)
+}
 
+func distance(point1 : Point, point2 : Point) -> Double {
+    // надо еще раз обсудить доставание значений, я кажется не до конца понимаю эту конструкцию...
+    guard case let .coordinates(x1, y1) = point1, // создаем две константы за раз
+          case let .coordinates(x2, y2) = point2 else { // создаем еще две константы за раз
+        return 0 // возвращаем ноль если не получилось присвоить значения
+    }
 
+    // d = sqrt((x2 - x1)^2 + (y2 - y1)^2)
+    let dx = x2 - x1
+    let dy = y2 - y1
+    let result = sqrt(dx * dx + dy * dy)
+    return result
+}
 
-// 5.
+let pointA = Point.coordinates(x: 2, y: 5)
+let pointB = Point.coordinates(x: -2, y: -6)
 
+let distanceBetween = distance(point1: pointA, point2: pointB)
+print("Расстояние между точками \(pointA) - \(pointB) = \(distanceBetween)")
 
+// 4. Типы ошибок
+
+enum ErrorType {
+    case invalidInput, fileNotFound, networkError
+    
+    func message() -> String {
+        var errorMessage = ""
+        switch self {
+        case .invalidInput : errorMessage = "Некорректный ввод"
+            return errorMessage
+        case .fileNotFound : errorMessage = "Файл не найден"
+            return errorMessage
+        case .networkError : errorMessage = "Ошибка сети"
+            return errorMessage
+        }
+    }
+}
+
+let error = ErrorType.fileNotFound
+print(error.message())
+
+// 5. Типы данных
+
+enum DataType {
+    case integer(value: Int)
+    case double(value: Double)
+    case string(value: String)
+    case bool(value: Bool)
+}
+
+let str: DataType = .string(value: "Привет!")
 
 // */
 
 // lvl_3
 // /*
-// 1.
+// 1. Выражения арифметических операций
+
+enum Operation {
+    case add(leftOperand: Double, rightOperand: Double)
+    case substract(leftOperand: Double, rightOperand: Double)
+    case multiply(leftOperand: Double, rightOperand: Double)
+    case divide(leftOperand: Double, rightOperand: Double)
+}
+
+func calculate(_ operation: Operation) -> Double? {
+    switch operation {
+    case let .add(leftOperand: leftOp, rightOperand: rightOp) :
+        return leftOp + rightOp
+    case let .divide(leftOperand: leftOp, rightOperand: rightOp) :
+        if rightOp != 0 {
+            return leftOp / rightOp
+        }
+        else {
+            print("Деление на ноль!")
+            return nil
+        }
+    case let .multiply(leftOperand: leftOp, rightOperand: rightOp) :
+        return leftOp * rightOp
+    case let .substract(leftOperand: leftOp, rightOperand: rightOp) :
+        return leftOp - rightOp
+    }
+}
+
+let operationToCalculate: Operation = .divide(leftOperand: 13, rightOperand: 3)
+let resultOfCalculate = calculate(operationToCalculate)
+if resultOfCalculate != nil { // перед распаковкой опционала проверяю содержит ли он значение
+    print("Результат вычисления: \(resultOfCalculate!)")
+}
+
+// 2. Фигуры
+
+enum Shape {
+    case circle(radius: Double)
+    case rectangle(sideA: Double, sideB: Double)
+    case triangle(sideForArea: Double, height: Double)
+    
+    // общий вопрос, должен ли корректность ввода проверять метод, или это обработка при вводе значений пользователем?
+    func area() -> Double {
+        switch self {
+        case let .circle(radius: radiusOfCircle) :
+            return 3.14 * radiusOfCircle * radiusOfCircle
+        case let .rectangle(sideA: sideA, sideB: sideB) :
+            return sideA * sideB
+        case let .triangle(sideForArea: side, height: height) :
+            return (side * height) / 2
+        }
+    }
+}
+
+let someFigure: Shape = .triangle(sideForArea: 12, height: 23)
+print("Площадь выбранной фигуры равна: \(someFigure.area())")
+
+// 3. Монеты
 
 
-// 2.
+
+// 4. Статус заказа
 
 
 
-// 3.
-
-
-
-// 4.
-
-
-
-// 5.
+// 5. Калькулятор с перечислением
 
 
 
