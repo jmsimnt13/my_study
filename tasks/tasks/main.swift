@@ -1825,7 +1825,7 @@ else {
 */
 
 // lvl_2
-// /*
+/*
 // 1. Перечисления с raw значениями
 
 enum Month: Int {
@@ -1962,7 +1962,7 @@ enum DataType {
 
 let str: DataType = .string(value: "Привет!")
 
-// */
+*/
 
 // lvl_3
 // /*
@@ -2011,7 +2011,7 @@ enum Shape {
     func area() -> Double {
         switch self {
         case let .circle(radius: radiusOfCircle) :
-            return 3.14 * radiusOfCircle * radiusOfCircle
+            return Double.pi * radiusOfCircle * radiusOfCircle
         case let .rectangle(sideA: sideA, sideB: sideB) :
             return sideA * sideB
         case let .triangle(sideForArea: side, height: height) :
@@ -2025,15 +2025,90 @@ print("Площадь выбранной фигуры равна: \(someFigure.a
 
 // 3. Монеты
 
+enum Coin: Int {
+    case one = 1
+    case two = 2
+    case five = 5
+    case ten = 10
+    case fifty = 50
+    case hundred = 100
+    case twoHundred = 200
+    case fiveHundred = 500
+    case thousand = 1000
+}
 
+func totalValueInWallet(_ coins: [Coin]) -> Int {
+    var totalValue = 0
+    for coin in coins {
+        totalValue += coin.rawValue
+    }
+    return totalValue
+}
+
+let myWallet: [Coin] = [.one, .ten, .twoHundred]
+
+let totalValue = totalValueInWallet(myWallet)
+print("Содержимое кошелька: \(totalValue) монет")
 
 // 4. Статус заказа
 
+enum OrderStatus {
+    case new
+    case inProgress
+    case sent
+    case delivered
+    
+    func canCancel() -> Bool {
+        switch self {
+        case .new        : return true
+        case .inProgress : return true
+        case .sent       : return false 
+        case .delivered  : return false
+        }
+    }
+}
 
+let myOrder = OrderStatus.new
+
+let canCancel = myOrder.canCancel()
+if canCancel {
+    print("Да, заказ может быть отменен на данном этапе")
+}
+else {
+    print("Нет, к сожалению заказ отменить уже нельзя")
+}
 
 // 5. Калькулятор с перечислением
 
+enum CalculatorAction {
+    case add(leftOperand: Double, rightOperand: Double)
+    case substract(leftOperand: Double, rightOperand: Double)
+    case multiply(leftOperand: Double, rightOperand: Double)
+    case divide(leftOperand: Double, rightOperand: Double)
+}
 
+func actionOfCalc(_ operation: CalculatorAction) -> Double {
+    switch operation {
+    case let .add(leftOperand: leftOp, rightOperand: rightOp) :
+        return leftOp + rightOp
+    case let .divide(leftOperand: leftOp, rightOperand: rightOp) :
+        if rightOp != 0 {
+            return leftOp / rightOp
+        }
+        else {
+            print("Деление на ноль!")
+            return 0
+        }
+    case let .multiply(leftOperand: leftOp, rightOperand: rightOp) :
+        return leftOp * rightOp
+    case let .substract(leftOperand: leftOp, rightOperand: rightOp) :
+        return leftOp - rightOp
+    }
+}
+
+let mul = CalculatorAction.multiply(leftOperand: 2, rightOperand: 345)
+
+print(actionOfCalc(mul))
 
 // */
 
