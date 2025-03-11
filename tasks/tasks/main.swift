@@ -1965,7 +1965,7 @@ let str: DataType = .string(value: "Привет!")
 */
 
 // lvl_3
-// /*
+/*
 // 1. Выражения арифметических операций
 
 enum Operation {
@@ -2110,27 +2110,206 @@ let mul = CalculatorAction.multiply(leftOperand: 2, rightOperand: 345)
 
 print(actionOfCalc(mul))
 
-// */
+*/
 
 // lvl_dop
 // /*
-// 1.
+// 1. Телефонные номера
+
+enum PhoneNumberType {
+    case mobile(countryCode: String) // +7 (123) 456-7890
+    case home(countryCode: String) // +7 (495) 123-45-67
+    case work(countryCode: String) // +7 (495) 123-4567
+}
+
+func formatNumber(number: String, typeOfNumber: PhoneNumberType) -> String {
+    switch typeOfNumber {
+    case .home(countryCode: let code):
+        if number.count == 11 {
+            let cityCode = number.dropFirst(1).prefix(3)
+            let body1 = number.dropFirst(4).prefix(3)
+            let body2 = number.dropFirst(7).prefix(2)
+            let body3 = number.dropFirst(9).prefix(2)
+            return "+\(code) (\(cityCode)) \(body1)-\(body2)-\(body3)"
+        }
+        else {
+            return "Неправильный номер!"
+        }
+    case .mobile(countryCode: let code):
+        if number.count == 11 {
+            let cityCode = number.dropFirst(1).prefix(3)
+            let body1 = number.dropFirst(4).prefix(3)
+            let body2 = number.dropFirst(7).prefix(4)
+            return "+\(code) (\(cityCode)) \(body1)-\(body2)"
+        }
+        else {
+            return "Неправильный номер!"
+        }
+    case .work(countryCode: let code):
+        if number.count == 11 {
+            let cityCode = number.dropFirst(1).prefix(3)
+            let body1 = number.dropFirst(4).prefix(3)
+            let body2 = number.dropFirst(7).prefix(4)
+            return "+\(code) (\(cityCode)) \(body1)-\(body2)"
+        }
+        else {
+            return "Неправильный номер!"
+        }
+    }
+}
+
+let myNumber = "79992578713"
+print(formatNumber(number: myNumber, typeOfNumber: .mobile(countryCode: "7")))
+
+// 2. Режим работы приложения
+
+enum AppMode {
+    case LightTheme
+    case DarkTHeme
+    case BatterySaveMode
+
+    func apply() -> String {
+        switch self {
+        case .LightTheme: return "Активирована светлая тема"
+        case .DarkTHeme: return "Активирована темная тема"
+        case .BatterySaveMode: return "Активирован режим энергосбережения"
+        }
+    }
+}
+
+let myApp = AppMode.BatterySaveMode
+print(myApp.apply())
 
 
-// 2.
+// 3. Карты
 
+// Перечисление для масти
+enum CardSuit: String {
+    case spades = "\u{2660}"
+    case hearts = "\u{2665}"
+    case diamonds = "\u{2666}"
+    case clubs = "\u{2663}"
+}
 
+// Перечисление для ранга карт
+enum CardRunk: String {
+    case two = "2"
+    case three = "3"
+    case four = "4"
+    case five = "5"
+    case six = "6"
+    case seven = "7"
+    case eight = "8"
+    case nine = "9"
+    case ten = "10"
+    case jack = "J"
+    case queen = "Q"
+    case king = "K"
+    case ace = "A"
+}
 
-// 3.
+// Структура для отображения
+struct Card {
+    let suit: CardSuit
+    let runk: CardRunk
+    
+    func description() -> String {
+        return "\(runk.rawValue)\(suit.rawValue)"
+    }
+}
 
+// Функция возвращающая массив структур типа Карта
+func generateCardDeck() -> [Card] {
+    var cardDeck: [Card] = []
+    
+    // Массив мастей типа CardSuit
+    let suits: [CardSuit] = [.spades, .hearts, .diamonds, .clubs]
+    
+    // Массив рангов типа CardRank
+    let ranks: [CardRunk] = [.two, .three, .four, .five, .six, .seven, .eight, .nine, .ten,
+                             .jack, .queen, .king, .ace]
+    
+    // Сбор колоды
+    for suit in suits {
+        for rank in ranks {
+            let card = Card(suit: suit, runk: rank)
+            cardDeck.append(card)
+        }
+    }
+    
+    return cardDeck
+}
 
+let cardDeck = generateCardDeck()
 
-// 4.
+for card in cardDeck {
+    print(card.description())
+}
 
+// 4. Команды управления роботом
 
+enum RobotCommand {
+    case forward(howMany: Int)
+    case backward(howMany: Int)
+    case turnLeft(whichAngle: Int)
+    case turnRight(whichAngle: Int)
+}
 
-// 5.
+func executeCommand(_ command: RobotCommand) -> String {
+    switch command {
+    case .forward(howMany: let steps):
+        return "Робот проехал \(steps) шагов вперед"
+    case .backward(howMany: let steps):
+        return "Робот проехал \(steps) шагов назад"
+    case .turnLeft(whichAngle: let degrees):
+        return "Робот повернулся на \(degrees) градусов влево"
+    case .turnRight(whichAngle: let degrees):
+        return "Робот повернулся на \(degrees) градусов вправо"
+    }
+}
 
+// Массив для хранения перемещений моего робота
+var myWayForRobot: [RobotCommand] = []
 
+// Заполняю массив перемещений для моего робота команадами
+myWayForRobot.append(RobotCommand.forward(howMany: 10))
+myWayForRobot.append(RobotCommand.turnRight(whichAngle: 36))
+myWayForRobot.append(RobotCommand.forward(howMany: 7))
+
+print(executeCommand(myWayForRobot[0]))
+print(executeCommand(myWayForRobot[1]))
+print(executeCommand(myWayForRobot[2]))
+
+// 5. Типы событий
+
+enum EventType {
+    case meeting(date: Date, time: String, location: String)
+    case conference(date: Date, time: String, location: String, speakers: [String])
+    case seminar(date: Date, time: String, location: String, topic: String)
+}
+
+func processEvent(_ event: EventType) -> String {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateStyle = .medium
+    dateFormatter.timeStyle = .none
+    
+    switch event {
+    case let .meeting(date, time, location):
+        return "Встреча: \(dateFormatter.string(from: date)) - \(time) - \(location)"
+    case let .conference(date, time, location, speakers):
+        return "Конференция: \(dateFormatter.string(from: date)) - \(time) - \(location)\nСпикеры: \(speakers.joined(separator: ", "))"
+    case let .seminar(date, time, location, topic):
+        return "Семинар: \(dateFormatter.string(from: date)) - \(time) - \(location)\nТема: \(topic)"
+    }
+}
+
+let calendar = Calendar.current
+let components = DateComponents(year: 2025, month: 03, day: 11)
+let date = calendar.date(from: components)!
+
+// Семинар
+let seminar = EventType.seminar(date: date, time: "18:30", location: "ConfHall 187", topic: "Swift Vkat")
+
+print(processEvent(seminar))
 
 // */
