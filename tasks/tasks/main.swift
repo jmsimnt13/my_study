@@ -10,6 +10,7 @@ import Foundation
 print("Hello, World! Here's my tasks")
 
 // Conditions
+/*
 // lvl_1
 /*
 // 1.
@@ -548,9 +549,10 @@ if let inputTotal = readLine(), let total = Double(inputTotal), total > 0
 }
 
 */
-
+*/
 
 // Loops
+/*
 // lvl_1
 /*
 // 1.
@@ -988,9 +990,10 @@ else
     print("В этом массиве не нашлось серий из чисел(")
 }
 */
-
+*/
 
 // Functions
+/*
 // lvl_1
 /*
 // 1. Приветствие
@@ -1624,9 +1627,10 @@ else {
     print("Похоже что-то пошло не так...")
 }
 */
-
+*/
 
 // Enumerations
+/*
 // lvl_1
 /*
 // 1. Дни недели
@@ -2113,7 +2117,7 @@ print(actionOfCalc(mul))
 */
 
 // lvl_dop
-// /*
+/*
 // 1. Телефонные номера
 
 enum PhoneNumberType {
@@ -2311,5 +2315,84 @@ let date = calendar.date(from: components)!
 let seminar = EventType.seminar(date: date, time: "18:30", location: "ConfHall 187", topic: "Swift Vkat")
 
 print(processEvent(seminar))
+
+*/
+*/
+
+
+// Structures and Classes
+// /*
+// lvl_1
+// /*
+// 1. Создание простой структуры && 3. Методы в структуре
+
+struct Person {
+    var name: String
+    var age: Int
+    
+    // 3.
+    func sayHello() -> String {
+        return "Привет, меня зовут \(self.name) и мне \(self.age) лет!"
+    }
+}
+
+let somebody = Person(name: "Данила", age: 25)
+print(somebody.sayHello())
+
+
+// 2. Создание простого класса && 4. Методы в классе && 5. Инициализатор
+
+class Car {
+    var brand: String
+    var model: String
+    var year: Int
+    
+    // 4.
+    func startEngine() -> String {
+        return "Двигатель \(self.brand) \(self.model) запущен!"
+    }
+    
+    // 5.
+    init(brand: String, model: String, year: Int) {
+        self.brand = brand
+        self.model = model
+        self.year = year
+    }
+}
+
+let someCar = Car(brand: "Honda", model: "CR-V", year: 2013)
+// 2.
+print("У нас тут машина \(someCar.brand) \(someCar.model) \(someCar.year) года.")
+// 4.
+print(someCar.startEngine())
+
+// */
+
+// lvl_2
+/*
+// 1.
+// 2.
+// 3.
+// 4.
+// 5.
+ */
+
+// lvl_3
+/*
+// 1.
+// 2.
+// 3.
+// 4.
+// 5.
+ */
+
+// lvl_dop
+/*
+// 1.
+// 2.
+// 3.
+// 4.
+// 5.
+ */
 
 // */
