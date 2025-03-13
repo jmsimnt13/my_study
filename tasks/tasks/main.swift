@@ -2323,7 +2323,7 @@ print(processEvent(seminar))
 // Structures and Classes
 // /*
 // lvl_1
-// /*
+/*
 // 1. Создание простой структуры && 3. Методы в структуре
 
 struct Person {
@@ -2366,33 +2366,212 @@ print("У нас тут машина \(someCar.brand) \(someCar.model) \(someCar
 // 4.
 print(someCar.startEngine())
 
-// */
+*/
 
 // lvl_2
-/*
-// 1.
-// 2.
-// 3.
-// 4.
-// 5.
- */
+// /*
+// 1. Различия между классами и структурами
+
+struct Point {
+    var x: Int
+    var y: Int
+}
+
+var point1 = Point(x: 21, y: 19)
+var point2 = point1
+
+print("До изменений экземпляра структуры:")
+print(point1.x, point1.y)
+print(point2.x, point2.y)
+
+point1.x = 10
+
+print("После изменений экземпляра структуры:")
+print(point1.x, point1.y)
+print(point2.x, point2.y)
+
+// => экземляры point1 point2 получили копии структуры для работы
+
+class PointClass {
+    var x: Int
+    var y: Int
+    
+    init(x: Int, y: Int) {
+        self.x = x
+        self.y = y
+    }
+}
+
+var point3 = PointClass(x: 34, y: 17)
+var point4 = point3
+
+print("До изменений экземпляра класса:")
+print(point3.x, point3.y)
+print(point4.x, point3.y)
+
+point3.x = 10
+
+print("После изменений экземпляра класса:")
+print(point3.x, point3.y)
+print(point4.x, point3.y)
+
+// => экземпляры point3 point4 ссылаются на одну область в памяти, полученную при инициализации point3
+ 
+// 2. Вычисляемые свойства
+
+//struct Person {
+//    var name: String
+//    var age: Int
+//    
+//    func isAdult() -> Bool {
+//        return self.age >= 18
+//    }
+//    
+//    func sayHello() -> String {
+//        return "Привет, меня зовут \(self.name) и мне \(self.age) лет!"
+//    }
+//}
+//
+//var me = Person(name: "Данила", age: 25)
+//if me.isAdult() {
+//    print("Вы совершеннолетний.")
+//}
+//else {
+//    print("Вы не достигли совершеннолетия.")
+//}
+
+// 3. Свойства только для чтения
+
+//class Car {
+//    var brand: String
+//    var model: String
+//    var year: Int
+//    
+//    var description: String {
+//        return "Это \(self.brand) \(self.model) \(self.year) года выпуска."
+//    }
+//    
+//    func startEngine() -> String {
+//        return "Двигатель \(self.brand) \(self.model) запущен!"
+//    }
+//    
+//    init(brand: String, model: String, year: Int) {
+//        self.brand = brand
+//        self.model = model
+//        self.year = year
+//    }
+//}
+//
+//var someCar = Car(brand: "Honda", model: "CR-V", year: 2013)
+//print(someCar.description)
+
+// 4. Наследование
+
+//class Vehicle {
+//    var brand: String
+//    var model: String
+//    var year: Int
+//    
+//    func drive() -> String {
+//        return "Автомобиль \(self.brand) \(self.model) едет!"
+//    }
+//    
+//    init(brand: String, model: String, year: Int) {
+//        self.brand = brand
+//        self.model = model
+//        self.year = year
+//    }
+//}
+//class Car: Vehicle {
+//var numOfDoor: Int
+//
+//// инициализатор для класса Car
+//init(brand: String, model: String, year: Int, numOfDoor: Int) {
+//    self.numOfDoor = numOfDoor
+//    super.init(brand: brand, model: model, year: year) // Инициализатор родительского класса
+//}
+//
+//// Переопределение метода drive()
+//override func drive() -> String {
+//    return "\(self.numOfDoor)-дверный автомобиль \(self.brand) \(self.model) едет!"
+//}
+//}
+//
+//let someCar = Car(brand: "Honda", model: "CR-V", year: 2013, numOfDoor: 5)
+//print(someCar.drive())
+
+// 5. Протоколы
+
+// Усов с. 405
+protocol Describable {
+    var description: String { get }
+}
+
+class Car: Describable {
+    var brand: String
+    var model: String
+    var year: Int
+    var description: String {
+        return "Это \(self.brand) \(self.model) \(self.year) года выпуска."
+    }
+
+    func startEngine() -> String {
+        return "Двигатель \(self.brand) \(self.model) запущен!"
+    }
+
+    init(brand: String, model: String, year: Int) {
+        self.brand = brand
+        self.model = model
+        self.year = year
+    }
+}
+
+struct Person: Describable {
+    var name: String
+    var age: Int
+    var description: String {
+        return "Привет, меня зовут \(self.name) и мне \(self.age) лет!"
+    }
+    
+    func isAdult() -> Bool {
+        return self.age >= 18
+    }
+    
+    func sayHello() -> String {
+        return "Привет, меня зовут \(self.name) и мне \(self.age) лет!"
+    }
+}
+
+var me = Person(name: "Данила", age: 25)
+print(me.description)
+if me.isAdult() {
+    print("Вы совершеннолетний.")
+}
+else {
+    print("Вы не достигли совершеннолетия.")
+}
+
+var someCar = Car(brand: "Honda", model: "CR-V", year: 2013)
+print(someCar.description)
+
+// */
 
 // lvl_3
-/*
+// /*
 // 1.
 // 2.
 // 3.
 // 4.
 // 5.
- */
+// */
 
 // lvl_dop
-/*
+// /*
 // 1.
 // 2.
 // 3.
 // 4.
 // 5.
- */
+// */
 
 // */

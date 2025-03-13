@@ -1,72 +1,74 @@
-let result = "failure"
-let result2 = "fail"
-// путанница....
-
-enum Result {
-    case success
-    case failure
+struct Weapon {
+    var type: String = "Sword"
+    var range: Int = 1
 }
 
-var result4 = Result.failure
-result4 = .success
-let result5: Result
-
-result5 = .success
-
-
-enum Activity {
-    case dancing
-    case running(destination: String)
-    case singing(volume: Int)
-    case talking(topic: String)
+class Person {
+    let id = Int.random(in: 1...100)
+    var name = "Danila"
+    var personClass = "anykey"
+    var hp = 89
+    var mp = 20
+    
+    func greating() {
+        print("hello my name is \(name), I'm \(personClass)")
+    }
 }
 
-let currentActivity = Activity.dancing
+let person1 = Person()
+person1.greating()
+var weapon = Weapon()
+person1.personClass = "iOS Developer"
+person1.hp = 98
+person1.greating()
 
-switch currentActivity {
-case .dancing : print("Dance")
-case .running(destination: let destination): print("In \(destination)")
-case .singing(volume: let volume): print("At \(volume)")
-case .talking(topic: let topic): print("About \(topic)")
+class Animal {
+    var name: String
+    var type: String
+    var numberOfLegs: Int
+    
+    init(nameOfAnimal: String, typeOfAnimal: String, numberOfLegsOfAnimal: Int) {
+        name = nameOfAnimal
+        type = typeOfAnimal
+        numberOfLegs = numberOfLegsOfAnimal
+    }
 }
 
-print(currentActivity)
+let human = Animal(nameOfAnimal: "Danila", typeOfAnimal: "Human", numberOfLegsOfAnimal: 2)
+human.name
 
-let talking = Activity.talking(topic: "Football")
+var axe = Weapon()
+var sword = Weapon()
+var copy = axe
+axe.type = "axe"
+copy.type = "copy"
 
-enum Planet: Int {
-    case mercury = 1
-    case venus
-    case earth
-    case mars
+
+sword.type
+axe.type
+copy.type
+
+let tiger = Animal(nameOfAnimal: "Ruletik", typeOfAnimal: "cats", numberOfLegsOfAnimal: 4)
+let dove = tiger
+dove.type = "dove"
+
+tiger.type
+dove.type
+
+// === !==
+
+if tiger === dove {
+    print("Две переменные ссылаются на один экземпляр класса Animal")
 }
 
-let earth = Planet.earth
-print(earth.rawValue)
-
-enum Phone: String {
-    case Apple = "iPhone 14 Pro"
-    case Samsung = "Galaxy s25 Ultra"
-    case Google = "Pixel 9 Pro"
+struct A: Equatable {
+    static func == (lhs: A, rhs: A) -> Bool {
+        return lhs.a == rhs.a
+    }
+    
+    var a: Int
 }
 
-var myPhone = Phone.Apple
-print(myPhone)
-print(myPhone.rawValue)
-
-
-enum Barcode {
-    case upc(Int, Int, Int, Int)
-    case qrCode(String)
-}
-
-var productBarcode = Barcode.upc(8, 1223, 234, 4124)
-
-//productBarcode = .qrCode("abcdefghi")
-
-switch productBarcode {
-case let .upc(numberSys, manufacturer, product, check) :
-    print("UPC: \(numberSys) \(manufacturer) \(product) \(check)")
-case .qrCode(let productCode) :
-    print("QR Code: \(productCode)")
-}
+let one = A(a: 1)
+let two = A(a: 2)
+one == two
