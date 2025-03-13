@@ -2369,7 +2369,7 @@ print(someCar.startEngine())
 */
 
 // lvl_2
-// /*
+/*
 // 1. Различия между классами и структурами
 
 struct Point {
@@ -2554,15 +2554,125 @@ else {
 var someCar = Car(brand: "Honda", model: "CR-V", year: 2013)
 print(someCar.description)
 
-// */
+*/
 
 // lvl_3
 // /*
-// 1.
-// 2.
-// 3.
-// 4.
-// 5.
+// 1. Композиция
+
+class Address {
+    var street: String
+    var city: String
+    var zipCode: Int?
+    
+    init(street: String, city: String, zipCode: Int?) {
+        self.street = street
+        self.city = city
+        self.zipCode = zipCode
+    }
+}
+
+class Person {
+    var name: String
+    var age: Int
+    var address: Address
+    
+    init(name: String, age: Int, address: Address) {
+        self.name = name
+        self.age = age
+        self.address = address
+    }
+}
+
+var me = Person(name: "Данила", age: 25, address: .init(street: "Скарятинский пер.", city: "Москва", zipCode: 121069))
+print("\(me.name) живет в городе \(me.address.city), на \(me.address.street),")
+print("ему \(me.age), возможно вы можете отправить ему письмо на \(me.address.zipCode ?? 0)")
+
+
+// 2. Статические свойства и методы
+
+class Car {
+    var brand: String
+    var model: String
+    var year: Int
+    
+    // статическое свойство
+    static var totalCars: Int  = 0
+
+    init(brand: String, model: String, year: Int) {
+        self.brand = brand
+        self.model = model
+        self.year = year
+        
+        // при инициализации свойство увеличивается
+        Car.totalCars += 1
+    }
+    
+    // статический метод для вывода
+    static func printTotalCars() {
+        print("Всего создано \(totalCars) автомобилей")
+    }
+}
+
+let car1 = Car(brand: "Honda", model: "CR-V", year: 2013)
+let car2 = Car(brand: "Lada", model: "Vesta", year: 2024)
+let car3 = Car(brand: "Skoda", model: "Octavia", year: 2019)
+
+Car.printTotalCars()
+
+// 3. Кастомный инициализатор
+
+struct Rectangle {
+    var width: Double
+    var height: Double
+    
+    init(area: Double) {
+        self.height = sqrt(area)
+        self.width = sqrt(area)
+    }
+}
+
+var rect = Rectangle(area: 256.87)
+print("При введенной площади")
+print("Ширина: \(rect.width), высота: \(rect.height)")
+
+// 4. Копирование объектов
+
+class Book {
+    // Свойства класса
+    var title: String
+    var author: String
+    
+    init(title: String, author: String) {
+        self.title = title
+        self.author = author
+    }
+    
+    // Методы класса
+    func copy() -> Book {
+        return Book(title: title, author: author)
+    }
+}
+
+let book1 = Book(title: "Кровь эльфов", author: "А. Сапковский")
+let book2 = book1.copy()
+print(book1 === book2) // определяем тожественность данных экземпляров
+
+// 5. Сравнение объектов
+
+struct Point {
+    var x: Int
+    var y: Int
+    
+    func isEqual(to other: Point) -> Bool {
+        return x == other.x && y == other.y
+    }
+}
+
+let point1 = Point(x: 1, y: 2)
+let point2 = Point(x: 3, y: 3)
+print(point1.isEqual(to: point2))
+
 // */
 
 // lvl_dop
