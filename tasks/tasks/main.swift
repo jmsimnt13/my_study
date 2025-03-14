@@ -2556,8 +2556,9 @@ print(someCar.description)
 
 */
 
+
 // lvl_3
-// /*
+/*
 // 1. Композиция
 
 class Address {
@@ -2673,15 +2674,118 @@ let point1 = Point(x: 1, y: 2)
 let point2 = Point(x: 3, y: 3)
 print(point1.isEqual(to: point2))
 
-// */
+*/
 
 // lvl_dop
 // /*
-// 1.
-// 2.
-// 3.
-// 4.
-// 5.
+// 1. Хранение массива объектов
+
+class Student {
+    var name: String
+    var grade: Int
+    
+    init(name: String, grade: Int) {
+        self.name = name
+        self.grade = grade
+    }
+}
+
+class Classroom {
+    // Свойства класса
+    var students: [Student] = []
+    
+    // Методы класса
+    // Добавление студента
+    func addStudent(_ student: Student) {
+        students.append(student)
+    }
+    // Отчисление студента
+    func removeStudent(_ who: String) {
+        for (position, student) in students.enumerated() {
+            if student.name == who {
+                students.remove(at: position)
+            }
+        }
+    }
+    // Получить среднюю оценку
+    func getAverageGrade() -> Double {
+        var sumOfGrades = 0
+        for student in students {
+            sumOfGrades += student.grade
+        }
+        return Double(sumOfGrades) / Double(students.count)
+    }
+}
+
+let student1 = Student(name: "Иван", grade: 4)
+let student2 = Student(name: "Петр", grade: 5)
+let student3 = Student(name: "Мария", grade: 5)
+let student4 = Student(name: "Дарья", grade: 4)
+let student5 = Student(name: "Александр", grade: 4)
+
+var myClass = Classroom()
+myClass.addStudent(student1)
+myClass.addStudent(student2)
+myClass.addStudent(student3)
+myClass.addStudent(student4)
+myClass.addStudent(student5)
+print("Средняя оценка: \(myClass.getAverageGrade())")
+print("Отчислим одного студента...")
+myClass.removeStudent("Мария")
+print("Теперь студентов у нас:")
+for student in myClass.students {
+    print(student.name)
+}
+print("Средняя оценка: \(myClass.getAverageGrade())")
+
+// 2. Константные свойства
+
+class Circle {
+    // изменяемое свойство
+    var radius: Double
+    // статическое свойство константное
+    static let pi = 3.14159
+    
+    init(radius: Double) {
+        self.radius = radius
+    }
+    
+    func area() -> Double {
+        return Circle.pi * radius * radius
+    }
+}
+
+let myCircle = Circle(radius: 24.3)
+print("Площадь круга с радиусом \(myCircle.radius) = \(myCircle.area())")
+
+// 3. Расширения
+
+extension String {
+    func isPalindrome() -> Bool {
+        // Строка содержащая перевернутую изначальную
+        var reversedStr = ""
+        // Наполняем строку перевертыш
+        for char in self.reversed() {
+            reversedStr.append(char)
+        }
+        // Проверяем по итогу
+        if self == reversedStr {
+            return true
+        }
+        else {
+            return false
+        }
+    }
+}
+
+let testStr = "привет"
+if testStr.isPalindrome() {
+    print("'\(testStr)' является палиндромом!")
+}
+else {
+    print("'\(testStr)' не является палиндромом!")
+}
+
 // */
 
 // */
