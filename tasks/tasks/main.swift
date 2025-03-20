@@ -2321,7 +2321,7 @@ print(processEvent(seminar))
 
 
 // Structures and Classes
-// /*
+/*
 // lvl_1
 /*
 // 1. Создание простой структуры && 3. Методы в структуре
@@ -2677,7 +2677,7 @@ print(point1.isEqual(to: point2))
 */
 
 // lvl_dop
-// /*
+/*
 // 1. Хранение массива объектов
 
 class Student {
@@ -2786,6 +2786,171 @@ else {
     print("'\(testStr)' не является палиндромом!")
 }
 
-// */
+*/
 
-// */
+*/
+
+// Closures
+//*
+// lvl_1
+//*
+// 1. Протокол Describable
+
+protocol Describeable {
+	var description: String { get }
+}
+
+class Person: Describeable {
+	var name: String
+	
+	init(name: String) {
+		self.name = name
+	}
+	
+	var description: String {
+		return "Привет! Я \(name)!"
+	}
+}
+
+class Car: Describeable {
+	var model: String
+	
+	init(model: String) {
+		self.model = model
+	}
+	
+	var description: String {
+		return "Перед нами \(model)!"
+	}
+}
+
+let myCar = Car(model: "Honda CR-V")
+let iAmPerson = Person(name: "Данила")
+
+print(iAmPerson.description)
+print(myCar.description)
+
+// 2. Протокол Comparable
+
+protocol Comparable {
+	func isBigger(_ thanWho: Student) -> Bool // Сранивает больше ли у выбранного студента средний бал
+}
+
+class Student: Comparable {
+	var name: String
+	var averageScore: Double
+	
+	init(name: String, score: Double) {
+		self.name = name
+		self.averageScore = score
+	}
+	
+	func isBigger(_ thanWho: Student) -> Bool {
+		if self.averageScore > thanWho.averageScore {
+			return true
+		}
+		else {
+			return false
+		}
+	}
+}
+
+let student1 = Student(name: "Петр", score: 4.2)
+let student2 = Student(name: "Анна", score: 4.1)
+let isBigger = student1.isBigger(student2)
+print(isBigger)
+
+// 3. Расширение String
+
+extension String {
+	func isPalindrome() {
+		var reversedStr = ""
+		
+		for char in self.reversed() {
+			reversedStr.append(char)
+		}
+		
+		if self.uppercased() == reversedStr.uppercased() {
+			print("Слово '\(self)' является палиндромом!")
+		}
+		else {
+			print("Слово '\(self)' не является палиндромом!")
+		}
+	}
+}
+
+let someStr = "Anna"
+someStr.isPalindrome()
+
+// 4. Протокол Equatable
+
+protocol Equateble {
+	func isEqual(to other: Self) -> Bool
+}
+
+struct Point {
+	var x: Int
+	var y: Int
+	
+	func isEqual(to other: Point) -> Bool {
+		return x == other.x && y == other.y
+	}
+}
+
+let point1 = Point(x: 1, y: 2)
+let point2 = Point(x: 3, y: 3)
+print(point1.isEqual(to: point2))
+
+// 5. Расширение Array
+
+extension Array where Element: Numeric {
+	func average() -> Double? {
+		guard !self.isEmpty else {
+			return nil //если массив пустой
+		}
+		
+		let sum = self.reduce(0, +)
+		
+		if let numericSum = sum as? Double {
+			return numericSum / Double(self.count)
+		} else if let numericSum = sum as? Int {
+			return Double(numericSum) / Double(self.count)
+		} else if let numericSum = sum as? Float {
+			return Double(numericSum) / Double(self.count)
+		}
+		
+		return nil
+	}
+}
+
+let testArr = [43.5, 23.23, 76.21]
+if let res = testArr.average() {
+	print("Среднее значение: \(res)")
+} else {
+	print("Массив пустой")
+}
+
+//*/
+
+// lvl_2
+//*
+// 1.
+
+
+//*/
+
+// lvl_3
+//*
+// 1.
+
+
+//*/
+
+// lvl_dop
+//*
+// 1.
+
+
+//*/
+
+//*/

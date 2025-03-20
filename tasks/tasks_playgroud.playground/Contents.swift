@@ -1,74 +1,65 @@
-struct Weapon {
-    var type: String = "Sword"
-    var range: Int = 1
-}
-
-class Person {
-    let id = Int.random(in: 1...100)
-    var name = "Danila"
-    var personClass = "anykey"
-    var hp = 89
-    var mp = 20
-    
-    func greating() {
-        print("hello my name is \(name), I'm \(personClass)")
+struct Circle {
+    var coordinates: (x: Int, y: Int)
+    var radius: Float
+    var perimetr: Float {
+        get {
+            return 2.0 * 3.14 * radius
+        }
+        set {
+            radius = newValue / (2.0 * 3.14)
+        }
     }
 }
 
-let person1 = Person()
-person1.greating()
-var weapon = Weapon()
-person1.personClass = "iOS Developer"
-person1.hp = 98
-person1.greating()
+var myNewCircle = Circle(coordinates: (0,0), radius: 10)
+print(myNewCircle.perimetr)
+myNewCircle.perimetr = 100
+print(myNewCircle.radius)
 
-class Animal {
-    var name: String
-    var type: String
-    var numberOfLegs: Int
-    
-    init(nameOfAnimal: String, typeOfAnimal: String, numberOfLegsOfAnimal: Int) {
-        name = nameOfAnimal
-        type = typeOfAnimal
-        numberOfLegs = numberOfLegsOfAnimal
+extension Int {
+    enum Kind {
+        case negative, zero, positive
+    }
+    var kind: Kind {
+        switch self {
+        case 0: return .zero
+        case let x where x > 0:
+            return .positive
+        default :
+            return .negative
+        }
     }
 }
 
-let human = Animal(nameOfAnimal: "Danila", typeOfAnimal: "Human", numberOfLegsOfAnimal: 2)
-human.name
-
-var axe = Weapon()
-var sword = Weapon()
-var copy = axe
-axe.type = "axe"
-copy.type = "copy"
-
-
-sword.type
-axe.type
-copy.type
-
-let tiger = Animal(nameOfAnimal: "Ruletik", typeOfAnimal: "cats", numberOfLegsOfAnimal: 4)
-let dove = tiger
-dove.type = "dove"
-
-tiger.type
-dove.type
-
-// === !==
-
-if tiger === dove {
-    print("Две переменные ссылаются на один экземпляр класса Animal")
-}
-
-struct A: Equatable {
-    static func == (lhs: A, rhs: A) -> Bool {
-        return lhs.a == rhs.a
+func printIntegerKinds(_ numbers: [Int]) {
+    for number in numbers {
+        switch number.kind {
+        case .negative:
+            print("- ", terminator: "")
+        case .positive:
+            print("+ ", terminator: "")
+        case .zero:
+            print("0 ", terminator: "")
+        }
     }
-    
-    var a: Int
+    print("")
+}
+printIntegerKinds([3, -5, 2, -10, 0, 4, -1])
+
+
+extension Array {
+	func safeElement(_ index: Index) -> Element? {
+		guard index < count else { return nil }
+		
+		return self[index]
+	}
 }
 
-let one = A(a: 1)
-let two = A(a: 2)
-one == two
+
+struct Application {
+	static func main() throws {
+		let a = ["Ivan", "Petr", "Danila"]
+		let elem = a.safeElement(4)
+		print(elem ?? "Not found")
+	}
+}
