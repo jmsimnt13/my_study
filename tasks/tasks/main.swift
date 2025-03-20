@@ -2793,7 +2793,7 @@ else {
 // Closures
 //*
 // lvl_1
-//*
+/*
 // 1. Протокол Describable
 
 protocol Describeable {
@@ -2930,12 +2930,152 @@ if let res = testArr.average() {
 	print("Массив пустой")
 }
 
-//*/
+*/
 
 // lvl_2
 //*
-// 1.
+// 1. Протокол Identifiable
 
+protocol Indentifiable {
+	var id: String { get }
+}
+
+class User: Identifiable {
+	let name: String
+	let id: String
+	static var counter: Int = 0
+	
+	init(_ name: String) {
+		self.name = name
+		self.id = String(User.counter)
+		User.counter += 1
+	}
+}
+
+struct Product: Identifiable {
+	let name: String
+	let id: String
+	static var counter: Int = 0
+	
+	init(_ name: String) {
+		self.name = name
+		self.id = String(Product.counter)
+		Product.counter += 1
+	}
+}
+
+let someProduct1 = Product("Apple iPhone 14 Pro")
+let someProduct2 = Product("Samsung Galaxy S25")
+
+let somePerson1 = User("Василий")
+let somePerson2 = User("Данила")
+
+print(somePerson1.id)
+print(somePerson2.id)
+print(someProduct1.id)
+print(someProduct2.id)
+
+// 2. Расширение Int
+
+extension Int {
+	func isEven() -> Bool {
+		self % 2 == 0 ? true : false
+	}
+}
+
+let someNum = 1243231234
+if someNum.isEven() {
+	print("Число четное!")
+}
+else {
+	print("Число нечетное!")
+}
+
+// 3. Протокол CustomStringConvertible
+
+protocol CustomStringConvertible: AnyObject {
+	var description: String { get }
+}
+
+class Book: CustomStringConvertible {
+	let author: String
+	let title: String
+	
+	init(author: String, title: String) {
+		self.author = author
+		self.title = title
+	}
+	
+	var description: String {
+		"""
+		Автор: \(author) 
+		Книга: \(title)
+		"""
+	}
+}
+
+let myBook = Book(author: "Таненбаум Эндрю", title: "Архитектура компьютера")
+print(myBook.description)
+
+// 4. Протокол Delegate
+
+protocol Delegate: AnyObject {
+	func timerDidStop()
+}
+
+class TimerClass {
+	weak var delegate: Delegate?
+	private var timer: Timer?
+	
+	func start(duration: TimeInterval) {
+		print("Таймер на \(duration) секунд")
+		timer = Timer.scheduledTimer(withTimeInterval: duration, repeats: false) { [weak self] _ in
+			self?.timerFinished()
+		}
+	}
+	
+	private func timerFinished() {
+		print("Таймер закончился!")
+		delegate?.timerDidStop()
+	}
+}
+
+class ViewController: Delegate {
+	private let timer = TimerClass()
+	
+	init() {
+		timer.delegate = self
+	}
+	
+	func startTimer() {
+		timer.start(duration: 5)
+	}
+	
+	func timerDidStop() {
+		print("ViewController: Таймер закончился!")
+	}
+}
+
+let viewController = ViewController()
+viewController.startTimer()
+
+RunLoop.main.run(until: Date().addingTimeInterval(6))
+
+// 5. Расширение Dictionary
+
+extension Dictionary {
+	func keysAsString() -> String {
+		let keysArray = self.keys.map { String(describing: $0) }
+		
+		return keysArray.joined(separator: ", ")
+	}
+}
+
+let dictOne = ["name" : "Данила", "age" : "25", "city" : "Moscow"]
+let dictTwo = [1 : "one", 2 : "two", 3 : "three"]
+
+print(dictOne.keysAsString())
+print(dictTwo.keysAsString())
 
 //*/
 
