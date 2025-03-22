@@ -3080,7 +3080,7 @@ print(dictTwo.keysAsString())
 */
 
 // lvl_3
-//*
+/*
 // 1. Протокол Observable
 
 protocol Observable {
@@ -3193,12 +3193,111 @@ var numbers = [1, 2, 3, 4, 5, 6, 7]
 numbers.removeAll(where: {$0 % 2 == 0})
 print(numbers)
 
-//*/
+*/
 
 // lvl_dop
 //*
-// 1.
+// 1. Протокол PaymentMethod
 
+protocol PaymentMethod {
+	func process(amount: Double)
+}
+
+class CreditCard: PaymentMethod {
+	let cardNum: String
+	
+	init(cardNum: String) {
+		self.cardNum = cardNum
+	}
+	
+	func process(amount: Double) {
+		print("Принят в обработку платеж с карты \(cardNum) на сумму \(amount) RUB")
+	}
+}
+
+class PayPal: PaymentMethod {
+	let email: String
+	
+	init(email: String) {
+		self.email = email
+	}
+	
+	func process(amount: Double) {
+		print("Принят в обработку платеж на адрес PayPal \(email) на сумму \(amount) RUB")
+	}
+}
+
+let myAcc = PayPal(email: "test@gmail.com")
+myAcc.process(amount: 2564.0)
+
+// 2. Расширение для URL
+
+extension URL {
+	func isValid() -> Bool {
+		if self.scheme != nil && !self.absoluteString.isEmpty {
+			true
+		} else {
+			false
+		}
+	}
+}
+
+let someURL = URL(string: "https://youtube.com")
+if let isntNil = someURL?.isValid() {
+	print(isntNil)
+} else {
+	print("Error")
+}
+
+// 3. Протокол Observer
+
+protocol Observer: AnyObject {
+	func update(message: String)
+}
+
+class WeatherObserver: Observer {
+	func update(message: String) {
+		print("Получено обновление погоды: \(message)")
+	}
+}
+
+// 4. Расширение для Date
+
+extension Date {
+	func daysUntil(date: Date) -> Int {
+		let calendar = Calendar.current
+		let dateComponents = calendar.dateComponents([.day], from: self, to: date)
+		return dateComponents.day ?? 0
+	}
+}
+
+let today = Date()
+if let untilDay = Calendar.current.date(byAdding: .day, value: 54, to: today) {
+	let days = today.daysUntil(date: untilDay)
+	print("Дней до требуемой даты: \(days)")
+}
+
+
+// 5. Протокол Transformer
+
+protocol Transformer {
+	associatedtype Input
+	associatedtype Output
+	
+	func transform(_ input: Input) -> Output
+}
+
+class TextEncryptor: Transformer {
+	typealias Input = String
+	typealias Output = String
+	
+	func transform(_ input: String) -> String {
+		return input.uppercased()
+	}
+}
+
+let someTextToEncode = TextEncryptor()
+print(someTextToEncode.transform("Privet"))
 
 //*/
 
