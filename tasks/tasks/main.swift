@@ -2933,7 +2933,7 @@ if let res = testArr.average() {
 */
 
 // lvl_2
-//*
+/*
 // 1. Протокол Identifiable
 
 protocol Indentifiable {
@@ -3077,12 +3077,121 @@ let dictTwo = [1 : "one", 2 : "two", 3 : "three"]
 print(dictOne.keysAsString())
 print(dictTwo.keysAsString())
 
-//*/
+*/
 
 // lvl_3
 //*
-// 1.
+// 1. Протокол Observable
 
+protocol Observable {
+	func notify(message: String)
+}
+
+// 2. Расширение Double
+
+extension Double {
+	func roundToDecimal(places: Int) -> Double {
+		let divisor = pow(10.0, Double(places)) // если умножить число на 10, точка съедет на 1 разряд вправо
+		return (self * divisor).rounded() / divisor // умножаем число на съезд и округляем результат, после чего делим обратно
+		// чтобы точка вернулась на место
+	}
+}
+
+let num = 38.1235723
+print(num.roundToDecimal(places: 4))
+
+// 3. Протокол Codable
+
+struct User: Codable {
+	let name: String
+	let age: Int
+}
+
+// создаю экземпляр пользователя
+let someUser = User(name: "Данила", age: 25)
+
+// преобразовываю в json
+func toJSON(user: User) -> String? {
+	let encoder = JSONEncoder()
+	
+	do {
+		let data = try encoder.encode(user)
+		if let jsonString = String(data: data, encoding: .utf8) {
+			return jsonString
+		}
+	} catch {
+		print("Ошибка \(error)")
+	}
+	return nil
+}
+// обратно в объект User
+func fromJSON(jsonStr: String) -> User? {
+	let decoder = JSONDecoder()
+	guard let data = jsonStr.data(using: .utf8) else {
+		print("Не могу преобразовать строку")
+		return nil
+	}
+	
+	do {
+		let user = try decoder.decode(User.self, from: data)
+		return user
+	} catch {
+		print("Ошибка \(error)")
+	}
+	return nil
+}
+
+
+if let jsonStr = toJSON(user: someUser) {
+	print(jsonStr)
+	print(fromJSON(jsonStr: jsonStr) ?? "Error")
+}
+
+
+
+// 4. Протокол Factory
+
+protocol Factory {
+	func create() -> Car
+}
+
+class Car {
+	let model: String
+	let year: Int
+	
+	init(model: String, year: Int) {
+		self.model = model
+		self.year = year
+	}
+	
+	func description() -> String {
+		return "\(model) \(year)"
+	}
+}
+
+class CarFactory: Factory {
+	func create() -> Car {
+		return Car(model: "Honda CR-V", year: 2013)
+	}
+}
+
+let carFact = CarFactory()
+
+let car = carFact.create()
+
+print(car.description())
+
+// 5. Расширение для коллекций
+
+extension RangeReplaceableCollection {
+	mutating func removeAll(where condition: (Element) -> Bool) {
+		self = self.filter { !condition($0) }
+	}
+}
+
+var numbers = [1, 2, 3, 4, 5, 6, 7]
+numbers.removeAll(where: {$0 % 2 == 0})
+print(numbers)
 
 //*/
 
