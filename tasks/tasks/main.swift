@@ -3370,7 +3370,7 @@ if let thirdNum = someArr.last {
 */
 
 // lvl_2
-//*
+/*
 // 1. Цепочка опционалов
 
 struct Person {
@@ -3379,9 +3379,13 @@ struct Person {
 	var address: String?
 }
 
-let somePerson = Person(name: "Данила", age: 25, address: "Улица Пушкина, дом Колотушкина")
-let address = somePerson.address ?? "БОМЖ"
-print(address)
+let somePerson: Person? = Person(name: "Данила", age: 25)
+let address = somePerson?.address
+if let newAdd = address {
+	print(newAdd)
+} else {
+	print("Адрес не задан!")
+}
 
 // 2. Распаковка нескольких опционалов
 
@@ -3434,29 +3438,92 @@ let unknownName: String? = nil
 print(optionalGreetings(unknownName))
 print(optionalGreetings(myName))
 
-//*/
+*/
 
 // lvl_3
 //*
-// 1.
+// 1. Вложенные опционалы
 
+var nestedOprional: Int?? = 5
 
+if let unwrapOne = nestedOprional {
+	if let unwrapTwo = unwrapOne {
+		print("Значение вложенного опционала: \(unwrapTwo)")
+	}
+}
 
-// 2.
+// 2. Генерация случайных опционалов
 
+func randomOptional() -> Int? {
+	let num = Int.random(in: 1...10)
+	if num % 2 == 0 {
+		return num
+	} else {
+		return nil
+	}
+}
 
+var rand1: Int? = randomOptional()
+var rand2: Int? = randomOptional()
+var rand3: Int? = randomOptional()
+var rand4: Int? = randomOptional()
+var rand5: Int? = randomOptional()
+var rand6: Int? = randomOptional()
 
-// 3.
+print(rand1 as Any)
+print(rand2 as Any)
+print(rand3 as Any)
+print(rand4 as Any)
+print(rand5 as Any)
+print(rand6 as Any)
 
+// 3. Обработка JSON данных
 
+let json: [String: Any]? = [
+	"name": "Данила",
+	"age": 25,
+]
 
-// 4.
+if let dictionary = json {
+	if let name = dictionary["name"] as? String {
+		print("Имя: \(name)")
+	} else {
+		print("Имя не указано...")
+	}
+	if let age = dictionary["age"] as? Int {
+		print("Возраст: \(age)")
+	} else {
+		print("Возраст не указан...")
+	}
+} else {
+	print("Словарь отсутствует...")
+}
 
+// 4. Цепочка вызовов
 
+class User {
+	let name: String
+	var email: String?
+	
+	init(name: String) {
+		self.name = name
+	}
+}
 
-// 5.
+let someUser: User? = User(name: "Данила")
+var email = someUser?.email
+// email = "jmsimnt13@gmail.com"
+if let hisEmail = email{
+	print(hisEmail)
+} else {
+	print("Адрес электронной почты не задан!")
+}
 
+// 5. Обработка коллекций опционалов
 
+let myMassOfOptStrings: [String?] = ["1246", nil, "Погода чудесная", "25", nil, "Ничего!"]
+let mappedMassOfOptStrings = myMassOfOptStrings.compactMap { $0.flatMap { Int($0) } }
+print(mappedMassOfOptStrings)
 
 //*/
 
