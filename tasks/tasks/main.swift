@@ -2790,8 +2790,8 @@ else {
 
 */
 
-// Closures
-//*
+// Extensions and Protocols
+/*
 // lvl_1
 /*
 // 1. Протокол Describable
@@ -3196,7 +3196,7 @@ print(numbers)
 */
 
 // lvl_dop
-//*
+/*
 // 1. Протокол PaymentMethod
 
 protocol PaymentMethod {
@@ -3298,6 +3298,146 @@ class TextEncryptor: Transformer {
 
 let someTextToEncode = TextEncryptor()
 print(someTextToEncode.transform("Privet"))
+
+*/
+
+*/
+
+// Optional type
+//*
+// lvl_1
+//*
+// 1. Простая распаковка
+
+let optionalNum: Int?
+optionalNum = 5
+
+if let num = optionalNum {
+	print(num)
+} else {
+	print("nil detected")
+}
+
+// 2. Присваивание по умолчанию
+
+let optionalName: String? = nil
+
+let nameToPrint = optionalName ?? "Anonymous"
+print(nameToPrint)
+
+// 3. Проверка существования
+
+var optionalBool: Bool?
+optionalBool = true
+if let boolNum = optionalBool {
+	print(boolNum)
+} else {
+	print("nil detected")
+}
+
+// 4. Сложение опционалов
+
+let a: Int? = 3
+let b: Int? = nil
+
+if let aNum = a, let bNum = b {
+	print(aNum + bNum)
+} else {
+	print("nil detected")
+}
+
+// 5. Безопасная распаковка опционалов
+
+let someArr = [Int?](arrayLiteral: 1, nil, 3, 5, 12, nil, 1)
+if let firstNum = someArr.first {
+	print(firstNum ?? "error")
+} else {
+	print(terminator: "")
+}
+
+if let secondNum = someArr[1] {
+	print(secondNum)
+} else {
+	print(terminator: "")
+}
+
+if let thirdNum = someArr.last {
+	print(thirdNum ?? "error")
+} else {
+	print(terminator: "")
+}
+
+//*/
+
+// lvl_2
+//*
+// 1.
+
+
+
+// 2.
+
+
+
+// 3.
+
+
+
+// 4.
+
+
+
+// 5.
+
+
+
+//*/
+
+// lvl_3
+//*
+// 1.
+
+
+
+// 2.
+
+
+
+// 3.
+
+
+
+// 4.
+
+
+
+// 5.
+
+
+
+//*/
+
+// lvl_dop
+//*
+// 1.
+
+
+
+// 2.
+
+
+
+// 3.
+
+
+
+// 4.
+
+
+
+// 5.
+
+
 
 //*/
 
