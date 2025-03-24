@@ -3306,7 +3306,7 @@ print(someTextToEncode.transform("Privet"))
 // Optional type
 //*
 // lvl_1
-//*
+/*
 // 1. Простая распаковка
 
 let optionalNum: Int?
@@ -3367,29 +3367,72 @@ if let thirdNum = someArr.last {
 	print(terminator: "")
 }
 
-//*/
+*/
 
 // lvl_2
 //*
-// 1.
+// 1. Цепочка опционалов
 
+struct Person {
+	let name: String
+	var age: Int
+	var address: String?
+}
 
+let somePerson = Person(name: "Данила", age: 25, address: "Улица Пушкина, дом Колотушкина")
+let address = somePerson.address ?? "БОМЖ"
+print(address)
 
-// 2.
+// 2. Распаковка нескольких опционалов
 
+let x: Int? = 4
+let y: Int? = 5
+let z: Int? = nil
 
+if let xNum = x, let yNum = y, let zNum = z {
+	print(xNum + yNum + zNum)
+} else {
+	print("Nil обнаружен")
+}
 
-// 3.
+// 3. Обработка ошибок с опционалами
 
+func nilDetection(_ str: String) -> Int? {
+	var counter = 0
+	for char in str {
+		if char.isNumber {
+			counter += 1
+		}
+	}
+	return counter != 0 ? counter : nil
+}
 
+if let result = nilDetection("12someText345") {
+	print("Строка содержит \(result) цифр")
+} else {
+	print("Строка не содержит цифр")
+}
 
-// 4.
+// 4. Фильтрация массивов опционалов
 
+let someArr: [Int?] = [1, nil, 3, nil, 5]
+let newArr = someArr.compactMap { $0 }
+print(newArr)
 
+// 5. Опциональные аргументы функции
 
-// 5.
+func optionalGreetings(_ name: String?) -> String {
+	guard let name = name else {
+		return "Nil обнаружен!"
+	}
+	return "Привет, \(name)!"
+}
 
+let myName: String = "Данила"
+let unknownName: String? = nil
 
+print(optionalGreetings(unknownName))
+print(optionalGreetings(myName))
 
 //*/
 
