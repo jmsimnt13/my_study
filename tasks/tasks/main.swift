@@ -2319,7 +2319,6 @@ print(processEvent(seminar))
 */
 */
 
-
 // Structures and Classes
 /*
 // lvl_1
@@ -3304,7 +3303,7 @@ print(someTextToEncode.transform("Privet"))
 */
 
 // Optional type
-//*
+/*
 // lvl_1
 /*
 // 1. Простая распаковка
@@ -3441,7 +3440,7 @@ print(optionalGreetings(myName))
 */
 
 // lvl_3
-//*
+/*
 // 1. Вложенные опционалы
 
 var nestedOprional: Int?? = 5
@@ -3524,6 +3523,139 @@ if let hisEmail = email{
 let myMassOfOptStrings: [String?] = ["1246", nil, "Погода чудесная", "25", nil, "Ничего!"]
 let mappedMassOfOptStrings = myMassOfOptStrings.compactMap { $0.flatMap { Int($0) } }
 print(mappedMassOfOptStrings)
+
+*/
+
+// lvl_dop
+/*
+// 1.
+
+
+
+// 2.
+
+
+
+// 3.
+
+
+
+// 4.
+
+
+
+// 5.
+
+
+
+*/
+
+*/
+
+// Closures
+//*
+// lvl_1
+//*
+// 1. Сумма чисел
+
+let myclos: (Int, Int) -> Int = { $0 + $1 }
+print(myclos(10,20))
+print(myclos(10,2))
+
+// 2. Умножение на константу
+
+let myNum = 3
+let myConst = 3.14
+let closure: (Double, Double) -> Double = { $0 * $1 }
+print(closure(Double(myNum), myConst))
+
+// 3. Поиск максиамльного числа
+
+let myArr: [Int] = [5, 2, 1, 4, 23, 12, 33, 15]
+let closureMax: ([Int]) -> Int = { (arr: [Int]) -> Int in
+	var max: Int = -1
+	for i in 0..<arr.count - 1 {
+		if max <= arr[i] {
+			max = arr[i]
+		}
+	}
+	return max
+}
+print(closureMax(myArr))
+
+// 4. Фильтрация четных чисел
+
+let myArrToFilter: [Int] = [5, 2, 1, 4, 23, 12, 33, 15, 6]
+
+let closureFilter: ([Int]) -> [Int] = { (arr: [Int]) -> [Int] in
+	var newArr: [Int] = []
+	arr.forEach {
+		if $0 % 2 == 0 {
+			newArr.append($0)
+		}
+	}
+	return newArr
+}
+
+let notEvenArr = closureFilter(myArrToFilter)
+print(notEvenArr)
+
+// 5. Приветствие
+
+let greetingClosure: (String) -> String = {
+	"\($0), приветствую тебя!"
+}
+
+let myName = "Данила"
+print(greetingClosure(myName))
+
+//*/
+
+// lvl_2
+//*
+// 1.
+
+
+
+// 2.
+
+
+
+// 3.
+
+
+
+// 4.
+
+
+
+// 5.
+
+
+
+//*/
+
+// lvl_3
+//*
+// 1.
+
+
+
+// 2.
+
+
+
+// 3.
+
+
+
+// 4.
+
+
+
+// 5.
+
+
 
 //*/
 
