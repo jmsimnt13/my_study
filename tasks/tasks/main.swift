@@ -3555,7 +3555,7 @@ print(mappedMassOfOptStrings)
 // Closures
 //*
 // lvl_1
-//*
+/*
 // 1. Сумма чисел
 
 let myclos: (Int, Int) -> Int = { $0 + $1 }
@@ -3609,29 +3609,84 @@ let greetingClosure: (String) -> String = {
 let myName = "Данила"
 print(greetingClosure(myName))
 
-//*/
+*/
 
 // lvl_2
 //*
-// 1.
+// 1. Сортировка массива
 
+let myArrForSort: [Int] = [5, 2, 1, 4, 23, 12, 33, 15]
+let completionSort: ([Int], String) -> [Int] = { (arr: [Int], sortType: String) -> [Int] in
+	switch sortType {
+	case ">": return arr.sorted()
+	case "<": return arr.sorted().reversed()
+	default : return arr
+	}
+}
 
+print(completionSort(myArrForSort, ">"))
+print(completionSort(myArrForSort, "<"))
+print(completionSort(myArrForSort, "g"))
 
-// 2.
+// 2. Подсчет слов
 
+let strForAnalysis = "Привет, как твои дела сегодня?"
+let closureCountWords: (String) -> Int = {
+	$0.split(separator: " ").count
+}
+print(closureCountWords(strForAnalysis))
 
+// 3. Вычисление факториала
 
-// 3.
+let myFactorial = 5
 
+let closureFactorial: (Int) -> Int = { (n: Int) -> Int in
+	let next = n - 1
+	var res = 1
+	// если дошли до единицы, значит можно больше не вызывать
+	if next > 1 {
+		res = closureFactorial(next)
+	}
+	// осталось каскадно все это дело перемножить
+	// 1 *= 2
+	// 2 *= 3 и т.д...
+	res *= n
+	return res
+}
 
+print(closureFactorial(myFactorial))
 
-// 4.
+// 4. Конвейер обработки
 
+let closureForSum: (Double, Double) -> Double = { $0 + $1 }
+let closureForSub: (Double, Double) -> Double = { $0 - $1 }
+let closureForMul: (Double, Double) -> Double = { $0 * $1 }
+let closureForDiv: (Double, Double) -> Double = { $0 / $1 }
 
+// возращает 0 если ввели не "+" "-" "*" "/" или пытаемся делить на ноль, или если реально получили ноль)
+let pipeline: (Double, Double, String) -> Double = { (a: Double, b: Double, sign: String) -> Double in
+	switch sign {
+	case "+": return closureForSum(a, b)
+	case "-": return closureForSub(a, b)
+	case "*": return closureForMul(a, b)
+	case "/": return b != 0 ? closureForDiv(a, b) : 0
+	default : return 0
+	}
+}
 
-// 5.
+let firstNumber: Double = 10
+let secondNumber: Double = 20
+let operationSign = "/"
 
+let resultOfOperation: Double = pipeline(firstNumber, secondNumber, operationSign)
+print(resultOfOperation)
 
+// 5. Реверс строки
+
+let closureForReverse: (String) -> String = { String($0.reversed()) }
+
+let myStrForReverse: String = "Привет, меня зовут Данила!"
+print(closureForReverse(myStrForReverse))
 
 //*/
 
