@@ -3612,7 +3612,7 @@ print(greetingClosure(myName))
 */
 
 // lvl_2
-//*
+/*
 // 1. Сортировка массива
 
 let myArrForSort: [Int] = [5, 2, 1, 4, 23, 12, 33, 15]
@@ -3688,29 +3688,125 @@ let closureForReverse: (String) -> String = { String($0.reversed()) }
 let myStrForReverse: String = "Привет, меня зовут Данила!"
 print(closureForReverse(myStrForReverse))
 
-//*/
+*/
 
 // lvl_3
 //*
-// 1.
+// 1. Мемоизация
 
+func memoize<T: Hashable, V>(someFunc: @escaping (T) -> V) -> (T) -> V {
+	var cache: [T: V] = [:]
+	return { input in
+		// если значение ранее присутствовало то просто его возвращаем
+		if let cachedResult = cache[input] {
+			print("Значение найдено в кэше: \(input)")
+			return cachedResult
+		}
+		
+		// если не присутствовало, проводим пополнение массива с кэшэм
+		let result = someFunc(input)
+		cache[input] = result
+		print("Записано новое значение в кэш: \(input)")
+		return result
+	}
+}
 
+let closureForMemoize: (Int) -> Int = { (x: Int) -> Int in
+	print("Выполняется замыкание для сложения \(x) с самим собой")
+	return x + x
+}
 
-// 2.
+let memoizedClosure = memoize(someFunc: closureForMemoize)
+let memoizedClosure1 = memoize(someFunc: closureForMemoize)
+print(memoizedClosure(10))
+print(memoizedClosure1(10))
+print(memoizedClosure(12))
+print(memoizedClosure(10))
 
+// 2. Асинхронная загрузка данных
 
+func fetchData(completion: @escaping ([String]) -> Void) {
+	DispatchQueue.global().asyncAfter(deadline: .now() + 2) {
+		completion(["Данные 1", "Данные 2", "Данные 3", "Данные 4"])
+	}
+}
 
-// 3.
+fetchData { data in
+	print("Получили данные: \(data)")
+}
 
+// 3. Композиция замыканий
 
+func compose<A, B, C>(_ firstClosure: @escaping (A) -> B, _ secondClosure: @escaping (B) -> C) -> (A) -> C {
+	return { input in
+		let resultFromFirstClosure: B = firstClosure(input)
+		return secondClosure(resultFromFirstClosure)
+	}
+}
 
-// 4.
+// первое замыкание складывает х с 15
+let doSumClosure: (Double) -> Double = {
+	print("Прибавляем к \($0) 15")
+	return $0 + 15.0
+}
 
+// второе замыкание умножает полученное на 13
+let doMulClosure: (Double) -> Double = {
+	print("Умножаем \($0) на 13")
+	return $0 * 13.0
+}
 
+let composedFunc = compose(doSumClosure, doMulClosure)
+// проверил вывод напрямую
+print(composedFunc(21))
 
-// 5.
+// записал результат вычислений в константу и тоже вывел
+let result: Double = composedFunc(10.0)
+print(result)
 
+// 4. Фильтр и преобразование
 
+let someNumbers: [Int] = [1, 5, 12, 52, 13, 11]
+
+// Фильтруем и преобразуем
+let resultArr = someNumbers
+	.filter { $0 > 11 } // фильтруем числа больше 11
+	.map { $0 * $0 } // возводим в квадрат каждое
+
+print("Итого: \(resultArr)")
+
+// 5. Цепочка событий
+
+typealias EventHandler = () -> Void
+
+class EventChain {
+	private var handlers: [EventHandler] = []
+	
+	func add(handler: @escaping EventHandler) {
+		handlers.append(handler)
+	}
+	
+	func startEvents() {
+		for handler in handlers {
+			handler()
+		}
+	}
+}
+
+// создал экземпляр класса цепочка событий
+let eventChain = EventChain()
+
+// добавил событие раз
+eventChain.add(handler: {
+	print("Нажата кнопка")
+})
+// добавил событие два
+eventChain.add(handler: {
+	print("Текст изменен")
+})
+
+// запустил цепочку на выполнение
+eventChain.startEvents()
 
 //*/
 
