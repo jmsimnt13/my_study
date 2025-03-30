@@ -3691,7 +3691,7 @@ print(closureForReverse(myStrForReverse))
 */
 
 // lvl_3
-//*
+/*
 // 1. Мемоизация
 
 func memoize<T: Hashable, V>(someFunc: @escaping (T) -> V) -> (T) -> V {
@@ -3808,29 +3808,102 @@ eventChain.add(handler: {
 // запустил цепочку на выполнение
 eventChain.startEvents()
 
-//*/
+*/
 
 // lvl_dop
 //*
-// 1.
+// 1. Счетчик вызовов
 
+var counter = 0
+let callCounter: () -> Int = {
+	counter += 1
+	return counter
+}
 
+for _ in 1...3 {
+	print("Вызов: \(callCounter())")
+}
 
-// 2.
+// 2. Проверка пароля
 
+let passwordCheckClosure: (String) -> Bool = { password in
+	// Проверяем длину
+	guard password.count >= 8 else {
+		return false
+	}
+	
+	// Проверка цифр
+	let includeDigits = password.rangeOfCharacter(from: .decimalDigits) != nil
+	guard includeDigits else {
+		return false
+	}
+	
+	// Проверка букв
+	let includeLetters = password.rangeOfCharacter(from: .letters) != nil
+	guard includeLetters else {
+		return false
+	}
+	
+	// Если все на месте то
+	return true
+}
 
+let myPassword = "Qwerty12345"
+let resOfCheck = passwordCheckClosure(myPassword)
+if resOfCheck {
+	print("Пароль удовлетворяет требованиям к сложности.")
+} else {
+	print("Пароль не удовлетворяет требованиям к сложности.")
+}
 
-// 3.
+// 3. Генератор случайных чисел
 
+let closureForGenerate: (Int, Int) -> Int = { lowBorder, highBorder in
+	return Int.random(in: lowBorder...highBorder)
+}
 
+let rand1: Int = closureForGenerate(1, 100)
+let rand2: Int = closureForGenerate(50, 250)
 
-// 4.
+print(rand1)
+print(rand2)
 
+// 4. Обработка ошибок
 
+let closureForErrorHandling: (Int, Int) -> (result: Int?, error: String?) = { x, y in
+	// пример на основе операции деления
+	// если пытаемся делить на ноль получаем ошибку
+	if y == 0 {
+		// возвращаем кортеж
+		return (nil, "Деление на ноль")
+	}
+	
+	// если не пытаемся делить на ноль выполняем операцию
+	let result = x / y
+	
+	// возвращаем кортеж
+	return (result, nil)
+}
 
-// 5.
+let result1 = closureForErrorHandling(65, 30)
+if let value = result1.result {
+	print("Результат вычислений: \(value)")
+} else if let errorMessage = result1.error {
+	print("Ошибка: \(errorMessage)")
+}
 
+// 5. Рекурсивное замыкание
 
+var closureForRecursiveSum: (Int) -> Int = { x in
+	if x == 0 {
+		return 0
+	} else {
+		return x + closureForRecursiveSum(x - 1)
+	}
+}
+
+let resultTo10: Int = closureForRecursiveSum(10)
+print("Сумма чисел до 10 равна: \(resultTo10)")
 
 //*/
 
