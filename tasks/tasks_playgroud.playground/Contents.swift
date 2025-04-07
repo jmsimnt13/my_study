@@ -184,3 +184,54 @@ engineer.delegate = client
 engineer.tasks += 1
 engineer.taskDone()
 engineer.tasks
+
+// 1. protocol - AnyObject
+// 2. obj1: property weak var delegate: ProtocolDelegate?
+// 3. obj2: :ProtocolDelegate
+// 4.
+
+class ViewController {
+	var payView: [PayView]
+	
+	// view did load
+	// init
+	
+	init(payView: [PayView]) {
+		self.payView = payView
+		payView.forEach { $0.delegate = self }
+	}
+}
+
+extension ViewController: PayViewDelegate {
+	func didPressPayButton(_ view: PayView) {
+		// show pay screen
+		print("Pay button tapped for price \(view.price)")
+	}
+}
+
+protocol PayViewDelegate: AnyObject {
+	func didPressPayButton(_ view: PayView) // UIView
+}
+
+class PayView {
+	var price: Double = 0.0
+	weak var delegate: PayViewDelegate?
+	
+	func payButtonTapped() {
+		// add animation
+		delegate?.didPressPayButton(self)
+	}
+}
+
+var monitor = PayView()
+monitor.price = 500
+var headset = PayView()
+headset.price = 200
+var mouse = PayView()
+mouse.price = 50
+
+var screen = ViewController(payView: [monitor, headset, mouse])
+
+monitor.payButtonTapped()
+mouse.payButtonTapped()
+headset.payButtonTapped()
