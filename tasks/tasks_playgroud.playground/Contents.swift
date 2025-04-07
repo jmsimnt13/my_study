@@ -1,65 +1,186 @@
-struct Circle {
-    var coordinates: (x: Int, y: Int)
-    var radius: Float
-    var perimetr: Float {
-        get {
-            return 2.0 * 3.14 * radius
-        }
-        set {
-            radius = newValue / (2.0 * 3.14)
-        }
-    }
+struct Person {
+	let name: String
+	let age: Int
 }
 
-var myNewCircle = Circle(coordinates: (0,0), radius: 10)
-print(myNewCircle.perimetr)
-myNewCircle.perimetr = 100
-print(myNewCircle.radius)
-
-extension Int {
-    enum Kind {
-        case negative, zero, positive
-    }
-    var kind: Kind {
-        switch self {
-        case 0: return .zero
-        case let x where x > 0:
-            return .positive
-        default :
-            return .negative
-        }
-    }
+func sort(persons: [Person], compare: (Person, Person) -> Bool) -> [Person] {
+	var persons = persons
+	for i in 0..<persons.count - 1 {
+		for j in (i + 1)..<persons.count {
+			if compare(persons[i], persons[j]) {
+				let tmp = persons[i]
+				persons[i] = persons[j]
+				persons[j] = tmp
+			}
+		}
+	}
+	return persons
 }
 
-func printIntegerKinds(_ numbers: [Int]) {
-    for number in numbers {
-        switch number.kind {
-        case .negative:
-            print("- ", terminator: "")
-        case .positive:
-            print("+ ", terminator: "")
-        case .zero:
-            print("0 ", terminator: "")
-        }
-    }
-    print("")
-}
-printIntegerKinds([3, -5, 2, -10, 0, 4, -1])
+
+let persons: [Person] = [
+	Person(name: "Ирина", age: 51),
+	Person(name: "Владимир", age: 32),
+	Person(name: "Данила", age: 25),
+	Person(name: "Александра", age: 22)
+]
+
+let personsToOlder = sort(persons: persons, compare: { $0.age > $1.age })
+let personToYonger = sort(persons: persons, compare: { $0.age < $1.age })
+let personsByName = sort(persons: persons, compare: { $0.name > $1.name })
+
+print(personsToOlder)
+print(personToYonger)
+print(personsByName)
+
+let closure: () -> Void = { print("Hello") }
+closure()
 
 
-extension Array {
-	func safeElement(_ index: Index) -> Element? {
-		guard index < count else { return nil }
-		
-		return self[index]
+
+
+struct Point {
+	var x: Int
+	var y: Int
+	
+	mutating func moveBy(dx: Int, dy: Int) {
+		x += dx
+		y += dy
 	}
 }
 
+var point = Point(x: 10, y: 20)
+point.moveBy(dx: 4, dy: -2)
+print(point)
 
-struct Application {
-	static func main() throws {
-		let a = ["Ivan", "Petr", "Danila"]
-		let elem = a.safeElement(4)
-		print(elem ?? "Not found")
+enum Light {
+	case on
+	case off
+	
+	mutating func toggle() {
+		switch self {
+		case .on : self = .off
+		case .off : self = .on
+		}
 	}
 }
+
+var light = Light.on
+light.toggle()
+print(light)
+
+
+var greeting = "Hello!"
+
+protocol EngineerDelegate: AnyObject {
+	func taskHasEnded()
+	func didFinishResearch(data: String)
+	func didFinishAnalyzeRequirements(results: [String])
+}
+
+class Engineer {
+	var tasks: Int = 0 {
+		didSet {
+			if tasks == 0 {
+				delegate?.taskHasEnded()
+			}
+		}
+	}
+	
+	func taskDone(_ numberOfTasks: Int = 1) {
+		tasks -= numberOfTasks
+	}
+	
+	func startResearch(_ data: String = "") {
+		// google
+		// create doc
+		// review doc
+		delegate?.didFinishResearch(data: "document")
+	}
+	
+	func analyze(requirements: [String]) {
+		// read
+		// questions
+		// document
+		delegate?.didFinishAnalyzeRequirements(results: ["q1", "q2"])
+	}
+	
+	weak var delegate: EngineerDelegate?
+}
+
+class ProjectManager {
+	var engineer: Engineer?
+	
+	func addTasksToEngineer(_ numberOfTasks: Int = 1) {
+		engineer?.tasks += numberOfTasks
+	}
+}
+
+extension ProjectManager: EngineerDelegate {
+	
+	func didFinishResearch(data: String) {
+		addTasksToEngineer(2)
+	}
+	
+	func didFinishAnalyzeRequirements(results: [String]) {
+		print("Client: Clearify requirements.")
+	}
+	
+	func taskHasEnded() {
+		print("Client: Give me tasks.")
+	}
+}
+
+class Client {
+	var engineer: Engineer?
+}
+
+extension Client: EngineerDelegate {
+	func taskHasEnded() {
+		// think about requirements
+		// think about tasks
+		print("Add task to engineer")
+		engineer?.tasks += 1
+	}
+	
+	func didFinishResearch(data: String) {
+		engineer?.tasks += 2
+	}
+	
+	func didFinishAnalyzeRequirements(results: [String]) {
+		print("Answers")
+	}
+	
+	
+}
+
+var engineer = Engineer()
+var manager = ProjectManager()
+engineer.delegate = manager
+manager.engineer = engineer
+manager.addTasksToEngineer()
+
+engineer.tasks
+engineer.taskDone()
+
+engineer.analyze(requirements: [])
+
+engineer.tasks
+engineer.startResearch()
+engineer.tasks
+
+engineer.taskDone(2)
+
+engineer.tasks
+
+// Project Manager
+manager.engineer = nil
+engineer.delegate = nil
+
+var client = Client()
+client.engineer = engineer
+engineer.delegate = client
+
+engineer.tasks += 1
+engineer.taskDone()
+engineer.tasks
