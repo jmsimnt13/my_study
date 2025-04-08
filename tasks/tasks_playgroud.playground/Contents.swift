@@ -235,3 +235,67 @@ var screen = ViewController(payView: [monitor, headset, mouse])
 monitor.payButtonTapped()
 mouse.payButtonTapped()
 headset.payButtonTapped()
+
+// Примерная реализация MVC подхода
+
+import UIKit
+
+// Model
+struct User {
+	let id: Int
+	let name: String
+	var email: String?
+}
+
+// View
+class UserView: UIView {
+	let nameLabel = UILabel()
+	let emailLabel = UILabel()
+	
+	override init(frame: CGRect) {
+		super.init(frame: frame)
+		setupUI()
+	}
+	
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
+	private func setupUI() {
+		addSubview(nameLabel)
+		addSubview(emailLabel)
+		
+		nameLabel.frame = CGRect(x: 20, y: 20, width: 200, height: 30)
+		emailLabel.frame = GCRect(x: 20, y: 60, width: 200, height: 30)
+	}
+}
+
+// Controller
+
+class UserController: UIViewContoller {
+	var user: User?
+	let userView = UserView()
+	
+	override func viewDidLoad() {
+		super.viewDidLoad()
+		view.backgroundColor = .white
+		view.addSubview(userView)
+		updateView()
+	}
+	
+	private func updateView() {
+		guard let user = user else { return }
+		userView.nameLabel.text = "Name: \(user.name)"
+		userView.emailLabel.text = "Email: \(user.email)" ?? "No email"
+	}
+}
+
+// Use
+
+let user = User(id: 1, name: "Danila", email: "example@gmail.com")
+let controller = UserController()
+controller.user = user
+
+// Start of app
+window?.rootViewController = controller
+window?.makeKeyAndVisible()
