@@ -299,3 +299,65 @@ controller.user = user
 // Start of app
 window?.rootViewController = controller
 window?.makeKeyAndVisible()
+
+
+// Рассмотрение шаблона Notifications Communication Pattern
+
+// Создание отправителя уведомлений
+class Sender {
+	func sendNotification() {
+		let userInfo = ["message": "Hello!"]
+		NotificationCenter.default.post(
+			name: NSNotification.Name("MessageNotification"),
+			object: self,
+			userInfo: userInfo
+		)
+	}
+}
+
+// Создание получателя уведомлений
+class Reciever {
+	init() {
+		NotificationCenter.default.addObserver(
+			self, // Кто подписывается
+			selector: #selector(handleNotification(_:)), // Метод, который будет вызван
+			name: NSNotification.Name("MessageNotification"), // Имя уведомления
+			object: nil // Отправитель (если nil, то слушаются все отправители)
+		)
+	}
+	
+	@objc func handleNotification(_ notification: Notification) {
+		if let userInfo = notification.userInfo,
+		   let message = userInfo["message"] as? String {
+			print("Recieved message: \(message)")
+		}
+	}
+	
+	deinit {
+		NotificationCenter.default.removeObserver(self)
+	}
+}
+
+// Использование в приложении
+
+let sender = Sender()
+let reciever = Reciever()
+
+// Отправка уведомления
+sender.sendNotification()
+
+// Вывод:
+// Recieved message: Hello!
+
+// Недостатки NotificationCenter
+//	Сложность отладки :
+//	Поскольку уведомления работают асинхронно и могут отправляться из разных мест, их сложнее отслеживать и отлаживать.
+//	Отсутствие гарантий доставки :
+//	Если подписчик не зарегистрирован в момент отправки уведомления, он не получит его.
+//	Риск утечек памяти :
+//	Если забыть удалить наблюдателя, это может привести к утечкам памяти.
+
+//	Альтернативы NotificationCenter
+//	Если вам нужна более строгая связь между объектами, рассмотрите следующие альтернативы:
+//	Delegation (Делегирование) : Подходит для односторонней связи между двумя объектами.
+//	Closures (Замыкания) : Позволяют передавать действия напрямую.
