@@ -17,8 +17,8 @@ import UIKit
 // +UIImage
 // +фреймы
 // констрейнты (умеют рассчитывать динамически, более умные чем frames)
-
 // таблицы
+
 // навигация
 
 // 1 Если один элемент на странице - то closure
@@ -35,19 +35,35 @@ import UIKit
 //		return $0
 //	}(UILabel())
 
+struct UserItem: Identifiable {
+	let id = UUID().uuidString
+	let name: String
+	let surname: String
+	let photo: String
+	
+	static func mockData() -> [UserItem] {
+		[
+			UserItem(name: "user1", surname: "surname1", photo: "square.and.arrow.up"),
+			UserItem(name: "user2", surname: "surname2", photo: "square.and.arrow.up.fill"),
+			UserItem(name: "user3", surname: "surname3", photo: "scribble"),
+			UserItem(name: "user4", surname: "surname4", photo: "pencil.and.scribble"),
+			UserItem(name: "user5", surname: "surname5", photo: "pencil.tip.crop.circle.fill"),
+		]
+	}
+}
+
 class ViewController: UIViewController {
 	
 	// Этапы создания таблицы
 	// 1 массив
-	let users: [String] = [
-		"user1", "user2", "user3", "user4", "user5", "user6", "user7", "user8", "user9", "user10"
-	]
+	var users: [UserItem] = UserItem.mockData()
 	
 	// 2 таблица
 	lazy var tableView: UITableView = {
 		// 3 регистрация переиспользуемой ячейки
 		$0.register(UITableViewCell.self, forCellReuseIdentifier: "mainCell")
 		$0.dataSource = self
+		$0.delegate = self
 		return $0
 	}(UITableView(frame: view.frame, style: .insetGrouped))
 
@@ -96,11 +112,29 @@ extension ViewController: UITableViewDataSource {
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		// 4 вытащить переиспользуемую ячейку
 		let cell = tableView.dequeueReusableCell(withIdentifier: "mainCell", for: indexPath)
-		cell.textLabel?.text = users[indexPath.row]
+		
+		var config = cell.defaultContentConfiguration()
+		config.text = users[indexPath.row].name
+		config.secondaryText = users[indexPath.row].surname
+		config.image = UIImage(systemName: users[indexPath.row].photo)
+		
+		cell.contentConfiguration = config
+		cell.accessoryType = .disclosureIndicator
+		
 		return cell
 	}
-	
-	
+}
+
+extension ViewController: UITableViewDelegate {
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		print(indexPath.row)
+	}
+	func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+		if editingStyle == .delete {
+			users.remove(at: indexPath.row)
+			tableView.deleteRows(at: [indexPath], with: .automatic)
+		}
+	}
 }
 
 // 2
