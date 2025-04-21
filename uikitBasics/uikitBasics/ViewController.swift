@@ -16,8 +16,8 @@ import UIKit
 // +UIButton
 // +UIImage
 // +фреймы
-
 // констрейнты (умеют рассчитывать динамически, более умные чем frames)
+
 // таблицы
 // навигация
 
@@ -37,7 +37,12 @@ import UIKit
 
 class ViewController: UIViewController {
 
-	lazy var pageTitle: UILabel = createLabel(text: "Main Page")
+	lazy var pageTitle: UILabel = createLabel(text: """
+	Bad tattoos on leather-tanned skin
+	Jesus Christ on a plastic sign
+	Fall in love again and again
+	Winding roads, doing manual drive
+""")
 	lazy var topImage = createImageView(image: .img)
 	lazy var pageTitle1: UILabel = createLabel(text: "Brat")
 	lazy var bottomImage = createImageView(image: .img1)
@@ -69,7 +74,21 @@ class ViewController: UIViewController {
 		NSLayoutConstraint.activate([
 			topImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
 			topImage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-			topImage.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 20)
+			topImage.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+			topImage.heightAnchor.constraint(equalToConstant: 200),
+			
+			pageTitle.topAnchor.constraint(equalTo: topImage.bottomAnchor, constant: 30),
+			pageTitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+			pageTitle.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+			
+			bottomImage.topAnchor.constraint(equalTo: pageTitle.bottomAnchor, constant: 30),
+			bottomImage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+			bottomImage.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+			bottomImage.heightAnchor.constraint(equalTo: topImage.heightAnchor, multiplier: 0.5),
+			
+			btn.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+			btn.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+			btn.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
 		])
 	}
 	
