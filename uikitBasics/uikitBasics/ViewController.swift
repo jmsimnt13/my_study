@@ -98,6 +98,8 @@ class ViewController: UIViewController {
 		
 		view.addSubview(tableView)
 		
+		title = "Brat"
+		navigationController?.navigationBar.prefersLargeTitles = true
 	}
 }
 
@@ -127,8 +129,10 @@ extension ViewController: UITableViewDataSource {
 
 extension ViewController: UITableViewDelegate {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		print(indexPath.row)
+		let vc = SecondViewController(userItem: users[indexPath.row])
+		navigationController?.pushViewController(vc, animated: true)
 	}
+	
 	func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
 		if editingStyle == .delete {
 			users.remove(at: indexPath.row)

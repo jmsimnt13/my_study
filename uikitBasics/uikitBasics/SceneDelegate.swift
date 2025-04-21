@@ -20,7 +20,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		// 2 init window
 		self.window = UIWindow(windowScene: scene)
 		// 3 root controller = главный контроллер
-		self.window?.rootViewController = ViewController()
+		self.window?.rootViewController = UINavigationController(rootViewController: ViewController())
+		
+		//
 		self.window?.makeKeyAndVisible()
 		
 	}
