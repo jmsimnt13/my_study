@@ -36,6 +36,20 @@ import UIKit
 //	}(UILabel())
 
 class ViewController: UIViewController {
+	
+	// Этапы создания таблицы
+	// 1 массив
+	let users: [String] = [
+		"user1", "user2", "user3", "user4", "user5", "user6", "user7", "user8", "user9", "user10"
+	]
+	
+	// 2 таблица
+	lazy var tableView: UITableView = {
+		// 3 регистрация переиспользуемой ячейки
+		$0.register(UITableViewCell.self, forCellReuseIdentifier: "mainCell")
+		$0.dataSource = self
+		return $0
+	}(UITableView(frame: view.frame, style: .insetGrouped))
 
 	lazy var pageTitle: UILabel = createLabel(text: """
 	Bad tattoos on leather-tanned skin
@@ -66,53 +80,46 @@ class ViewController: UIViewController {
 		view.backgroundColor = .appGreen
 		print("viewDidLoad")
 		
-		view.addSubview(topImage)
-		view.addSubview(pageTitle)
-		view.addSubview(bottomImage)
-		view.addSubview(btn)
+		view.addSubview(tableView)
 		
-		NSLayoutConstraint.activate([
-			topImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
-			topImage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-			topImage.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-			topImage.heightAnchor.constraint(equalToConstant: 200),
-			
-			pageTitle.topAnchor.constraint(equalTo: topImage.bottomAnchor, constant: 30),
-			pageTitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-			pageTitle.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-			
-			bottomImage.topAnchor.constraint(equalTo: pageTitle.bottomAnchor, constant: 30),
-			bottomImage.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-			bottomImage.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-			bottomImage.heightAnchor.constraint(equalTo: topImage.heightAnchor, multiplier: 0.5),
-			
-			btn.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-			btn.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-			btn.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
-		])
 	}
-	
-	
-	// 2
-	func createLabel(text: String) -> UILabel {
-		let label = UILabel()
-		label.translatesAutoresizingMaskIntoConstraints = false
-		label.text = text
-		label.numberOfLines = 0
-		label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-		label.textColor = .black
-		return label
-	}
-	
-	func createImageView(image: UIImage) -> UIImageView {
-		{
-			$0.image = image
-			$0.translatesAutoresizingMaskIntoConstraints = false
-			$0.contentMode = .scaleAspectFit
-			$0.clipsToBounds = true
-			return $0
-		}(UIImageView())
-	}
-
 }
 
+
+extension ViewController: UITableViewDataSource {
+	// сколько ячеек
+	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		users.count
+	}
+	
+	// КАК выглядит ОДНА конкретная ячейка
+	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+		// 4 вытащить переиспользуемую ячейку
+		let cell = tableView.dequeueReusableCell(withIdentifier: "mainCell", for: indexPath)
+		cell.textLabel?.text = users[indexPath.row]
+		return cell
+	}
+	
+	
+}
+
+// 2
+func createLabel(text: String) -> UILabel {
+	let label = UILabel()
+	label.translatesAutoresizingMaskIntoConstraints = false
+	label.text = text
+	label.numberOfLines = 0
+	label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+	label.textColor = .black
+	return label
+}
+
+func createImageView(image: UIImage) -> UIImageView {
+	{
+		$0.image = image
+		$0.translatesAutoresizingMaskIntoConstraints = false
+		$0.contentMode = .scaleAspectFit
+		$0.clipsToBounds = true
+		return $0
+	}(UIImageView())
+}
