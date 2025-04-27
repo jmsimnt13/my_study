@@ -19,7 +19,10 @@ class RegistView: UIViewController, RegistViewProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
 		
-		let contentView = RegistViewContent()
+		let contentView = RegistViewContent { [weak self] in
+			guard let self = self else { return }
+			presenter?.checkName(name: $0)
+		}
 		
 		let content = UIHostingController(rootView: contentView)
 		addChild(content)

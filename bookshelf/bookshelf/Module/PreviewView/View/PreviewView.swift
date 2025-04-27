@@ -21,11 +21,13 @@ class PreviewView: UIViewController {
 		super.viewDidLoad()
 		view.backgroundColor = .bgMain // выставили цвет вью
 		view.addSubview(lottieView) // добавили анимацию
-		lottieView.play()
-		
-		DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+		lottieView.play(fromFrame: 0, toFrame: 20, loopMode: .repeat(3)) { _ in
 			NotificationCenter.default.post(name: .windowManager, object: nil, userInfo: [String.windowInfo: WindowCase.reg])
 		}
+		
+//		DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+//
+//		}
 		
 	}
 	

@@ -8,14 +8,14 @@
 import UIKit
 
 enum WindowCase {
-	case preview, reg, onboarding, main
+	case reg, onboarding, main
 }
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-
+	
 	var window: UIWindow?
-
-
+	
+	
 	func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(windowManager), name: .windowManager, object: nil)
@@ -32,10 +32,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		let window = userInfo[.windowInfo]  else { return }
 		
 		switch window {
-		default:
+		case .reg:
 			self.window?.rootViewController = Builder.createRegistView()
+		case .onboarding:
+			self.window?.rootViewController = Builder.createOnboardingView()
+		case .main:
+			print("main")
+			
 		}
+		
 	}
-	
 }
-

@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct RegistViewContent: View {
-	@State var nameField: String = ""
+	@State private var nameField: String = ""
+	var btnAction: (String) -> Void
 	var body: some View {
 		ZStack {
 			VStack {
@@ -24,16 +25,8 @@ struct RegistViewContent: View {
 					.foregroundStyle(.white)
 					.clipShape(.rect(cornerRadius: 10))
 				Spacer()
-				Button {
-					//
-				} label: {
-					Text("Далее")
-						.padding(.vertical, 19)
-						.frame(maxWidth: .infinity)
-						.background(.appOrange)
-						.foregroundStyle(.white)
-						.clipShape(.rect(cornerRadius: 10))
-						.font(type: .bold, size: 14)
+				OrangeButton(title: "Далее") {
+					btnAction(nameField)
 				}
 			}
 			.padding(.horizontal, 30)
@@ -42,6 +35,4 @@ struct RegistViewContent: View {
 	}
 }
 
-#Preview {
-	RegistViewContent()
-}
+
