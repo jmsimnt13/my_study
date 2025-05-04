@@ -11,30 +11,88 @@
 
 import UIKit
 
-enum myColors: String, CaseIterable {
-	case Green = "Green", ProductRed = "Product Red", Yellow = "Yellow", Purple = "Purple", DeepPurple = "Deep Purple", Violet = "Violet", Gray = "Gray", SpaceGray = "Space Gray",
-		 RoseGold = "Rose Gold", Gold = "Gold", Brat = "Brat Green", Lime = "Lime", Cyan = "Cyan", Magenta = "Magenta", Brown = "Brown", Orange = "Orange", Blue = "Blue", Red = "Red"
+enum MyColors: String, CaseIterable { // с большой
+	case green = "Green",
+		 productRed = "Product Red",
+		 yellow = "Yellow",
+		 purple = "Purple",
+		 deepPurple = "Deep Purple",
+		 violet = "Violet",
+		 gray = "Gray",
+		 spaceGray = "Space Gray",
+		 roseGold = "Rose Gold",
+		 gold = "Gold",
+		 brat = "Brat Green",
+		 lime = "Lime",
+		 cyan = "Cyan",
+		 magenta = "Magenta",
+		 brown = "Brown",
+		 orange = "Orange",
+		 blue = "Blue",
+		 red = "Red" // с маленькой буквы и каждый с новой строки
+	
+	var color: UIColor {
+		switch self {
+		case .green:
+			return .appGreen
+		case .productRed:
+			return .appRed
+		case .yellow:
+			return .appYellow
+		case .purple:
+			return .appPurple
+		case .deepPurple:
+			return .appDeepPurple
+		case .violet:
+			return .appViolet
+		case .gray:
+			return .gray
+		case .spaceGray:
+			return .appSpaceGray
+		case .roseGold:
+			return .appRoseGold
+		case .gold:
+			return .appGold
+		case .brat:
+			return .appBrat
+		case .lime:
+			return .appLime
+		case .cyan:
+			return .cyan
+		case .magenta:
+			return .magenta
+		case .brown:
+			return .brown
+		case .orange:
+			return .orange
+		case .blue:
+			return .blue
+		case .red:
+			return .red
+		}
+	}
 }
 
 //let colSamp = myColors.DeepPurple
 //colSamp.rawValue
 
-struct colorItem: Identifiable {
+struct ColorItem: Identifiable {
 	let id = UUID().uuidString
-	let typeOfColor: myColors
+	let typeOfColor: MyColors
 	let nameOfColor: String
 	
-	static func mockData() -> [colorItem] {
-		let allColors = myColors.allCases
+	static func mockData() -> [ColorItem] {
+		let allColors = MyColors.allCases.shuffled().map {element in
+			return ColorItem(typeOfColor: element, nameOfColor: element.rawValue)}//
 		
-		var mockData: [colorItem] = []
-		for _ in 0..<20 {
-			if let randColor = allColors.randomElement() {
-				let newItemOfMockData = colorItem(typeOfColor: randColor, nameOfColor: randColor.rawValue)
-				mockData.append(newItemOfMockData)
-			}
-		}
-		return mockData
+//		var mockData: [colorItem] = []
+//		for _ in 0..<20 {
+//			if let randColor = allColors.randomElement() {
+//				let newItemOfMockData = colorItem(typeOfColor: randColor, nameOfColor: randColor.rawValue)
+//				mockData.append(newItemOfMockData)
+//			}
+//		}
+		return allColors
 	}
 }
 
@@ -43,7 +101,7 @@ class ViewController: UIViewController {
 	// *
 	// Создание таблицы
 	// Массив для таблицы
-	var colors: [colorItem] = colorItem.mockData()
+	var colors: [ColorItem] = ColorItem.mockData()
 	
 	// Сама таблица
 	lazy var tableView: UITableView = {
@@ -59,19 +117,20 @@ class ViewController: UIViewController {
 	private lazy var addBtn: UIButton = {
 		$0.frame.size = CGSize(width: 150, height: 30)
 		$0.layer.cornerRadius = 10
-		$0.backgroundColor = .white
+		$0.backgroundColor = .appBrat
 		$0.setTitle("randomize again", for: .normal) // Называю кнопку
 		$0.titleLabel?.font = UIFont.systemFont(ofSize: 12) // Задаю ей размер шрифта
 		$0.tintColor = .appRed
-		$0.frame.origin = CGPoint(
-			x: view.safeAreaLayoutGuide.layoutFrame.maxX - $0.frame.width - 20, // Отступ от правого края
-			y: view.safeAreaLayoutGuide.layoutFrame.minY + 105                  // Отступ от верхнего края
-		)
+//		$0.frame.origin = CGPoint(
+//			x: view.safeAreaLayoutGuide.layoutFrame.maxX - $0.frame.width - 20, // Отступ от правого края
+//			y: view.safeAreaLayoutGuide.layoutFrame.minY + 105                  // Отступ от верхнего края
+//		)
 		return $0
-	}(UIButton(primaryAction: generateAction))
+	}(UIButton(type: .custom, primaryAction: generateAction))
 	
 	lazy var generateAction: UIAction = UIAction { _ in
-		self.colors = colorItem.mockData()
+		self.colors = ColorItem.mockData()
+		self.tableView.reloadData() // для обновления содержимого
 	}
 	
 	
@@ -80,11 +139,13 @@ class ViewController: UIViewController {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view.
 		view.addSubview(tableView) // Добавили таблицу
-		view.addSubview(addBtn) // Добавили кнопку
+//		view.addSubview(addBtn) // Добавили кнопку
 		
 		tableView.rowHeight = 150 // Задали высоту ячейки таблицы
 		title = "Colors Table" // Задали название View
 		navigationController?.navigationBar.prefersLargeTitles = true
+		
+		navigationItem.leftBarButtonItem = UIBarButtonItem(customView: addBtn) // я хочу добавить кнопку на экран с помощью navigstioncontroller, которая будет leftbarbuttonitem чтобы она была выше всех в иерархии
 	}
 }
 
@@ -105,45 +166,8 @@ extension ViewController: UITableViewDataSource {
 		
 		cell.contentConfiguration = config
 		cell.accessoryType = .disclosureIndicator
-		switch colors[indexPath.row].typeOfColor {
-			
-		case .Green:
-			cell.backgroundColor = .appGreen
-		case .ProductRed:
-			cell.backgroundColor = .appRed
-		case .Yellow:
-			cell.backgroundColor = .appYellow
-		case .Purple:
-			cell.backgroundColor = .appPurple
-		case .DeepPurple:
-			cell.backgroundColor = .appDeepPurple
-		case .Violet:
-			cell.backgroundColor = .appViolet
-		case .Gray:
-			cell.backgroundColor = .gray
-		case .SpaceGray:
-			cell.backgroundColor = .appSpaceGray
-		case .RoseGold:
-			cell.backgroundColor = .appRoseGold
-		case .Gold:
-			cell.backgroundColor = .appGold
-		case .Brat:
-			cell.backgroundColor = .appBrat
-		case .Lime:
-			cell.backgroundColor = .appLime
-		case .Cyan:
-			cell.backgroundColor = .cyan
-		case .Magenta:
-			cell.backgroundColor = .magenta
-		case .Brown:
-			cell.backgroundColor = .brown
-		case .Orange:
-			cell.backgroundColor = .orange
-		case .Blue:
-			cell.backgroundColor = .blue
-		case .Red:
-			cell.backgroundColor = .red
-		}
+		let cellColor = colors[indexPath.row].typeOfColor.color
+		cell.backgroundColor = cellColor
 		
 		return cell
 	}

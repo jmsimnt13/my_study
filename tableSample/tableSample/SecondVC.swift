@@ -19,9 +19,9 @@ class SecondVC: UIViewController {
 		
 	}
 	
-	var colorItem: colorItem
+	var colorItem: ColorItem
 	
-	init(colorItem: colorItem) {
+	init(colorItem: ColorItem) {
 		self.colorItem = colorItem
 		super.init(nibName: nil, bundle: nil)
 	}
@@ -29,44 +29,9 @@ class SecondVC: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		title = colorItem.nameOfColor
-		switch colorItem.typeOfColor {
-		case .Green:
-			view.backgroundColor = .appGreen
-		case .ProductRed:
-			view.backgroundColor = .appRed
-		case .Yellow:
-			view.backgroundColor = .appYellow
-		case .Purple:
-			view.backgroundColor = .appPurple
-		case .DeepPurple:
-			view.backgroundColor = .appDeepPurple
-		case .Violet:
-			view.backgroundColor = .appViolet
-		case .Gray:
-			view.backgroundColor = .gray
-		case .SpaceGray:
-			view.backgroundColor = .appSpaceGray
-		case .RoseGold:
-			view.backgroundColor = .appRoseGold
-		case .Gold:
-			view.backgroundColor = .appGold
-		case .Brat:
-			view.backgroundColor = .appBrat
-		case .Lime:
-			view.backgroundColor = .appLime
-		case .Cyan:
-			view.backgroundColor = .cyan
-		case .Magenta:
-			view.backgroundColor = .magenta
-		case .Brown:
-			view.backgroundColor = .brown
-		case .Orange:
-			view.backgroundColor = .orange
-		case .Blue:
-			view.backgroundColor = .blue
-		case .Red:
-			view.backgroundColor = .red
-		}
+		let scColor = colorItem.typeOfColor.color
+		view.backgroundColor = scColor
+		
 	}
 	
 	required init?(coder: NSCoder) {
