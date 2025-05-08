@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 protocol OnboardingViewPresenterProtocol: AnyObject {
 	var mockData: [OnboardingViewData] { get }
@@ -24,6 +25,10 @@ class OnboardingViewPresenter: OnboardingViewPresenterProtocol {
 	
 	func startApp() {
 		// save state
-		NotificationCenter.default.post(name: .windowManager, object: nil, userInfo: [String.windowInfo: WindowCase.main])
+		//NotificationCenter.default.post(name: .windowManager, object: nil, userInfo: [String.windowInfo: WindowCase.main])
+		let img: UIImage = .bratSummer
+		if let imgData = img.jpegData(compressionQuality: 1) {
+			DataBaseManager.shared.createBook(name: "Мартин Иден", author: "Джек Лондон", description: "Некоторый текст, описывающий книгу", cover: imgData)
+		}
 	}
 }
