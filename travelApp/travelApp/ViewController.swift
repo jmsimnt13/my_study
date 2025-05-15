@@ -56,9 +56,10 @@ Enjoy the best expirience with us!
 		// Do any additional setup after loading the view.
 		setupUI()
 		setupConstraints()
-		//setuprActions()
+		setupActions()
 	}
 	
+	// Функция добавления объектов на экран
 	private func setupUI() {
 		view.backgroundColor = .white
 		view.addSubview(imageView)
@@ -67,6 +68,7 @@ Enjoy the best expirience with us!
 		view.addSubview(nextBtn)
 	}
 	
+	// Функиця установления ограничений
 	private func setupConstraints() {
 		imageView.translatesAutoresizingMaskIntoConstraints = false
 		titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -98,6 +100,18 @@ Enjoy the best expirience with us!
 		])
 	}
 	
+	// Функция для добавления действий с кнопками
+	private func setupActions() {
+		nextBtn.addTarget(self, action: #selector(nextBtnTupped), for: .touchUpInside)
+	}
 	
+	// Функция для осуществления действия
+	@objc private func nextBtnTupped() {
+		let secondVC = SecondVC()
+		secondVC.modalPresentationStyle = .fullScreen
+		UIView.transition(with: self.view.window!, duration: 0.5, options: .transitionCrossDissolve, animations: {
+			self.present(secondVC, animated: false, completion: nil)
+		}, completion: nil)
+	}
 }
 
