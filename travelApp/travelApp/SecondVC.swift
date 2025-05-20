@@ -30,8 +30,8 @@ struct PlaceData {
 	}
 }
 
-class SecondVC: UIViewController, UICollectionViewDelegateFlowLayout {
-	private var placeData: [PlaceData] = PlaceData.fillArray()
+class SecondVC: UIViewController {
+	var placeData: [PlaceData] = PlaceData.fillArray()
 	
 	//MARK: UI элементы
 	/// Навигационная строка, на которую лягут меню заголовок и иконка профиля пользователя
@@ -54,7 +54,6 @@ class SecondVC: UIViewController, UICollectionViewDelegateFlowLayout {
 	private let titleLabelDiscover: UILabel = {
 		let label = UILabel()
 		$0.text = "Discover"
-		$0.textAlignment = .center
 		$0.font = UIFont.boldSystemFont(ofSize: 27)
 		$0.textColor = .black
 		return $0
@@ -77,7 +76,6 @@ class SecondVC: UIViewController, UICollectionViewDelegateFlowLayout {
 	private let sliderLayoutHorizontal: UICollectionViewFlowLayout = {
 		let layout = UICollectionViewFlowLayout()
 		layout.scrollDirection = .horizontal
-		layout.itemSize = CGSize(width: 335, height: 253)
 		layout.minimumLineSpacing = 16
 		return layout
 	}()
@@ -128,7 +126,6 @@ class SecondVC: UIViewController, UICollectionViewDelegateFlowLayout {
 	private let sliderLayoutVertical: UICollectionViewFlowLayout = {
 		let layout = UICollectionViewFlowLayout()
 		layout.scrollDirection = .vertical
-		layout.itemSize = CGSize(width: 175, height: 175)
 		layout.minimumLineSpacing = 16
 		layout.minimumInteritemSpacing = 16
 		return layout
@@ -147,6 +144,10 @@ class SecondVC: UIViewController, UICollectionViewDelegateFlowLayout {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		view.backgroundColor = .white
+		navigationBar.backgroundColor = .lightGray
+		tabsView.backgroundColor = .lightGray
+		recomendedView.backgroundColor = .lightGray
 		//
 		setupUI()
 		setupConstraints()
@@ -154,49 +155,49 @@ class SecondVC: UIViewController, UICollectionViewDelegateFlowLayout {
 	
 	//MARK: SETUP UI
 	private func setupUI() {
-		view.backgroundColor = .white
+		menuImageView.translatesAutoresizingMaskIntoConstraints = false
+		navigationBar.translatesAutoresizingMaskIntoConstraints = false
+		tabsView.translatesAutoresizingMaskIntoConstraints = false
+		placeCollectionViewHorizontal.translatesAutoresizingMaskIntoConstraints = false
+		placeCollectionViewVertical.translatesAutoresizingMaskIntoConstraints = false
 		
 		view.addSubview(navigationBar)
+		view.addSubview(tabsView)
+		view.addSubview(placeCollectionViewHorizontal)
+		view.addSubview(pageControl)
+		view.addSubview(recomendedView)
+		view.addSubview(placeCollectionViewVertical)
+	
 		navigationBar.addSubview(menuImageView)
 		navigationBar.addSubview(titleLabelDiscover)
 		//navigationBar.addSubview(profileImageView)
-		
-		view.addSubview(tabsView)
+
 		tabsView.addSubview(popularTab)
 		tabsView.addSubview(featuredTab)
 		tabsView.addSubview(mostVisitedTab)
 		tabsView.addSubview(europeTab)
 		tabsView.addSubview(asiaTab)
-		view.addSubview(placeCollectionViewHorizontal)
-		placeCollectionViewHorizontal.translatesAutoresizingMaskIntoConstraints = false
-		view.addSubview(pageControl)
-		
-		view.addSubview(recomendedView)
+
 		recomendedView.addSubview(titleLabelRecomended)
 		recomendedView.addSubview(titleLabelViewAll)
-		view.addSubview(placeCollectionViewVertical)
-		placeCollectionViewVertical.translatesAutoresizingMaskIntoConstraints = false
+		
 	}
 	
 	//MARK: CONSTRAINTS
 	private func setupConstraints() {
 		NSLayoutConstraint.activate([
-			//MARK: ВЕРХ СТРАНИЦЫ
-			// Ограничения для строки навигации
+			// MARK: ВЕРХ СТРАНИЦЫ
 			navigationBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
 			navigationBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
 			navigationBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 			navigationBar.heightAnchor.constraint(equalToConstant: 50),
 			
-			// Ограничения для картинки
 			menuImageView.leadingAnchor.constraint(equalTo: navigationBar.leadingAnchor, constant: 16),
 			menuImageView.centerYAnchor.constraint(equalTo: navigationBar.centerYAnchor),
 			
-			// Ограничения для Discover
 			titleLabelDiscover.centerXAnchor.constraint(equalTo: navigationBar.centerXAnchor),
 			titleLabelDiscover.centerYAnchor.constraint(equalTo: navigationBar.centerYAnchor),
 			
-			// Ограничения для кнопок Popular Featured Most.. + pageControl
 			tabsView.topAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: 8),
 			tabsView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
 			tabsView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -206,7 +207,7 @@ class SecondVC: UIViewController, UICollectionViewDelegateFlowLayout {
 			featuredTab.leadingAnchor.constraint(equalTo: popularTab.trailingAnchor, constant: 16),
 			mostVisitedTab.leadingAnchor.constraint(equalTo: featuredTab.trailingAnchor, constant: 16),
 			europeTab.leadingAnchor.constraint(equalTo: mostVisitedTab.trailingAnchor, constant: 16),
-			asiaTab.leadingAnchor.constraint(equalTo: asiaTab.trailingAnchor, constant: 16),
+			asiaTab.leadingAnchor.constraint(equalTo: europeTab.trailingAnchor, constant: 16),
 			
 			popularTab.centerYAnchor.constraint(equalTo: tabsView.centerYAnchor),
 			featuredTab.centerYAnchor.constraint(equalTo: tabsView.centerYAnchor),
@@ -214,17 +215,16 @@ class SecondVC: UIViewController, UICollectionViewDelegateFlowLayout {
 			europeTab.centerYAnchor.constraint(equalTo: tabsView.centerYAnchor),
 			asiaTab.centerYAnchor.constraint(equalTo: tabsView.centerYAnchor),
 			
-			pageControl.topAnchor.constraint(equalTo: placeCollectionViewHorizontal.bottomAnchor, constant: 8),
-			pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-			pageControl.heightAnchor.constraint(equalToConstant: 20),
-			
-			// Слайдер с карточками
 			placeCollectionViewHorizontal.topAnchor.constraint(equalTo: tabsView.bottomAnchor, constant: 16),
 			placeCollectionViewHorizontal.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
 			placeCollectionViewHorizontal.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
 			placeCollectionViewHorizontal.heightAnchor.constraint(equalToConstant: 250),
 			
-			//MARK: СЕКЦИЯ РЕКОМЕНДАЦИИ
+			pageControl.topAnchor.constraint(equalTo: placeCollectionViewHorizontal.bottomAnchor, constant: 8),
+			pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+			pageControl.heightAnchor.constraint(equalToConstant: 20),
+			
+			// MARK: СЕКЦИЯ РЕКОМЕНДАЦИИ
 			recomendedView.topAnchor.constraint(equalTo: pageControl.bottomAnchor, constant: 32),
 			recomendedView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
 			recomendedView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -232,6 +232,8 @@ class SecondVC: UIViewController, UICollectionViewDelegateFlowLayout {
 			
 			titleLabelRecomended.leadingAnchor.constraint(equalTo: recomendedView.leadingAnchor, constant: 16),
 			titleLabelRecomended.topAnchor.constraint(equalTo: recomendedView.topAnchor, constant: 16),
+			titleLabelRecomended.heightAnchor.constraint(greaterThanOrEqualToConstant: 20),
+			titleLabelRecomended.widthAnchor.constraint(greaterThanOrEqualToConstant: 100),
 			
 			titleLabelViewAll.trailingAnchor.constraint(equalTo: recomendedView.trailingAnchor, constant: -16),
 			titleLabelViewAll.centerYAnchor.constraint(equalTo: recomendedView.centerYAnchor),
@@ -242,10 +244,6 @@ class SecondVC: UIViewController, UICollectionViewDelegateFlowLayout {
 			placeCollectionViewVertical.bottomAnchor.constraint(equalTo: recomendedView.bottomAnchor),
 		])
 	}
-
-//	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//		return CGSize(width: 175, height: 175)
-//	}
 	
 	//Создание одного раздела
 	private func createTabButton(title: String, isSelected: Bool = false) -> UIButton {
@@ -258,6 +256,22 @@ class SecondVC: UIViewController, UICollectionViewDelegateFlowLayout {
 	
 	//Создание слайдера
 	
+}
+
+extension SecondVC: UICollectionViewDelegateFlowLayout {
+	func collectionView(
+		_ collectionView: UICollectionView,
+		layout collectionViewLayout: UICollectionViewLayout,
+		sizeForItemAt indexPath: IndexPath
+	) -> CGSize {
+		if collectionView == placeCollectionViewHorizontal {
+			// Размер для горизонтальной коллекции
+			return CGSize(width: 335, height: 253)
+		} else {
+			// Размер для вертикальной коллекции
+			return CGSize(width: (view.frame.width - 48) / 2, height: 175)
+		}
+	}
 }
 
 extension SecondVC: UICollectionViewDataSource {
@@ -273,7 +287,13 @@ extension SecondVC: UICollectionViewDataSource {
 	
 	// Настройка самой ячейки
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-		let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
+		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? CustomCollectionViewCell else {
+			return UICollectionViewCell()
+		}
+		
+		let place = placeData[indexPath.row]
+		cell.titleLabel.text = place.title
+		cell.imageView.image = UIImage(named: "mainVC")
 		cell.backgroundColor = .appPurple
 		cell.layer.cornerRadius = 10
 		return cell
