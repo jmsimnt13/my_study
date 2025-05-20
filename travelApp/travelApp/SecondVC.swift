@@ -5,7 +5,6 @@
 //  Created by Данила on 12.05.2025.
 //
 
-import Foundation
 import UIKit
 
 struct PlaceData {
@@ -33,171 +32,92 @@ struct PlaceData {
 class SecondVC: UIViewController {
 	var placeData: [PlaceData] = PlaceData.fillArray()
 	
-	//MARK: UI элементы
-	/// Навигационная строка, на которую лягут меню заголовок и иконка профиля пользователя
-	private let navigationBar: UIView = {
-		$0.backgroundColor = .clear
-		return $0
-	}(UIView())
-	
-	// Изображение меню
-	private let menuImageView: UIImageView = {
-		$0.image = UIImage(named: "appMenu")
-		$0.frame.size.height = 33
-		$0.frame.size.width = 33
-		$0.contentMode = .scaleAspectFit
-		$0.clipsToBounds = true
-		return $0
-	}(UIImageView())
-	
-	// Discover
-	private let titleLabelDiscover: UILabel = {
-		let label = UILabel()
-		$0.text = "Discover"
-		$0.font = UIFont.boldSystemFont(ofSize: 27)
-		$0.textColor = .black
-		return $0
-	}(UILabel())
-	
-	/// Вью, на которую лягут разделы табы
-	private let tabsView: UIView = {
-		$0.backgroundColor = .clear
-		return $0
-	}(UIView())
-	
-	// Сами разделы
-	lazy var popularTab = createTabButton(title: "Popular", isSelected: true)
-	lazy var featuredTab = createTabButton(title: "Featured")
-	lazy var mostVisitedTab = createTabButton(title: "Most Visited")
-	lazy var europeTab = createTabButton(title: "Europe")
-	lazy var asiaTab = createTabButton(title: "Asia")
-	
-	// Шаблон для таблицы внизу с прокруткой горизонтальный + индикаторы страницы
-	private let sliderLayoutHorizontal: UICollectionViewFlowLayout = {
-		let layout = UICollectionViewFlowLayout()
-		layout.scrollDirection = .horizontal
-		layout.minimumLineSpacing = 16
-		return layout
-	}()
-	
-	private lazy var placeCollectionViewHorizontal: UICollectionView = {
-		let collectionView = UICollectionView(frame: .zero, collectionViewLayout: sliderLayoutHorizontal)
-		collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
-		collectionView.dataSource = self
-		collectionView.delegate = self
-		collectionView.showsHorizontalScrollIndicator = false
-		collectionView.backgroundColor = .appPurple
-		return collectionView
-	}()
-	
-	lazy var pageControl: UIPageControl = {
-		$0.currentPageIndicatorTintColor = .appPurple
-		$0.pageIndicatorTintColor = .lightGray
-		$0.numberOfPages = 3
-		return $0
-	}(UIPageControl())
-	
-	/// Вью на которую лягут элементы из раздела рекомендации
-	private let recomendedView: UIView = {
-		$0.backgroundColor = .clear
-		return $0
-	}(UIView())
-	// Recomended
-	private let titleLabelRecomended: UILabel = {
-		$0.text = "Recomended"
-		$0.textAlignment = .center
-		$0.numberOfLines = 0
-		$0.font = UIFont.boldSystemFont(ofSize: 18) // Как заставить работать с моими шрифтами хз
-		$0.textColor = .black
-		return $0
-	}(UILabel())
-	
-	// View All
-	private let titleLabelViewAll: UILabel = {
-		$0.text = "View All"
-		$0.textAlignment = .center
-		$0.numberOfLines = 0
-		$0.font = UIFont.systemFont(ofSize: 14) // Как заставить работать с моими шрифтами хз
-		$0.textColor = .black
-		return $0
-	}(UILabel())
-	
-	// Шаблон для таблицы внизу с прокруткой вертиально
-	private let sliderLayoutVertical: UICollectionViewFlowLayout = {
-		let layout = UICollectionViewFlowLayout()
-		layout.scrollDirection = .vertical
-		layout.minimumLineSpacing = 16
-		layout.minimumInteritemSpacing = 16
-		return layout
-	}()
-	
-	private lazy var placeCollectionViewVertical: UICollectionView = {
-		let collectionView = UICollectionView(frame: .zero, collectionViewLayout: sliderLayoutVertical)
-		collectionView.dataSource = self
-		collectionView.delegate = self
-		collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
-		collectionView.backgroundColor = .white
-		return collectionView
-	}()
-	
-	
+	// Коллекции
+	let sliderCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+	let recommendedCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		view.backgroundColor = .white
-		navigationBar.backgroundColor = .lightGray
-		tabsView.backgroundColor = .lightGray
-		recomendedView.backgroundColor = .lightGray
-		//
+		
+		// Настройка UI
 		setupUI()
-		setupConstraints()
 	}
 	
-	//MARK: SETUP UI
 	private func setupUI() {
-		menuImageView.translatesAutoresizingMaskIntoConstraints = false
+		// 1. Навигационная строка
+		let navigationBar = UIView()
+		navigationBar.backgroundColor = .clear
 		navigationBar.translatesAutoresizingMaskIntoConstraints = false
-		tabsView.translatesAutoresizingMaskIntoConstraints = false
-		placeCollectionViewHorizontal.translatesAutoresizingMaskIntoConstraints = false
-		placeCollectionViewVertical.translatesAutoresizingMaskIntoConstraints = false
-		
 		view.addSubview(navigationBar)
-		view.addSubview(tabsView)
-		view.addSubview(placeCollectionViewHorizontal)
-		view.addSubview(pageControl)
-		view.addSubview(recomendedView)
-		view.addSubview(placeCollectionViewVertical)
-	
-		navigationBar.addSubview(menuImageView)
-		navigationBar.addSubview(titleLabelDiscover)
-		//navigationBar.addSubview(profileImageView)
-
-		tabsView.addSubview(popularTab)
-		tabsView.addSubview(featuredTab)
-		tabsView.addSubview(mostVisitedTab)
-		tabsView.addSubview(europeTab)
-		tabsView.addSubview(asiaTab)
-
-		recomendedView.addSubview(titleLabelRecomended)
-		recomendedView.addSubview(titleLabelViewAll)
 		
-	}
-	
-	//MARK: CONSTRAINTS
-	private func setupConstraints() {
+		// Меню (burger icon)
+		let menuButton = UIButton(type: .system)
+		menuButton.setImage(UIImage(named: "appMenu"), for: .normal)
+		menuButton.tintColor = .black
+		menuButton.translatesAutoresizingMaskIntoConstraints = false
+		navigationBar.addSubview(menuButton)
+		
+		// Заголовок "Discover"
+		let titleLabel = UILabel()
+		titleLabel.text = "Discover"
+		titleLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
+		titleLabel.translatesAutoresizingMaskIntoConstraints = false
+		navigationBar.addSubview(titleLabel)
+		
+		// Профиль пользователя
+		let profileImageView = UIImageView(image: UIImage(named: "appProfileIcon"))
+		profileImageView.contentMode = .scaleAspectFill
+		profileImageView.layer.cornerRadius = 20
+		profileImageView.clipsToBounds = true
+		profileImageView.translatesAutoresizingMaskIntoConstraints = false
+		navigationBar.addSubview(profileImageView)
+		
+		// Ограничения для навигационной строки
 		NSLayoutConstraint.activate([
-			// MARK: ВЕРХ СТРАНИЦЫ
 			navigationBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
 			navigationBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
 			navigationBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 			navigationBar.heightAnchor.constraint(equalToConstant: 50),
 			
-			menuImageView.leadingAnchor.constraint(equalTo: navigationBar.leadingAnchor, constant: 16),
-			menuImageView.centerYAnchor.constraint(equalTo: navigationBar.centerYAnchor),
+			menuButton.leadingAnchor.constraint(equalTo: navigationBar.leadingAnchor, constant: 16),
+			menuButton.centerYAnchor.constraint(equalTo: navigationBar.centerYAnchor),
 			
-			titleLabelDiscover.centerXAnchor.constraint(equalTo: navigationBar.centerXAnchor),
-			titleLabelDiscover.centerYAnchor.constraint(equalTo: navigationBar.centerYAnchor),
+			titleLabel.centerXAnchor.constraint(equalTo: navigationBar.centerXAnchor),
+			titleLabel.centerYAnchor.constraint(equalTo: navigationBar.centerYAnchor),
 			
+			profileImageView.trailingAnchor.constraint(equalTo: navigationBar.trailingAnchor, constant: -16),
+			profileImageView.centerYAnchor.constraint(equalTo: navigationBar.centerYAnchor),
+			profileImageView.widthAnchor.constraint(equalToConstant: 40),
+			profileImageView.heightAnchor.constraint(equalToConstant: 40)
+		])
+		
+		// 2. Табы (Popular, Featured, Most Visited, Europe, Asia)
+		let tabsView = UIView()
+		tabsView.backgroundColor = .clear
+		tabsView.translatesAutoresizingMaskIntoConstraints = false
+		view.addSubview(tabsView)
+		
+		let popularTab = createTabButton(title: "Popular", isSelected: true)
+		let featuredTab = createTabButton(title: "Featured")
+		let mostVisitedTab = createTabButton(title: "Most Visited")
+		let europeTab = createTabButton(title: "Europe")
+		let asiaTab = createTabButton(title: "Asia")
+		
+		popularTab.translatesAutoresizingMaskIntoConstraints = false
+		featuredTab.translatesAutoresizingMaskIntoConstraints = false
+		mostVisitedTab.translatesAutoresizingMaskIntoConstraints = false
+		europeTab.translatesAutoresizingMaskIntoConstraints = false
+		asiaTab.translatesAutoresizingMaskIntoConstraints = false
+		
+		tabsView.addSubview(popularTab)
+		tabsView.addSubview(featuredTab)
+		tabsView.addSubview(mostVisitedTab)
+		tabsView.addSubview(europeTab)
+		tabsView.addSubview(asiaTab)
+		
+		// Ограничения для табов
+		NSLayoutConstraint.activate([
 			tabsView.topAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: 8),
 			tabsView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
 			tabsView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -213,95 +133,145 @@ class SecondVC: UIViewController {
 			featuredTab.centerYAnchor.constraint(equalTo: tabsView.centerYAnchor),
 			mostVisitedTab.centerYAnchor.constraint(equalTo: tabsView.centerYAnchor),
 			europeTab.centerYAnchor.constraint(equalTo: tabsView.centerYAnchor),
-			asiaTab.centerYAnchor.constraint(equalTo: tabsView.centerYAnchor),
-			
-			placeCollectionViewHorizontal.topAnchor.constraint(equalTo: tabsView.bottomAnchor, constant: 16),
-			placeCollectionViewHorizontal.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-			placeCollectionViewHorizontal.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-			placeCollectionViewHorizontal.heightAnchor.constraint(equalToConstant: 250),
-			
-			pageControl.topAnchor.constraint(equalTo: placeCollectionViewHorizontal.bottomAnchor, constant: 8),
-			pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-			pageControl.heightAnchor.constraint(equalToConstant: 20),
-			
-			// MARK: СЕКЦИЯ РЕКОМЕНДАЦИИ
-			recomendedView.topAnchor.constraint(equalTo: pageControl.bottomAnchor, constant: 32),
-			recomendedView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-			recomendedView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-			recomendedView.heightAnchor.constraint(equalToConstant: 300),
-			
-			titleLabelRecomended.leadingAnchor.constraint(equalTo: recomendedView.leadingAnchor, constant: 16),
-			titleLabelRecomended.topAnchor.constraint(equalTo: recomendedView.topAnchor, constant: 16),
-			titleLabelRecomended.heightAnchor.constraint(greaterThanOrEqualToConstant: 20),
-			titleLabelRecomended.widthAnchor.constraint(greaterThanOrEqualToConstant: 100),
-			
-			titleLabelViewAll.trailingAnchor.constraint(equalTo: recomendedView.trailingAnchor, constant: -16),
-			titleLabelViewAll.centerYAnchor.constraint(equalTo: recomendedView.centerYAnchor),
-			
-			placeCollectionViewVertical.topAnchor.constraint(equalTo: titleLabelRecomended.bottomAnchor, constant: 16),
-			placeCollectionViewVertical.leadingAnchor.constraint(equalTo: recomendedView.leadingAnchor),
-			placeCollectionViewVertical.trailingAnchor.constraint(equalTo: recomendedView.trailingAnchor),
-			placeCollectionViewVertical.bottomAnchor.constraint(equalTo: recomendedView.bottomAnchor),
+			asiaTab.centerYAnchor.constraint(equalTo: tabsView.centerYAnchor)
 		])
+		
+		// 3. Горизонтальный слайдер
+		sliderCollectionView.register(SliderCell.self, forCellWithReuseIdentifier: "SliderCell")
+		sliderCollectionView.dataSource = self
+		sliderCollectionView.delegate = self
+		sliderCollectionView.showsHorizontalScrollIndicator = false
+		sliderCollectionView.backgroundColor = .clear
+		sliderCollectionView.translatesAutoresizingMaskIntoConstraints = false
+		view.addSubview(sliderCollectionView)
+		
+		// Ограничения для слайдера
+		NSLayoutConstraint.activate([
+			sliderCollectionView.topAnchor.constraint(equalTo: tabsView.bottomAnchor, constant: 16),
+			sliderCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+			sliderCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+			sliderCollectionView.heightAnchor.constraint(equalToConstant: 250)
+		])
+		
+		// 4. Индикаторы слайдера
+		let pageControl = UIPageControl()
+		pageControl.currentPageIndicatorTintColor = .purple
+		pageControl.pageIndicatorTintColor = .lightGray
+		pageControl.numberOfPages = placeData.count
+		pageControl.translatesAutoresizingMaskIntoConstraints = false
+		view.addSubview(pageControl)
+		
+		// Ограничения для индикаторов
+		NSLayoutConstraint.activate([
+			pageControl.topAnchor.constraint(equalTo: sliderCollectionView.bottomAnchor, constant: 8),
+			pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+			pageControl.heightAnchor.constraint(equalToConstant: 20)
+		])
+		
+		// 5. Секция "Recommended"
+		let recommendedSection = UIView()
+		recommendedSection.backgroundColor = .clear
+		recommendedSection.translatesAutoresizingMaskIntoConstraints = false
+		view.addSubview(recommendedSection)
+		
+		let recommendedLabel = UILabel()
+		recommendedLabel.text = "Recommended"
+		recommendedLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+		recommendedLabel.translatesAutoresizingMaskIntoConstraints = false
+		recommendedSection.addSubview(recommendedLabel)
+		
+		let viewAllButton = UIButton(type: .system)
+		viewAllButton.setTitle("View All", for: .normal)
+		viewAllButton.setTitleColor(.gray, for: .normal)
+		viewAllButton.translatesAutoresizingMaskIntoConstraints = false
+		recommendedSection.addSubview(viewAllButton)
+		
+		// Коллекция рекомендаций
+		recommendedCollectionView.register(RecommendedCell.self, forCellWithReuseIdentifier: "RecommendedCell")
+		recommendedCollectionView.dataSource = self
+		recommendedCollectionView.delegate = self
+		recommendedCollectionView.backgroundColor = .clear
+		recommendedCollectionView.translatesAutoresizingMaskIntoConstraints = false
+		recommendedSection.addSubview(recommendedCollectionView)
+		
+		// Ограничения для секции "Recommended"
+		NSLayoutConstraint.activate([
+			recommendedSection.topAnchor.constraint(equalTo: pageControl.bottomAnchor, constant: 32),
+			recommendedSection.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+			recommendedSection.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+			recommendedSection.heightAnchor.constraint(equalToConstant: 300),
+			
+			recommendedLabel.leadingAnchor.constraint(equalTo: recommendedSection.leadingAnchor, constant: 16),
+			recommendedLabel.topAnchor.constraint(equalTo: recommendedSection.topAnchor, constant: 16),
+			
+			viewAllButton.trailingAnchor.constraint(equalTo: recommendedSection.trailingAnchor, constant: -16),
+			viewAllButton.centerYAnchor.constraint(equalTo: recommendedLabel.centerYAnchor),
+			
+			recommendedCollectionView.topAnchor.constraint(equalTo: recommendedLabel.bottomAnchor, constant: 16),
+			recommendedCollectionView.leadingAnchor.constraint(equalTo: recommendedSection.leadingAnchor),
+			recommendedCollectionView.trailingAnchor.constraint(equalTo: recommendedSection.trailingAnchor),
+			recommendedCollectionView.bottomAnchor.constraint(equalTo: recommendedSection.bottomAnchor)
+		])
+		
 	}
 	
-	//Создание одного раздела
 	private func createTabButton(title: String, isSelected: Bool = false) -> UIButton {
 		let button = UIButton(type: .system)
 		button.setTitle(title, for: .normal)
-		button.setTitleColor(isSelected ? .appPurple : .black, for: .normal)
-		button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold) // тут тоже шрифты
+		button.setTitleColor(isSelected ? .purple : .black, for: .normal)
+		button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
 		return button
 	}
 	
-	//Создание слайдера
+	private func createSliderLayout() -> UICollectionViewFlowLayout {
+		let layout = UICollectionViewFlowLayout()
+		layout.scrollDirection = .horizontal
+		layout.itemSize = CGSize(width: view.frame.width - 32, height: 250)
+		layout.minimumLineSpacing = 16
+		return layout
+	}
 	
-}
-
-extension SecondVC: UICollectionViewDelegateFlowLayout {
-	func collectionView(
-		_ collectionView: UICollectionView,
-		layout collectionViewLayout: UICollectionViewLayout,
-		sizeForItemAt indexPath: IndexPath
-	) -> CGSize {
-		if collectionView == placeCollectionViewHorizontal {
-			// Размер для горизонтальной коллекции
-			return CGSize(width: 335, height: 253)
-		} else {
-			// Размер для вертикальной коллекции
-			return CGSize(width: (view.frame.width - 48) / 2, height: 175)
-		}
+	private func createRecommendedLayout() -> UICollectionViewFlowLayout {
+		let layout = UICollectionViewFlowLayout()
+		layout.scrollDirection = .vertical
+		layout.itemSize = CGSize(width: (view.frame.width - 48) / 2, height: 200)
+		layout.minimumLineSpacing = 16
+		layout.minimumInteritemSpacing = 16
+		return layout
 	}
 }
 
+// MARK: - UICollectionViewDataSource
 extension SecondVC: UICollectionViewDataSource {
-	// Количество секций
-	func numberOfSections(in collectionView: UICollectionView) -> Int {
-		return 1
-	}
-	
-	// Количество ячеек в секции
 	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		return placeData.count
+		if collectionView == sliderCollectionView {
+			return placeData.count
+		} else {
+			return placeData.count
+		}
 	}
 	
-	// Настройка самой ячейки
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? CustomCollectionViewCell else {
-			return UICollectionViewCell()
+		if collectionView == sliderCollectionView {
+			let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SliderCell", for: indexPath) as! SliderCell
+			cell.configure(with: placeData[indexPath.row])
+			return cell
+		} else {
+			let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RecommendedCell", for: indexPath) as! RecommendedCell
+			cell.configure(with: placeData[indexPath.row])
+			return cell
 		}
-		
-		let place = placeData[indexPath.row]
-		cell.titleLabel.text = place.title
-		cell.imageView.image = UIImage(named: "mainVC")
-		cell.backgroundColor = .appPurple
-		cell.layer.cornerRadius = 10
-		return cell
+	}
+}
+	
+// MARK: - UICollectionViewDelegate
+extension SecondVC: UICollectionViewDelegateFlowLayout {
+	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+		if collectionView == sliderCollectionView {
+			return CGSize(width: view.frame.width - 32, height: 250)
+		} else {
+			return CGSize(width: (view.frame.width - 48) / 2, height: 200)
+		}
 	}
 }
 
-extension SecondVC: UICollectionViewDelegate {
-	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-		print(placeData[indexPath.row])
-	}
-}
