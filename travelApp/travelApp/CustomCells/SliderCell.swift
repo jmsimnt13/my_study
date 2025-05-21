@@ -8,34 +8,38 @@
 import UIKit
 
 class SliderCell: UICollectionViewCell {
-	let imageView = UIImageView()
+	let imageView = UIImageView(image: UIImage(named: "mainVC"))
 	let titleLabel = UILabel()
 	let ratingLabel = UILabel()
 	let heartButton = UIButton(type: .system)
 	
 	override init(frame: CGRect) {
 		super.init(frame: frame)
-		backgroundColor = .systemPurple
+		backgroundColor = .appPurple
 		layer.cornerRadius = 16
 		clipsToBounds = true
 		
 		// ImageView
 		imageView.backgroundColor = .lightGray
+		imageView.translatesAutoresizingMaskIntoConstraints = false
 		contentView.addSubview(imageView)
 		
 		// Title Label
 		titleLabel.textColor = .white
 		titleLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+		titleLabel.translatesAutoresizingMaskIntoConstraints = false
 		contentView.addSubview(titleLabel)
 		
 		// Rating Label
 		ratingLabel.textColor = .white
 		ratingLabel.font = UIFont.systemFont(ofSize: 16)
+		ratingLabel.translatesAutoresizingMaskIntoConstraints = false
 		contentView.addSubview(ratingLabel)
 		
 		// Heart Button
 		heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
 		heartButton.tintColor = .white
+		heartButton.translatesAutoresizingMaskIntoConstraints = false
 		contentView.addSubview(heartButton)
 		
 		// Ограничения
@@ -64,6 +68,7 @@ class SliderCell: UICollectionViewCell {
 	}
 	
 	func configure(with place: PlaceData) {
+//		print("Configuring cell with title: \(place.title)")
 		titleLabel.text = place.title
 		ratingLabel.text = "\(place.userMark)"
 	}

@@ -33,8 +33,8 @@ class SecondVC: UIViewController {
 	var placeData: [PlaceData] = PlaceData.fillArray()
 	
 	// Коллекции
-	let sliderCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-	let recommendedCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+	lazy var sliderCollectionView = UICollectionView(frame: .zero, collectionViewLayout: createSliderLayout())
+	lazy var recommendedCollectionView = UICollectionView(frame: .zero, collectionViewLayout: createRecommendedLayout())
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -45,27 +45,27 @@ class SecondVC: UIViewController {
 	}
 	
 	private func setupUI() {
-		// 1. Навигационная строка
+		// Навигационная строка
 		let navigationBar = UIView()
 		navigationBar.backgroundColor = .clear
 		navigationBar.translatesAutoresizingMaskIntoConstraints = false
 		view.addSubview(navigationBar)
 		
-		// Меню (burger icon)
+		// Кнопка меню
 		let menuButton = UIButton(type: .system)
 		menuButton.setImage(UIImage(named: "appMenu"), for: .normal)
 		menuButton.tintColor = .black
 		menuButton.translatesAutoresizingMaskIntoConstraints = false
 		navigationBar.addSubview(menuButton)
 		
-		// Заголовок "Discover"
+		// Discover
 		let titleLabel = UILabel()
 		titleLabel.text = "Discover"
 		titleLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
 		titleLabel.translatesAutoresizingMaskIntoConstraints = false
 		navigationBar.addSubview(titleLabel)
 		
-		// Профиль пользователя
+		// Иконка профиля пользователя
 		let profileImageView = UIImageView(image: UIImage(named: "appProfileIcon"))
 		profileImageView.contentMode = .scaleAspectFill
 		profileImageView.layer.cornerRadius = 20
@@ -73,13 +73,15 @@ class SecondVC: UIViewController {
 		profileImageView.translatesAutoresizingMaskIntoConstraints = false
 		navigationBar.addSubview(profileImageView)
 		
-		// Ограничения для навигационной строки
+		// Ограничения для области навигации
 		NSLayoutConstraint.activate([
+			// для основы
 			navigationBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
 			navigationBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
 			navigationBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 			navigationBar.heightAnchor.constraint(equalToConstant: 50),
 			
+			// для элементов на ней
 			menuButton.leadingAnchor.constraint(equalTo: navigationBar.leadingAnchor, constant: 16),
 			menuButton.centerYAnchor.constraint(equalTo: navigationBar.centerYAnchor),
 			
@@ -92,13 +94,13 @@ class SecondVC: UIViewController {
 			profileImageView.heightAnchor.constraint(equalToConstant: 40)
 		])
 		
-		// 2. Табы (Popular, Featured, Most Visited, Europe, Asia)
+		// Разделы
 		let tabsView = UIView()
 		tabsView.backgroundColor = .clear
 		tabsView.translatesAutoresizingMaskIntoConstraints = false
 		view.addSubview(tabsView)
 		
-		let popularTab = createTabButton(title: "Popular", isSelected: true)
+		let popularTab = createTabButton(title: "Popular")
 		let featuredTab = createTabButton(title: "Featured")
 		let mostVisitedTab = createTabButton(title: "Most Visited")
 		let europeTab = createTabButton(title: "Europe")
@@ -116,7 +118,7 @@ class SecondVC: UIViewController {
 		tabsView.addSubview(europeTab)
 		tabsView.addSubview(asiaTab)
 		
-		// Ограничения для табов
+		// Ограничения для разделов
 		NSLayoutConstraint.activate([
 			tabsView.topAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: 8),
 			tabsView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -136,7 +138,7 @@ class SecondVC: UIViewController {
 			asiaTab.centerYAnchor.constraint(equalTo: tabsView.centerYAnchor)
 		])
 		
-		// 3. Горизонтальный слайдер
+		// Коллекция с горизонтальной прокруткой
 		sliderCollectionView.register(SliderCell.self, forCellWithReuseIdentifier: "SliderCell")
 		sliderCollectionView.dataSource = self
 		sliderCollectionView.delegate = self
@@ -145,7 +147,7 @@ class SecondVC: UIViewController {
 		sliderCollectionView.translatesAutoresizingMaskIntoConstraints = false
 		view.addSubview(sliderCollectionView)
 		
-		// Ограничения для слайдера
+		// Ограничения для нее
 		NSLayoutConstraint.activate([
 			sliderCollectionView.topAnchor.constraint(equalTo: tabsView.bottomAnchor, constant: 16),
 			sliderCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -153,7 +155,7 @@ class SecondVC: UIViewController {
 			sliderCollectionView.heightAnchor.constraint(equalToConstant: 250)
 		])
 		
-		// 4. Индикаторы слайдера
+		// Индикаторы под коллекцией
 		let pageControl = UIPageControl()
 		pageControl.currentPageIndicatorTintColor = .purple
 		pageControl.pageIndicatorTintColor = .lightGray
@@ -168,7 +170,7 @@ class SecondVC: UIViewController {
 			pageControl.heightAnchor.constraint(equalToConstant: 20)
 		])
 		
-		// 5. Секция "Recommended"
+		// Раздел Recommended
 		let recommendedSection = UIView()
 		recommendedSection.backgroundColor = .clear
 		recommendedSection.translatesAutoresizingMaskIntoConstraints = false
@@ -186,7 +188,7 @@ class SecondVC: UIViewController {
 		viewAllButton.translatesAutoresizingMaskIntoConstraints = false
 		recommendedSection.addSubview(viewAllButton)
 		
-		// Коллекция рекомендаций
+		// Коллекция рекомендаций вертикальная прокрутка
 		recommendedCollectionView.register(RecommendedCell.self, forCellWithReuseIdentifier: "RecommendedCell")
 		recommendedCollectionView.dataSource = self
 		recommendedCollectionView.delegate = self
@@ -197,10 +199,11 @@ class SecondVC: UIViewController {
 		// Ограничения для секции "Recommended"
 		NSLayoutConstraint.activate([
 			recommendedSection.topAnchor.constraint(equalTo: pageControl.bottomAnchor, constant: 32),
-			recommendedSection.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-			recommendedSection.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-			recommendedSection.heightAnchor.constraint(equalToConstant: 300),
-			
+			recommendedSection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+			recommendedSection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15),
+//			recommendedSection.heightAnchor.constraint(equalToConstant: 400),
+			recommendedSection.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+		
 			recommendedLabel.leadingAnchor.constraint(equalTo: recommendedSection.leadingAnchor, constant: 16),
 			recommendedLabel.topAnchor.constraint(equalTo: recommendedSection.topAnchor, constant: 16),
 			
@@ -234,7 +237,7 @@ class SecondVC: UIViewController {
 	private func createRecommendedLayout() -> UICollectionViewFlowLayout {
 		let layout = UICollectionViewFlowLayout()
 		layout.scrollDirection = .vertical
-		layout.itemSize = CGSize(width: (view.frame.width - 48) / 2, height: 200)
+		layout.itemSize = CGSize(width: (view.frame.width - 48) / 2, height: 175)
 		layout.minimumLineSpacing = 16
 		layout.minimumInteritemSpacing = 16
 		return layout
@@ -270,8 +273,23 @@ extension SecondVC: UICollectionViewDelegateFlowLayout {
 		if collectionView == sliderCollectionView {
 			return CGSize(width: view.frame.width - 32, height: 250)
 		} else {
-			return CGSize(width: (view.frame.width - 48) / 2, height: 200)
+			return CGSize(width: (view.frame.width - 48) / 2, height: 175)
 		}
+	}
+}
+
+extension SecondVC: UICollectionViewDelegate {
+	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+		print("IndexPath = \(indexPath.row)")
+		// получаем данные для выбранной ячейки
+		let selectedPlace = placeData[indexPath.row] // поместили в константу данные о текущей карточке
+		
+		// создаем экземпляр ThirdVC с передачей туда данных
+		let thirdVC = ThirdVC()
+		thirdVC.placeData = selectedPlace
+		
+		// переключение на ThirdVC
+		navigationController?.pushViewController(thirdVC, animated: true)
 	}
 }
 

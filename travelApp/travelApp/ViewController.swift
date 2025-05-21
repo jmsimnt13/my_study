@@ -14,6 +14,7 @@ class ViewController: UIViewController {
 		$0.image = UIImage(named: "mainVC")
 		$0.contentMode = .scaleAspectFill
 		$0.clipsToBounds = true
+		$0.layer.cornerRadius = 15
 		return $0
 	}(UIImageView())
 	
@@ -54,6 +55,7 @@ Enjoy the best expirience with us!
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view.
+		navigationController?.navigationBar.isHidden = true
 		setupUI()
 		setupConstraints()
 		setupActions()
@@ -77,7 +79,7 @@ Enjoy the best expirience with us!
 		
 		NSLayoutConstraint.activate([
 			// Ограничения для картинки
-			imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+			imageView.topAnchor.constraint(equalTo: view.topAnchor),
 			imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
 			imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 			imageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.5),
@@ -109,9 +111,10 @@ Enjoy the best expirience with us!
 	@objc private func nextBtnTupped() {
 		let secondVC = SecondVC()
 		secondVC.modalPresentationStyle = .fullScreen
-		UIView.transition(with: self.view.window!, duration: 0.5, options: .transitionCrossDissolve, animations: {
-			self.present(secondVC, animated: false, completion: nil)
-		}, completion: nil)
+		navigationController?.pushViewController(secondVC, animated: true)
+//		UIView.transition(with: self.view.window!, duration: 0.5, options: .transitionCrossDissolve, animations: {
+//			self.present(secondVC, animated: false, completion: nil)
+//		}, completion: nil)
 	}
 }
 
