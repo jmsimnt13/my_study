@@ -14,7 +14,7 @@ class ViewController: UIViewController {
 		$0.image = UIImage(named: "mainVC")
 		$0.contentMode = .scaleAspectFill
 		$0.clipsToBounds = true
-		$0.layer.cornerRadius = 15
+		$0.layer.cornerRadius = 37
 		return $0
 	}(UIImageView())
 	
