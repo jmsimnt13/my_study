@@ -10,6 +10,17 @@ import UIKit
 class ThirdVC: UIViewController {
 	var placeData: PlaceData? // свойство куда передается информация о выбранном месте
 
+	// Вынос контейнеров для корректной работы функции по закраске звезд
+	// Следует ли все контейнеры вынести в свойства???
+	private lazy var placeInfoContainerView = UIView()
+	private lazy var ratingStackView = UIStackView()
+	
+	// Для реализации тумблера с выбором дней отдыха
+	private lazy var personControlStack = UIStackView()
+	private lazy var personLabel = UILabel()
+	
+	// Пока не понял как эту кнопку задействовать, но свайп назад сам по себе работает,
+	// либо я не понял как его включил...
 	lazy var backAction: UIAction = UIAction { [weak self] _ in
 		// чтобы вернуться назад нужно сделать вот так
 		self?.navigationController?.popViewController(animated: true)
@@ -57,7 +68,7 @@ class ThirdVC: UIViewController {
 		])
 		
 		// Основной контейнер для отображения информации
-		let placeInfoContainerView: UIView = {
+		placeInfoContainerView = {
 			$0.backgroundColor = UIColor.white
 			$0.layer.cornerRadius = 37
 			$0.clipsToBounds = true
@@ -84,23 +95,74 @@ class ThirdVC: UIViewController {
 			return $0
 		}(UILabel())
 		
-		let ratingStackView: UIStackView = {
+		ratingStackView = {
 			$0.axis = .horizontal
-			$0.spacing = 8
+			$0.spacing = 4
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			placeInfoContainerView.addSubview($0)
 			return $0
 		}(UIStackView())
 		
-		let starImageView = UIImageView(image: UIImage(systemName: "star.fill"))
-		starImageView.tintColor = .yellow
-		ratingStackView.addArrangedSubview(starImageView)
+		// добавляем пять звезд
+		for _ in 1...5 {
+			let starImageView = UIImageView(image: UIImage(systemName: "star.fill"))
+			starImageView.tintColor = .gray
+			ratingStackView.addArrangedSubview(starImageView)
+		}
 		
 		let ratingLabel = UILabel()
 		ratingLabel.text = "\(place.userMark)"
 		ratingLabel.textColor = .black
 		ratingLabel.font = UIFont.boldSystemFont(ofSize: 16)
+		ratingLabel.translatesAutoresizingMaskIntoConstraints = false
 		ratingStackView.addArrangedSubview(ratingLabel)
+		
+		// Заполняем цветом рейтинг 
+		updateStarRating(rating: place.userMark)
+		
+		// настраиваем стек для тумберов выбора количества персон
+		personControlStack = {
+			$0.axis = .horizontal
+			$0.spacing = 0
+			$0.distribution = .fillEqually
+			$0.translatesAutoresizingMaskIntoConstraints = false
+			placeInfoContainerView.addSubview($0)
+			return $0
+		}(UIStackView())
+		
+		// -
+		let _ : UIButton = {
+			$0.setTitle("-", for: .normal)
+			$0.setTitleColor(.white, for: .normal)
+			$0.backgroundColor = .appViolet
+			$0.layer.cornerRadius = 13.5
+			$0.addTarget(self, action: #selector(decreasePersons), for: .touchUpInside)
+			$0.translatesAutoresizingMaskIntoConstraints = false
+			personControlStack.addArrangedSubview($0)
+			return $0
+		}(UIButton(type: .system))
+		
+		// Количество персон
+		personLabel = {
+			$0.text = "1"
+			$0.font = UIFont.boldSystemFont(ofSize: 16)
+			$0.textAlignment = .center
+			$0.translatesAutoresizingMaskIntoConstraints = false
+			personControlStack.addArrangedSubview($0)
+			return $0
+		}(UILabel())
+		
+		// +
+		let _ : UIButton = {
+			$0.setTitle("+", for: .normal)
+			$0.setTitleColor(.white, for: .normal)
+			$0.backgroundColor = .appViolet
+			$0.layer.cornerRadius = 13.5
+			$0.addTarget(self, action: #selector(increasePersons), for: .touchUpInside)
+			$0.translatesAutoresizingMaskIntoConstraints = false
+			personControlStack.addArrangedSubview($0)
+			return $0
+		}(UIButton(type: .system))
 		
 		let durationStackView: UIStackView = {
 			$0.axis = .horizontal
@@ -112,6 +174,7 @@ class ThirdVC: UIViewController {
 		
 		let clockImageView = UIImageView(image: UIImage(systemName: "clock"))
 		clockImageView.tintColor = .black
+		clockImageView.contentMode = .scaleAspectFit
 		durationStackView.addArrangedSubview(clockImageView)
 		
 		let durationLabel: UILabel = {
@@ -176,8 +239,13 @@ class ThirdVC: UIViewController {
 			ratingStackView.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 8),
 			ratingStackView.leadingAnchor.constraint(equalTo: placeInfoContainerView.leadingAnchor, constant: 16),
 			
+			personControlStack.topAnchor.constraint(equalTo: ratingStackView.bottomAnchor, constant: 16),
+//			personControlStack.centerXAnchor.constraint(equalTo: placeInfoContainerView.centerXAnchor),
+			personControlStack.leadingAnchor.constraint(equalTo: placeInfoContainerView.leadingAnchor, constant: 16),
+			
 			durationStackView.topAnchor.constraint(equalTo: ratingStackView.bottomAnchor, constant: 16),
-			durationStackView.leadingAnchor.constraint(equalTo: placeInfoContainerView.leadingAnchor, constant: 16),
+			durationStackView.centerYAnchor.constraint(equalTo: personControlStack.centerYAnchor),
+			durationStackView.leadingAnchor.constraint(equalTo: personControlStack.trailingAnchor, constant: 16),
 			
 			descriptionLabel.topAnchor.constraint(equalTo: durationStackView.bottomAnchor, constant: 16),
 			descriptionLabel.leadingAnchor.constraint(equalTo: placeInfoContainerView.leadingAnchor, constant: 16),
@@ -198,6 +266,33 @@ class ThirdVC: UIViewController {
 			
 		])
 	}
+
+}
+
+extension ThirdVC {
+	// Методы для увеличения/уменьшения числа дней
+	@objc func increasePersons() {
+		if let currentPersons = Int(personLabel.text ?? "0"), currentPersons < 10 { // Предположим, максимальное значение — 10 человек
+			personLabel.text = "\(currentPersons + 1)"
+		}
+	}
 	
+	@objc func decreasePersons() {
+		if let currentPersons = Int(personLabel.text ?? "0"), currentPersons > 1 { // Минимальное значение — 1 человек
+			personLabel.text = "\(currentPersons - 1)"
+		}
+	}
 	
+	// Функция для закрашивания звезд
+	func updateStarRating(rating: Double) {
+		let roundedRating = Int(rating.rounded())
+		
+		for i in 0..<5 {
+			if i < roundedRating {
+				ratingStackView.arrangedSubviews[i].tintColor = .appYellow
+			} else {
+				ratingStackView.arrangedSubviews[i].tintColor = .lightGray
+			}
+		}
+	}
 }
