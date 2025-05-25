@@ -8,9 +8,10 @@
 import UIKit
 
 class ThirdVC: UIViewController {
+	
 	var placeData: PlaceData? // свойство куда передается информация о выбранном месте
-
-	// Вынос контейнеров для корректной работы функции по закраске звезд
+	
+	// Вынос контейнеров для корректной работы функции по закраске звезд для досутпа к placeData
 	// Следует ли все контейнеры вынести в свойства???
 	private lazy var placeInfoContainerView = UIView()
 	private lazy var ratingStackView = UIStackView()
@@ -19,18 +20,16 @@ class ThirdVC: UIViewController {
 	private lazy var personControlStack = UIStackView()
 	private lazy var personLabel = UILabel()
 	
-	// Пока не понял как эту кнопку задействовать, но свайп назад сам по себе работает,
-	// либо я не понял как его включил...
-	lazy var backAction: UIAction = UIAction { [weak self] _ in
-		// чтобы вернуться назад нужно сделать вот так
-		self?.navigationController?.popViewController(animated: true)
-	} // вообще я ожидал что появится кнока в левом верхнем углу назад.... но она не появилась
-	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		view.backgroundColor = .appPurple
 		//
 		setupUI()
+	}
+	
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(true)
+		navigationController?.navigationBar.isHidden = true
 	}
 	
 	private func setupUI() {
@@ -39,8 +38,9 @@ class ThirdVC: UIViewController {
 		
 		// Подложка в виде изображения местности
 		let backgroundImageView: UIImageView = {
-			$0.image = UIImage(named: "mainVC")
-			$0.contentMode = .scaleToFill
+			$0.image = UIImage(named: "\(place.imageAssetName)")
+			$0.contentMode = .scaleAspectFill
+			$0.clipsToBounds = true
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			view.addSubview($0)
 			return $0
@@ -86,12 +86,33 @@ class ThirdVC: UIViewController {
 			return $0
 		}(UILabel())
 		
+		// UIStackView для местоположения
+		let locationStackView: UIStackView = {
+			$0.axis = .horizontal
+			$0.spacing = 4
+			$0.alignment = .center
+			$0.distribution = .fill
+			$0.translatesAutoresizingMaskIntoConstraints = false
+			placeInfoContainerView.addSubview($0)
+			return $0
+		}(UIStackView())
+		
+		let locationImage: UIImageView = {
+			$0.image = UIImage(named: "appLocationIcon")
+			$0.widthAnchor.constraint(equalToConstant: 14).isActive = true
+			$0.heightAnchor.constraint(equalToConstant: 14).isActive = true
+			$0.contentMode = .scaleAspectFit
+			$0.tintColor = .black
+			locationStackView.addArrangedSubview($0)
+			return $0
+		}(UIImageView())
+		
 		let locationLabel: UILabel = {
 			$0.text = "\(place.place.city), \(place.place.country)"
 			$0.textColor = .black
-			$0.font = UIFont.systemFont(ofSize: 16)
+			$0.font = UIFont.systemFont(ofSize: 12)
 			$0.translatesAutoresizingMaskIntoConstraints = false
-			placeInfoContainerView.addSubview($0)
+			locationStackView.addArrangedSubview($0)
 			return $0
 		}(UILabel())
 		
@@ -106,6 +127,8 @@ class ThirdVC: UIViewController {
 		// добавляем пять звезд
 		for _ in 1...5 {
 			let starImageView = UIImageView(image: UIImage(systemName: "star.fill"))
+			starImageView.widthAnchor.constraint(equalToConstant: 14).isActive = true
+			starImageView.heightAnchor.constraint(equalToConstant: 14).isActive = true
 			starImageView.tintColor = .gray
 			ratingStackView.addArrangedSubview(starImageView)
 		}
@@ -113,11 +136,11 @@ class ThirdVC: UIViewController {
 		let ratingLabel = UILabel()
 		ratingLabel.text = "\(place.userMark)"
 		ratingLabel.textColor = .black
-		ratingLabel.font = UIFont.boldSystemFont(ofSize: 16)
+		ratingLabel.font = UIFont.boldSystemFont(ofSize: 12)
 		ratingLabel.translatesAutoresizingMaskIntoConstraints = false
 		ratingStackView.addArrangedSubview(ratingLabel)
 		
-		// Заполняем цветом рейтинг 
+		// Заполняем цветом рейтинг
 		updateStarRating(rating: place.userMark)
 		
 		// настраиваем стек для тумберов выбора количества персон
@@ -205,9 +228,18 @@ class ThirdVC: UIViewController {
 		}(UILabel())
 		
 		let priceLabel: UILabel = {
-			$0.text = "$\(place.price)/Package"
+			$0.text = "$\(place.price)"
 			$0.textColor = .appViolet
-			$0.font = UIFont.boldSystemFont(ofSize: 20)
+			$0.font = UIFont.boldSystemFont(ofSize: 24)
+			$0.translatesAutoresizingMaskIntoConstraints = false
+			placeInfoContainerView.addSubview($0)
+			return $0
+		}(UILabel())
+		
+		let packageLabel: UILabel = {
+			$0.text = "/Package"
+			$0.textColor = .appViolet
+			$0.font = UIFont.boldSystemFont(ofSize: 18)
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			placeInfoContainerView.addSubview($0)
 			return $0
@@ -223,6 +255,7 @@ class ThirdVC: UIViewController {
 			return $0
 		}(UIButton(type: .system))
 		
+		// Активация ограничений
 		NSLayoutConstraint.activate([
 			placeInfoContainerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 300),
 			placeInfoContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -233,14 +266,14 @@ class ThirdVC: UIViewController {
 			titleLabel.leadingAnchor.constraint(equalTo: placeInfoContainerView.leadingAnchor, constant: 16),
 			titleLabel.trailingAnchor.constraint(equalTo: placeInfoContainerView.trailingAnchor, constant: -16),
 			
-			locationLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
-			locationLabel.leadingAnchor.constraint(equalTo: placeInfoContainerView.leadingAnchor, constant: 16),
+			locationStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
+			locationStackView.leadingAnchor.constraint(equalTo: placeInfoContainerView.leadingAnchor, constant: 16),
 			
-			ratingStackView.topAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 8),
+			ratingStackView.topAnchor.constraint(equalTo: locationStackView.bottomAnchor, constant: 8),
 			ratingStackView.leadingAnchor.constraint(equalTo: placeInfoContainerView.leadingAnchor, constant: 16),
 			
 			personControlStack.topAnchor.constraint(equalTo: ratingStackView.bottomAnchor, constant: 16),
-//			personControlStack.centerXAnchor.constraint(equalTo: placeInfoContainerView.centerXAnchor),
+			//			personControlStack.centerXAnchor.constraint(equalTo: placeInfoContainerView.centerXAnchor),
 			personControlStack.leadingAnchor.constraint(equalTo: placeInfoContainerView.leadingAnchor, constant: 16),
 			
 			durationStackView.topAnchor.constraint(equalTo: ratingStackView.bottomAnchor, constant: 16),
@@ -257,6 +290,9 @@ class ThirdVC: UIViewController {
 			priceLabel.topAnchor.constraint(equalTo: detailsLabel.bottomAnchor, constant: 16),
 			priceLabel.leadingAnchor.constraint(equalTo: placeInfoContainerView.leadingAnchor, constant: 16),
 			
+			packageLabel.leadingAnchor.constraint(equalTo: priceLabel.trailingAnchor),
+			packageLabel.centerYAnchor.constraint(equalTo: priceLabel.centerYAnchor),
+			
 			bookNowButton.topAnchor.constraint(equalToSystemSpacingBelow: priceLabel.bottomAnchor, multiplier: 16),
 			bookNowButton.trailingAnchor.constraint(equalTo: placeInfoContainerView.trailingAnchor, constant: -16),
 			bookNowButton.heightAnchor.constraint(equalToConstant: 50),
@@ -266,11 +302,13 @@ class ThirdVC: UIViewController {
 			
 		])
 	}
-
+	
 }
 
+//MARK: useful
 extension ThirdVC {
-	// Методы для увеличения/уменьшения числа дней
+	
+	// Методы для увеличения/уменьшения числа персон
 	@objc func increasePersons() {
 		if let currentPersons = Int(personLabel.text ?? "0"), currentPersons < 10 { // Предположим, максимальное значение — 10 человек
 			personLabel.text = "\(currentPersons + 1)"

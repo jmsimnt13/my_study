@@ -7,28 +7,28 @@
 
 import UIKit
 
-struct PlaceData {
-	let title: String
-	let description: String
-	let place: (country: String, city: String)
-	var userMark: Double
-	let price: Double
-	let durationInDays: Int
-	
-	// Заполнение массива мест
-	static func fillArray() -> [PlaceData] {
-		//
-		let arrTemp: [PlaceData] = [
-			PlaceData(title: "Northern Mountain", description: "Bad tattoos on leather-tanned skin Jesus Christ on a plastic sign Fall in love again and again Winding roads, doing manual drive", place: ("USA", "Jercey"), userMark: 2.3, price: 234.5, durationInDays: 5),
-			PlaceData(title: "Northern Mountain", description: "Bad tattoos on leather-tanned skin Jesus Christ on a plastic sign Fall in love again and again Winding roads, doing manual drive", place: ("USA", "Jercey"), userMark: 3.3, price: 234.5, durationInDays: 5),
-			PlaceData(title: "Northern Mountain", description: "Bad tattoos on leather-tanned skin Jesus Christ on a plastic sign Fall in love again and again Winding roads, doing manual drive", place: ("USA", "Jercey"), userMark: 1.3, price: 234.5, durationInDays: 5),
-			PlaceData(title: "Northern Mountain", description: "Bad tattoos on leather-tanned skin Jesus Christ on a plastic sign Fall in love again and again Winding roads, doing manual drive", place: ("USA", "Jercey"), userMark: 3.1, price: 234.5, durationInDays: 5),
-			PlaceData(title: "Northern Mountain", description: "Bad tattoos on leather-tanned skin Jesus Christ on a plastic sign Fall in love again and again Winding roads, doing manual drive", place: ("USA", "Jercey"), userMark: 5.0, price: 234.5, durationInDays: 5),
-			PlaceData(title: "Northern Mountain", description: "Bad tattoos on leather-tanned skin Jesus Christ on a plastic sign Fall in love again and again Winding roads, doing manual drive", place: ("USA", "Jercey"), userMark: 4.3, price: 234.5, durationInDays: 5),
-		]
-		return arrTemp
-	}
-}
+//struct PlaceData {
+//	let title: String
+//	let description: String
+//	let place: (country: String, city: String)
+//	var userMark: Double
+//	let price: Double
+//	let durationInDays: Int
+//	
+//	// Заполнение массива мест
+//	static func fillArray() -> [PlaceData] {
+//		//
+//		let arrTemp: [PlaceData] = [
+//			PlaceData(title: "Northern Mountain", description: "Bad tattoos on leather-tanned skin Jesus Christ on a plastic sign Fall in love again and again Winding roads, doing manual drive", place: ("USA", "Jercey"), userMark: 2.3, price: 234.5, durationInDays: 5),
+//			PlaceData(title: "Northern Mountain", description: "Bad tattoos on leather-tanned skin Jesus Christ on a plastic sign Fall in love again and again Winding roads, doing manual drive", place: ("USA", "Jercey"), userMark: 3.3, price: 234.5, durationInDays: 5),
+//			PlaceData(title: "Northern Mountain", description: "Bad tattoos on leather-tanned skin Jesus Christ on a plastic sign Fall in love again and again Winding roads, doing manual drive", place: ("USA", "Jercey"), userMark: 1.3, price: 234.5, durationInDays: 5),
+//			PlaceData(title: "Northern Mountain", description: "Bad tattoos on leather-tanned skin Jesus Christ on a plastic sign Fall in love again and again Winding roads, doing manual drive", place: ("USA", "Jercey"), userMark: 3.1, price: 234.5, durationInDays: 5),
+//			PlaceData(title: "Northern Mountain", description: "Bad tattoos on leather-tanned skin Jesus Christ on a plastic sign Fall in love again and again Winding roads, doing manual drive", place: ("USA", "Jercey"), userMark: 5.0, price: 234.5, durationInDays: 5),
+//			PlaceData(title: "Northern Mountain", description: "Bad tattoos on leather-tanned skin Jesus Christ on a plastic sign Fall in love again and again Winding roads, doing manual drive", place: ("USA", "Jercey"), userMark: 4.3, price: 234.5, durationInDays: 5),
+//		]
+//		return arrTemp
+//	}
+//}
 
 class SecondVC: UIViewController {
 	var placeData: [PlaceData] = PlaceData.fillArray()
@@ -37,12 +37,20 @@ class SecondVC: UIViewController {
 	lazy var sliderCollectionView = UICollectionView(frame: .zero, collectionViewLayout: createSliderLayout())
 	lazy var recommendedCollectionView = UICollectionView(frame: .zero, collectionViewLayout: createRecommendedLayout())
 	
+	// Свойства нужные в классе
+	private lazy var pageControl = UIPageControl()
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		view.backgroundColor = .white
 		
 		// Настройка UI
 		setupUI()
+	}
+	
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(true)
+		navigationController?.navigationBar.isHidden = true
 	}
 	
 	private func setupUI() {
@@ -95,11 +103,17 @@ class SecondVC: UIViewController {
 			profileImageView.heightAnchor.constraint(equalToConstant: 40)
 		])
 		
-		// Разделы
-		let tabsView = UIView()
-		tabsView.backgroundColor = .clear
-		tabsView.translatesAutoresizingMaskIntoConstraints = false
-		view.addSubview(tabsView)
+		// Разделы попробовать реализовать через UIScrollView
+		
+		let tabScrollView = UIScrollView()
+		tabScrollView.showsHorizontalScrollIndicator = false // без индикатора прокрутки
+		tabScrollView.translatesAutoresizingMaskIntoConstraints = false
+		view.addSubview(tabScrollView)
+		
+		let tabsViewContainer = UIView()
+		tabsViewContainer.backgroundColor = .clear
+		tabsViewContainer.translatesAutoresizingMaskIntoConstraints = false
+		tabScrollView.addSubview(tabsViewContainer)
 		
 		let popularTab = createTabButton(title: "Popular")
 		let featuredTab = createTabButton(title: "Featured")
@@ -107,36 +121,63 @@ class SecondVC: UIViewController {
 		let europeTab = createTabButton(title: "Europe")
 		let asiaTab = createTabButton(title: "Asia")
 		
-		popularTab.translatesAutoresizingMaskIntoConstraints = false
-		featuredTab.translatesAutoresizingMaskIntoConstraints = false
-		mostVisitedTab.translatesAutoresizingMaskIntoConstraints = false
-		europeTab.translatesAutoresizingMaskIntoConstraints = false
-		asiaTab.translatesAutoresizingMaskIntoConstraints = false
+//		popularTab.translatesAutoresizingMaskIntoConstraints = false
+//		featuredTab.translatesAutoresizingMaskIntoConstraints = false
+//		mostVisitedTab.translatesAutoresizingMaskIntoConstraints = false
+//		europeTab.translatesAutoresizingMaskIntoConstraints = false
+//		asiaTab.translatesAutoresizingMaskIntoConstraints = false
 		
-		tabsView.addSubview(popularTab)
-		tabsView.addSubview(featuredTab)
-		tabsView.addSubview(mostVisitedTab)
-		tabsView.addSubview(europeTab)
-		tabsView.addSubview(asiaTab)
+		tabsViewContainer.addSubview(popularTab)
+		tabsViewContainer.addSubview(featuredTab)
+		tabsViewContainer.addSubview(mostVisitedTab)
+		tabsViewContainer.addSubview(europeTab)
+		tabsViewContainer.addSubview(asiaTab)
 		
-		// Ограничения для разделов
+		// Ограничения для разделов (ДОДЕЛАТЬ!!!!)
 		NSLayoutConstraint.activate([
-			tabsView.topAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: 8),
-			tabsView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-			tabsView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-			tabsView.heightAnchor.constraint(equalToConstant: 40),
+			tabScrollView.topAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: 15),
+			tabScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 13),
+			tabScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+			tabScrollView.heightAnchor.constraint(equalToConstant: 50), // Высота кнопок разделов
 			
-			popularTab.leadingAnchor.constraint(equalTo: tabsView.leadingAnchor, constant: 16),
+			tabsViewContainer.topAnchor.constraint(equalTo: tabScrollView.topAnchor),
+			tabsViewContainer.bottomAnchor.constraint(equalTo: tabScrollView.bottomAnchor),
+			tabsViewContainer.leadingAnchor.constraint(equalTo: tabScrollView.leadingAnchor),
+			tabsViewContainer.trailingAnchor.constraint(equalTo: tabScrollView.trailingAnchor),
+			tabsViewContainer.heightAnchor.constraint(equalTo: tabScrollView.heightAnchor),
+			
+			popularTab.leadingAnchor.constraint(equalTo: tabsViewContainer.leadingAnchor),
+			popularTab.centerYAnchor.constraint(equalTo: tabsViewContainer.centerYAnchor),
+			
 			featuredTab.leadingAnchor.constraint(equalTo: popularTab.trailingAnchor, constant: 16),
-			mostVisitedTab.leadingAnchor.constraint(equalTo: featuredTab.trailingAnchor, constant: 16),
-			europeTab.leadingAnchor.constraint(equalTo: mostVisitedTab.trailingAnchor, constant: 16),
-			asiaTab.leadingAnchor.constraint(equalTo: europeTab.trailingAnchor, constant: 16),
+			featuredTab.topAnchor.constraint(equalTo: tabsViewContainer.topAnchor),
 			
-			popularTab.centerYAnchor.constraint(equalTo: tabsView.centerYAnchor),
-			featuredTab.centerYAnchor.constraint(equalTo: tabsView.centerYAnchor),
-			mostVisitedTab.centerYAnchor.constraint(equalTo: tabsView.centerYAnchor),
-			europeTab.centerYAnchor.constraint(equalTo: tabsView.centerYAnchor),
-			asiaTab.centerYAnchor.constraint(equalTo: tabsView.centerYAnchor)
+			mostVisitedTab.leadingAnchor.constraint(equalTo: featuredTab.trailingAnchor),
+			mostVisitedTab.topAnchor.constraint(equalTo: tabsViewContainer.topAnchor),
+			
+			europeTab.leadingAnchor.constraint(equalTo: mostVisitedTab.trailingAnchor),
+			europeTab.topAnchor.constraint(equalTo: tabsViewContainer.topAnchor),
+			
+			asiaTab.leadingAnchor.constraint(equalTo: europeTab.trailingAnchor),
+			asiaTab.topAnchor.constraint(equalTo: tabsViewContainer.topAnchor),
+			asiaTab.trailingAnchor.constraint(equalTo: tabsViewContainer.trailingAnchor),
+			
+//			tabsViewContainer.topAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: 8),
+//			tabsViewContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+//			tabsViewContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+//			tabsViewContainer.heightAnchor.constraint(equalToConstant: 40),
+//
+//			popularTab.leadingAnchor.constraint(equalTo: tabsViewContainer.leadingAnchor, constant: 16),
+//			featuredTab.leadingAnchor.constraint(equalTo: popularTab.trailingAnchor, constant: 16),
+//			mostVisitedTab.leadingAnchor.constraint(equalTo: featuredTab.trailingAnchor, constant: 16),
+//			europeTab.leadingAnchor.constraint(equalTo: mostVisitedTab.trailingAnchor, constant: 16),
+//			asiaTab.leadingAnchor.constraint(equalTo: europeTab.trailingAnchor, constant: 16),
+//			
+//			popularTab.centerYAnchor.constraint(equalTo: tabsViewContainer.centerYAnchor),
+//			featuredTab.centerYAnchor.constraint(equalTo: tabsViewContainer.centerYAnchor),
+//			mostVisitedTab.centerYAnchor.constraint(equalTo: tabsViewContainer.centerYAnchor),
+//			europeTab.centerYAnchor.constraint(equalTo: tabsViewContainer.centerYAnchor),
+//			asiaTab.centerYAnchor.constraint(equalTo: tabsViewContainer.centerYAnchor)
 		])
 		
 		// Коллекция с горизонтальной прокруткой
@@ -150,19 +191,23 @@ class SecondVC: UIViewController {
 		
 		// Ограничения для нее
 		NSLayoutConstraint.activate([
-			sliderCollectionView.topAnchor.constraint(equalTo: tabsView.bottomAnchor, constant: 16),
+			sliderCollectionView.topAnchor.constraint(equalTo: tabsViewContainer.bottomAnchor, constant: 16),
 			sliderCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
 			sliderCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
 			sliderCollectionView.heightAnchor.constraint(equalToConstant: 250)
 		])
 		
 		// Индикаторы под коллекцией
-		let pageControl = UIPageControl()
-		pageControl.currentPageIndicatorTintColor = .purple
-		pageControl.pageIndicatorTintColor = .lightGray
-		pageControl.numberOfPages = placeData.count
-		pageControl.translatesAutoresizingMaskIntoConstraints = false
-		view.addSubview(pageControl)
+		pageControl = {
+			$0.currentPageIndicatorTintColor = .appLightViolet
+			$0.pageIndicatorTintColor = .appPurple
+			$0.numberOfPages = placeData.count
+			$0.currentPage = 0
+			$0.addTarget(self, action: #selector(pageControlValueChanged), for: .valueChanged)
+			$0.translatesAutoresizingMaskIntoConstraints = false
+			view.addSubview($0)
+			return $0
+		}(UIPageControl())
 		
 		// Ограничения для индикаторов
 		NSLayoutConstraint.activate([
@@ -200,8 +245,8 @@ class SecondVC: UIViewController {
 		// Ограничения для секции "Recommended"
 		NSLayoutConstraint.activate([
 			recommendedSection.topAnchor.constraint(equalTo: pageControl.bottomAnchor, constant: 32),
-			recommendedSection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
-			recommendedSection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15),
+			recommendedSection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 13),
+			recommendedSection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -13),
 //			recommendedSection.heightAnchor.constraint(equalToConstant: 400),
 			recommendedSection.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 		
@@ -219,30 +264,7 @@ class SecondVC: UIViewController {
 		
 	}
 	
-	private func createTabButton(title: String, isSelected: Bool = false) -> UIButton {
-		let button = UIButton(type: .system)
-		button.setTitle(title, for: .normal)
-		button.setTitleColor(isSelected ? .purple : .black, for: .normal)
-		button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-		return button
-	}
 	
-	private func createSliderLayout() -> UICollectionViewFlowLayout {
-		let layout = UICollectionViewFlowLayout()
-		layout.scrollDirection = .horizontal
-		layout.itemSize = CGSize(width: view.frame.width - 32, height: 250)
-		layout.minimumLineSpacing = 16
-		return layout
-	}
-	
-	private func createRecommendedLayout() -> UICollectionViewFlowLayout {
-		let layout = UICollectionViewFlowLayout()
-		layout.scrollDirection = .vertical
-		layout.itemSize = CGSize(width: (view.frame.width - 48) / 2, height: 175)
-		layout.minimumLineSpacing = 16
-		layout.minimumInteritemSpacing = 16
-		return layout
-	}
 }
 
 // MARK: - UICollectionViewDataSource
@@ -268,17 +290,18 @@ extension SecondVC: UICollectionViewDataSource {
 	}
 }
 	
-// MARK: - UICollectionViewDelegate
+// MARK: - UICollectionViewDelegateFlowLayout
 extension SecondVC: UICollectionViewDelegateFlowLayout {
 	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 		if collectionView == sliderCollectionView {
-			return CGSize(width: view.frame.width - 32, height: 250)
+			return CGSize(width: 335, height: 250)
 		} else {
-			return CGSize(width: (view.frame.width - 48) / 2, height: 175)
+			return CGSize(width: 175, height: 175)
 		}
 	}
 }
 
+// MARK: - UICollectionViewDelegate
 extension SecondVC: UICollectionViewDelegate {
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		print("IndexPath = \(indexPath.row)")
@@ -294,3 +317,67 @@ extension SecondVC: UICollectionViewDelegate {
 	}
 }
 
+//MARK: - UIScrollViewDelegate
+extension SecondVC: UIScrollViewDelegate {
+	func scrollViewDidScroll(_ scrollView: UIScrollView) {
+		guard let collectionView = scrollView as? UICollectionView else { return }
+		
+		// Определяем текущую страницу
+		let visibleRect	= CGRect(origin: collectionView.contentOffset, size: collectionView.bounds.size)
+		let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.midY)
+		
+		if let indexPath = collectionView.indexPathForItem(at: visiblePoint) {
+			pageControl.currentPage = indexPath.row
+		}
+	}
+}
+
+extension SecondVC {
+	
+	// Создать кнопку для раздела
+	private func createTabButton(title: String, isSelected: Bool = false) -> UIButton {
+		let button = UIButton(type: .system)
+		button.setTitle(title, for: .normal)
+		button.titleLabel?.textAlignment = .center
+		button.setTitleColor(isSelected ? .appPurple : .black, for: .normal)
+		button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+		button.addTarget(self, action: #selector(tabTapped(_ :)), for: .touchUpInside)
+		button.sizeToFit()
+		button.translatesAutoresizingMaskIntoConstraints = false
+		return button
+	}
+	
+	// Для обработки нажатия на какой то раздел
+	@objc private func tabTapped(_ sender: UIButton) {
+		print("Нажат раздел: \(sender.currentTitle ?? "")")
+		// Если у меня появятся разделы то можно будет тут
+		// решить куда кидать пользователя дальше
+	}
+	
+	private func createSliderLayout() -> UICollectionViewFlowLayout {
+		let layout = UICollectionViewFlowLayout()
+		layout.scrollDirection = .horizontal
+		layout.itemSize = CGSize(width: 335 /*view.frame.width - 32*/, height: 250)
+		layout.minimumLineSpacing = 16
+		return layout
+	}
+	
+	private func createRecommendedLayout() -> UICollectionViewFlowLayout {
+		let layout = UICollectionViewFlowLayout()
+		layout.scrollDirection = .vertical
+		layout.itemSize = CGSize(width: 175 /*(view.frame.width - 48) / 2*/, height: 175)
+		layout.minimumLineSpacing = 16
+		layout.minimumInteritemSpacing = 16
+		return layout
+	}
+	
+	// Для обработки действия UIPageControl
+	@objc private func pageControlValueChanged() {
+		let currentPage = pageControl.currentPage
+		let indexPath = IndexPath(item: currentPage, section: 0)
+		
+		// Прокручиваем UICollectionView к соответствующей странице
+		sliderCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+	}
+	
+}

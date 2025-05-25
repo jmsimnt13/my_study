@@ -8,15 +8,17 @@
 import UIKit
 
 class RecommendedCell: UICollectionViewCell {
-	let imageView = UIImageView(image: UIImage(named: "mainVC"))
+	let imageView = UIImageView(/*image: UIImage(named: "mainVC")*/)
 	let titleLabel = UILabel()
+	lazy var ratingStackView = UIStackView()
+	let starImageView = UIView()
 	let ratingLabel = UILabel()
-	let heartButton = UIButton(type: .system)
+	let heartButton = UIButton()
 	
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		backgroundColor = .appPurple
-		layer.cornerRadius = 16
+		layer.cornerRadius = 10
 		clipsToBounds = true
 		
 		// ImageView
@@ -26,19 +28,47 @@ class RecommendedCell: UICollectionViewCell {
 		
 		// Title Label
 		titleLabel.textColor = .white
-		titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+		titleLabel.font = UIFont.systemFont(ofSize: 12, weight: .bold)
 		titleLabel.translatesAutoresizingMaskIntoConstraints = false
 		contentView.addSubview(titleLabel)
 		
-		// Rating Label
+		// rating stack view
+		
+		ratingStackView = {
+			$0.axis = .horizontal
+			$0.spacing = 0
+			$0.translatesAutoresizingMaskIntoConstraints = false
+			contentView.addSubview($0)
+			return $0
+		}(UIStackView())
+		
+		// добавляем пять звезд
+		for _ in 1...5 {
+			let starImageView = UIImageView(image: UIImage(systemName: "star.fill"))
+			starImageView.widthAnchor.constraint(equalToConstant: 14).isActive = true
+			starImageView.heightAnchor.constraint(equalToConstant: 14).isActive = true
+			starImageView.tintColor = .gray
+			ratingStackView.addArrangedSubview(starImageView)
+		}
+		
 		ratingLabel.textColor = .white
-		ratingLabel.font = UIFont.systemFont(ofSize: 14)
+		ratingLabel.font = UIFont.boldSystemFont(ofSize: 12)
 		ratingLabel.translatesAutoresizingMaskIntoConstraints = false
-		contentView.addSubview(ratingLabel)
+		ratingStackView.addArrangedSubview(ratingLabel)
 		
 		// Heart Button
-		heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
-		heartButton.tintColor = .white
+		heartButton.backgroundColor = .red
+		heartButton.setImage(UIImage(named: "appHeartButton")/*?.withRenderingMode(.alwaysOriginal)*/, for: .normal)
+		
+//		// Установка изображения
+//		if let image = UIImage(named: "appHeartButton") {
+//			heartButton.setImage(image.withRenderingMode(.alwaysOriginal), for: .normal)
+//		} else {
+//			print("Изображение 'appHeartButton' не найдено")
+//		}
+		heartButton.addTarget(self, action: #selector(favoriteButtonIsTapped), for: .touchUpInside)
+		heartButton.layer.cornerRadius = 10
+		heartButton.clipsToBounds = true
 		heartButton.translatesAutoresizingMaskIntoConstraints = false
 		contentView.addSubview(heartButton)
 		
@@ -50,16 +80,17 @@ class RecommendedCell: UICollectionViewCell {
 			imageView.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.7),
 			
 			titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
-			titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+			titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
 			titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
 			
-			ratingLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
-			ratingLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+			ratingStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
+			ratingStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
 			
-			heartButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
+			heartButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 113),
+//			heartButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor, constant: -15),
 			heartButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-			heartButton.widthAnchor.constraint(equalToConstant: 32),
-			heartButton.heightAnchor.constraint(equalToConstant: 32)
+			heartButton.widthAnchor.constraint(equalToConstant: 20),
+			heartButton.heightAnchor.constraint(equalToConstant: 20)
 		])
 	}
 	
@@ -70,5 +101,30 @@ class RecommendedCell: UICollectionViewCell {
 	func configure(with place: PlaceData) {
 		titleLabel.text = place.place.city
 		ratingLabel.text = "\(place.userMark)"
+		imageView.image = UIImage(named: "\(place.imageAssetName)")
+		ratingLabel.text = "\(place.userMark)"
+		// Заполняем цветом рейтинг
+		updateStarRating(rating: place.userMark)
 	}
+	
+	@objc func favoriteButtonIsTapped() {
+		print("Favorite button is tapped!")
+	}
+}
+
+extension RecommendedCell {
+	
+	// Функция для закрашивания звезд
+	func updateStarRating(rating: Double) {
+		let roundedRating = Int(rating.rounded())
+		
+		for i in 0..<5 {
+			if i < roundedRating {
+				ratingStackView.arrangedSubviews[i].tintColor = .appYellow
+			} else {
+				ratingStackView.arrangedSubviews[i].tintColor = .lightGray
+			}
+		}
+	}
+	
 }

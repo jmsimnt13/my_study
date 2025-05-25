@@ -11,7 +11,7 @@ class ViewController: UIViewController {
 	// UI элементы
 	// Главное изображение
 	private let imageView: UIImageView = {
-		$0.image = UIImage(named: "mainVC")
+		$0.image = UIImage(named: "appMainVC")
 		$0.contentMode = .scaleAspectFill
 		$0.clipsToBounds = true
 		$0.layer.cornerRadius = 37
@@ -21,9 +21,13 @@ class ViewController: UIViewController {
 	// Заголовок
 	private let titleLabel: UILabel = {
 		let label = UILabel()
-		$0.text = "Winter Vacation Trips"
-		$0.textAlignment = .center
-		$0.font = UIFont.boldSystemFont(ofSize: 24)
+		$0.text = """
+  Winter
+  Vacation Trips
+  """
+		$0.textAlignment = .left
+		$0.numberOfLines = 2
+		$0.font = UIFont.boldSystemFont(ofSize: 36)
 		$0.textColor = .black
 		return $0
 	}(UILabel())
@@ -31,12 +35,13 @@ class ViewController: UIViewController {
 	// Описание
 	private let descriptionLabel: UILabel = {
 		$0.text = """
-Enjoy your winter vacations with warmth and amazing sightseeing on the mountains. 
+Enjoy your winter vacations with warmth 
+and amazing sightseeing on the mountains. 
 Enjoy the best expirience with us!
 """
-		$0.textAlignment = .center
-		$0.numberOfLines = 0
-		$0.font = UIFont.boldSystemFont(ofSize: 16) // Как заставить работать с моими шрифтами хз
+		$0.textAlignment = .left
+		$0.numberOfLines = 3
+		$0.font = UIFont.systemFont(ofSize: 16) // Как заставить работать с моими шрифтами хз
 		$0.textColor = .black
 		return $0
 	}(UILabel())
@@ -44,9 +49,15 @@ Enjoy the best expirience with us!
 	// Кнопка Let's Go
 	private let nextBtn: UIButton = {
 		$0.setTitle("Let's Go!", for: .normal)
+		$0.setImage(UIImage(named: "appRight"), for: .normal)
+		$0.tintColor = .white
+		$0.semanticContentAttribute = .forceRightToLeft
+		$0.imageEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: -10)
+//		$0.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: -10)
+//		$0.sizeToFit()
 		$0.backgroundColor = .appViolet
 		$0.setTitleColor(.white, for: .normal)
-		$0.layer.cornerRadius = 10
+		$0.layer.cornerRadius = 25
 		$0.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
 		return $0
 	}(UIButton(type: .system))
@@ -85,20 +96,19 @@ Enjoy the best expirience with us!
 			imageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.5),
 			
 			// Ограничения для заголовка
-			titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-			titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 20),
+			titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 450),
+			titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 38),
 			
 			// Ограничения для описания
-			descriptionLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-			descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
-			descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-			descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+			descriptionLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 565),
+			descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 38),
+//			descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -87),
 			
 			// Ограничения для кнопки перехода
-			nextBtn.widthAnchor.constraint(equalToConstant: 100),
+			nextBtn.widthAnchor.constraint(equalToConstant: 181),
 			nextBtn.heightAnchor.constraint(equalToConstant: 50),
-			nextBtn.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-			nextBtn.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
+			nextBtn.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 38),
+			nextBtn.topAnchor.constraint(equalTo: view.topAnchor, constant: 703),
 		])
 	}
 	
