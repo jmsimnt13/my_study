@@ -99,7 +99,7 @@ class RecommendedCell: UICollectionViewCell {
 	}
 	
 	func configure(with place: PlaceData) {
-		titleLabel.text = place.place.city
+		titleLabel.text = place.title
 		ratingLabel.text = "\(place.userMark)"
 		imageView.image = UIImage(named: "\(place.imageAssetName)")
 		ratingLabel.text = "\(place.userMark)"

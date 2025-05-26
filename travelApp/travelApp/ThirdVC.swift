@@ -208,6 +208,8 @@ class ThirdVC: UIViewController {
 			return $0
 		}(UILabel())
 		
+		
+		// Описание
 		let descriptionLabel: UILabel = {
 			$0.text = "Description"
 			$0.textColor = .black
@@ -221,7 +223,7 @@ class ThirdVC: UIViewController {
 			$0.text = place.description
 			$0.textColor = .black
 			$0.numberOfLines = 0
-			$0.font = UIFont.systemFont(ofSize: 16)
+			$0.font = UIFont.systemFont(ofSize: 18)
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			placeInfoContainerView.addSubview($0)
 			return $0
@@ -248,8 +250,11 @@ class ThirdVC: UIViewController {
 		let bookNowButton: UIButton = {
 			$0.setTitle("Book Now", for: .normal)
 			$0.setTitleColor(.white, for: .normal)
+			$0.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
 			$0.backgroundColor = .appViolet
-			$0.layer.cornerRadius = 10
+			$0.widthAnchor.constraint(equalToConstant: 160).isActive = true
+			$0.heightAnchor.constraint(equalToConstant: 50).isActive = true
+			$0.layer.cornerRadius = 25
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			placeInfoContainerView.addSubview($0)
 			return $0
@@ -262,44 +267,40 @@ class ThirdVC: UIViewController {
 			placeInfoContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 			placeInfoContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 			
-			titleLabel.topAnchor.constraint(equalTo: placeInfoContainerView.topAnchor, constant: 16),
-			titleLabel.leadingAnchor.constraint(equalTo: placeInfoContainerView.leadingAnchor, constant: 16),
-			titleLabel.trailingAnchor.constraint(equalTo: placeInfoContainerView.trailingAnchor, constant: -16),
+			titleLabel.topAnchor.constraint(equalTo: placeInfoContainerView.topAnchor, constant: 25),
+			titleLabel.leadingAnchor.constraint(equalTo: placeInfoContainerView.leadingAnchor, constant: 25),
+			titleLabel.trailingAnchor.constraint(equalTo: placeInfoContainerView.trailingAnchor, constant: -25),
 			
 			locationStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
-			locationStackView.leadingAnchor.constraint(equalTo: placeInfoContainerView.leadingAnchor, constant: 16),
+			locationStackView.leadingAnchor.constraint(equalTo: placeInfoContainerView.leadingAnchor, constant: 25),
 			
 			ratingStackView.topAnchor.constraint(equalTo: locationStackView.bottomAnchor, constant: 8),
-			ratingStackView.leadingAnchor.constraint(equalTo: placeInfoContainerView.leadingAnchor, constant: 16),
+			ratingStackView.leadingAnchor.constraint(equalTo: placeInfoContainerView.leadingAnchor, constant: 25),
 			
 			personControlStack.topAnchor.constraint(equalTo: ratingStackView.bottomAnchor, constant: 16),
 			//			personControlStack.centerXAnchor.constraint(equalTo: placeInfoContainerView.centerXAnchor),
-			personControlStack.leadingAnchor.constraint(equalTo: placeInfoContainerView.leadingAnchor, constant: 16),
+			personControlStack.leadingAnchor.constraint(equalTo: placeInfoContainerView.leadingAnchor, constant: 25),
 			
 			durationStackView.topAnchor.constraint(equalTo: ratingStackView.bottomAnchor, constant: 16),
 			durationStackView.centerYAnchor.constraint(equalTo: personControlStack.centerYAnchor),
-			durationStackView.leadingAnchor.constraint(equalTo: personControlStack.trailingAnchor, constant: 16),
+			durationStackView.leadingAnchor.constraint(equalTo: personControlStack.trailingAnchor, constant: 25),
 			
 			descriptionLabel.topAnchor.constraint(equalTo: durationStackView.bottomAnchor, constant: 16),
-			descriptionLabel.leadingAnchor.constraint(equalTo: placeInfoContainerView.leadingAnchor, constant: 16),
+			descriptionLabel.leadingAnchor.constraint(equalTo: placeInfoContainerView.leadingAnchor, constant: 25),
 			
-			detailsLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 8),
-			detailsLabel.leadingAnchor.constraint(equalTo: placeInfoContainerView.leadingAnchor, constant: 16),
-			detailsLabel.trailingAnchor.constraint(equalTo: placeInfoContainerView.trailingAnchor, constant: -16),
+			detailsLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 16),
+			detailsLabel.leadingAnchor.constraint(equalTo: placeInfoContainerView.leadingAnchor, constant: 25),
+			detailsLabel.trailingAnchor.constraint(equalTo: placeInfoContainerView.trailingAnchor, constant: -25),
 			
-			priceLabel.topAnchor.constraint(equalTo: detailsLabel.bottomAnchor, constant: 16),
-			priceLabel.leadingAnchor.constraint(equalTo: placeInfoContainerView.leadingAnchor, constant: 16),
-			
+			// $400/Package
+			priceLabel.bottomAnchor.constraint(equalTo: placeInfoContainerView.bottomAnchor, constant: -100),
+			priceLabel.leadingAnchor.constraint(equalTo: placeInfoContainerView.leadingAnchor, constant: 25),
 			packageLabel.leadingAnchor.constraint(equalTo: priceLabel.trailingAnchor),
 			packageLabel.centerYAnchor.constraint(equalTo: priceLabel.centerYAnchor),
 			
-			bookNowButton.topAnchor.constraint(equalToSystemSpacingBelow: priceLabel.bottomAnchor, multiplier: 16),
-			bookNowButton.trailingAnchor.constraint(equalTo: placeInfoContainerView.trailingAnchor, constant: -16),
-			bookNowButton.heightAnchor.constraint(equalToConstant: 50),
-			bookNowButton.widthAnchor.constraint(equalToConstant: 200),
-			bookNowButton.bottomAnchor.constraint(equalTo: placeInfoContainerView.bottomAnchor, constant: -16),
-			
-			
+			// Book Now
+			bookNowButton.trailingAnchor.constraint(equalTo: placeInfoContainerView.trailingAnchor, constant: -25),
+			bookNowButton.centerYAnchor.constraint(equalTo: priceLabel.centerYAnchor),
 		])
 	}
 	

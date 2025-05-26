@@ -120,6 +120,8 @@ class SecondVC: UIViewController {
 		let mostVisitedTab = createTabButton(title: "Most Visited")
 		let europeTab = createTabButton(title: "Europe")
 		let asiaTab = createTabButton(title: "Asia")
+		let africaTab = createTabButton(title: "Africa")
+		let americaTab = createTabButton(title: "America")
 		
 //		popularTab.translatesAutoresizingMaskIntoConstraints = false
 //		featuredTab.translatesAutoresizingMaskIntoConstraints = false
@@ -132,6 +134,8 @@ class SecondVC: UIViewController {
 		tabsViewContainer.addSubview(mostVisitedTab)
 		tabsViewContainer.addSubview(europeTab)
 		tabsViewContainer.addSubview(asiaTab)
+		tabsViewContainer.addSubview(africaTab)
+		tabsViewContainer.addSubview(americaTab)
 		
 		// Ограничения для разделов (ДОДЕЛАТЬ!!!!)
 		NSLayoutConstraint.activate([
@@ -150,17 +154,23 @@ class SecondVC: UIViewController {
 			popularTab.centerYAnchor.constraint(equalTo: tabsViewContainer.centerYAnchor),
 			
 			featuredTab.leadingAnchor.constraint(equalTo: popularTab.trailingAnchor, constant: 16),
-			featuredTab.topAnchor.constraint(equalTo: tabsViewContainer.topAnchor),
+			featuredTab.centerYAnchor.constraint(equalTo: tabsViewContainer.centerYAnchor),
 			
-			mostVisitedTab.leadingAnchor.constraint(equalTo: featuredTab.trailingAnchor),
-			mostVisitedTab.topAnchor.constraint(equalTo: tabsViewContainer.topAnchor),
+			mostVisitedTab.leadingAnchor.constraint(equalTo: featuredTab.trailingAnchor, constant: 16),
+			mostVisitedTab.centerYAnchor.constraint(equalTo: tabsViewContainer.centerYAnchor),
 			
-			europeTab.leadingAnchor.constraint(equalTo: mostVisitedTab.trailingAnchor),
-			europeTab.topAnchor.constraint(equalTo: tabsViewContainer.topAnchor),
+			europeTab.leadingAnchor.constraint(equalTo: mostVisitedTab.trailingAnchor, constant: 16),
+			europeTab.centerYAnchor.constraint(equalTo: tabsViewContainer.centerYAnchor),
 			
-			asiaTab.leadingAnchor.constraint(equalTo: europeTab.trailingAnchor),
-			asiaTab.topAnchor.constraint(equalTo: tabsViewContainer.topAnchor),
-			asiaTab.trailingAnchor.constraint(equalTo: tabsViewContainer.trailingAnchor),
+			asiaTab.leadingAnchor.constraint(equalTo: europeTab.trailingAnchor, constant: 16),
+			asiaTab.centerYAnchor.constraint(equalTo: tabsViewContainer.centerYAnchor),
+			
+			africaTab.leadingAnchor.constraint(equalTo: asiaTab.trailingAnchor, constant: 16),
+			africaTab.centerYAnchor.constraint(equalTo: tabsViewContainer.centerYAnchor),
+			
+			americaTab.leadingAnchor.constraint(equalTo: africaTab.trailingAnchor, constant: 16),
+			americaTab.centerYAnchor.constraint(equalTo: tabsViewContainer.centerYAnchor),
+			americaTab.trailingAnchor.constraint(equalTo: tabsViewContainer.trailingAnchor),
 			
 //			tabsViewContainer.topAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: 8),
 //			tabsViewContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
