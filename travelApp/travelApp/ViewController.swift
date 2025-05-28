@@ -27,7 +27,8 @@ class ViewController: UIViewController {
   """
 		$0.textAlignment = .left
 		$0.numberOfLines = 2
-		$0.font = UIFont.boldSystemFont(ofSize: 36)
+		$0.font = MyAppFont.makeMerriweather(size: 36, weight: .Bold)
+//		$0.font = UIFont.boldSystemFont(ofSize: 36)
 		$0.textColor = .black
 		return $0
 	}(UILabel())
@@ -41,7 +42,8 @@ Enjoy the best expirience with us!
 """
 		$0.textAlignment = .left
 		$0.numberOfLines = 3
-		$0.font = UIFont.systemFont(ofSize: 16) // Как заставить работать с моими шрифтами хз
+		$0.font = MyAppFont.makeSourceSansPro(size: 16, weight: .Regular)
+//		$0.font = UIFont.systemFont(ofSize: 16) // Как заставить работать с моими шрифтами хз
 		$0.textColor = .black
 		return $0
 	}(UILabel())
@@ -49,6 +51,7 @@ Enjoy the best expirience with us!
 	// Кнопка Let's Go
 	private let nextBtn: UIButton = {
 		$0.setTitle("Let's Go!", for: .normal)
+		$0.titleLabel?.font = MyAppFont.makeMerriweather(size: 16, weight: .Regular)
 		$0.setImage(UIImage(named: "appRight"), for: .normal)
 		$0.tintColor = .white
 		$0.semanticContentAttribute = .forceRightToLeft
@@ -58,7 +61,7 @@ Enjoy the best expirience with us!
 		$0.backgroundColor = .appViolet
 		$0.setTitleColor(.white, for: .normal)
 		$0.layer.cornerRadius = 25
-		$0.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+//		$0.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
 		return $0
 	}(UIButton(type: .system))
 	

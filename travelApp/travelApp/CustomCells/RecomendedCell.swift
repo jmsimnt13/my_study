@@ -28,7 +28,8 @@ class RecommendedCell: UICollectionViewCell {
 		
 		// Title Label
 		titleLabel.textColor = .white
-		titleLabel.font = UIFont.systemFont(ofSize: 12, weight: .bold)
+		titleLabel.font = MyAppFont.makeMerriweather(size: 12, weight: .Bold)
+//		titleLabel.font = UIFont.systemFont(ofSize: 12, weight: .bold)
 		titleLabel.translatesAutoresizingMaskIntoConstraints = false
 		contentView.addSubview(titleLabel)
 		

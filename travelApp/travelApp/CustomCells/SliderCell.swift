@@ -28,7 +28,8 @@ class SliderCell: UICollectionViewCell {
 		
 		// Title Label
 		titleLabel.textColor = .white
-		titleLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+		titleLabel.font = MyAppFont.makeMerriweather(size: 20, weight: .Bold)
+//		titleLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
 		titleLabel.translatesAutoresizingMaskIntoConstraints = false
 		contentView.addSubview(titleLabel)
 		

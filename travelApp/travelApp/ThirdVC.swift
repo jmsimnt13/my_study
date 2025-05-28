@@ -80,7 +80,8 @@ class ThirdVC: UIViewController {
 		let titleLabel: UILabel = {
 			$0.text = place.title
 			$0.textColor = .black
-			$0.font = UIFont.boldSystemFont(ofSize: 24)
+			$0.font = MyAppFont.makeMerriweather(size: 24, weight: .Bold)
+//			$0.font = UIFont.boldSystemFont(ofSize: 24)
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			placeInfoContainerView.addSubview($0)
 			return $0
@@ -110,6 +111,7 @@ class ThirdVC: UIViewController {
 		let locationLabel: UILabel = {
 			$0.text = "\(place.place.city), \(place.place.country)"
 			$0.textColor = .black
+			$0.font = MyAppFont.makeSourceSansPro(size: 12, weight: .Bold)
 			$0.font = UIFont.systemFont(ofSize: 12)
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			locationStackView.addArrangedSubview($0)
@@ -136,7 +138,8 @@ class ThirdVC: UIViewController {
 		let ratingLabel = UILabel()
 		ratingLabel.text = "\(place.userMark)"
 		ratingLabel.textColor = .black
-		ratingLabel.font = UIFont.boldSystemFont(ofSize: 12)
+//		ratingLabel.font = UIFont.boldSystemFont(ofSize: 12)
+		ratingLabel.font = MyAppFont.makeSourceSansPro(size: 12, weight: .Bold)
 		ratingLabel.translatesAutoresizingMaskIntoConstraints = false
 		ratingStackView.addArrangedSubview(ratingLabel)
 		
@@ -168,7 +171,8 @@ class ThirdVC: UIViewController {
 		// Количество персон
 		personLabel = {
 			$0.text = "1"
-			$0.font = UIFont.boldSystemFont(ofSize: 16)
+			$0.font = MyAppFont.makeSourceSansPro(size: 16, weight: .Bold)
+//			$0.font = UIFont.boldSystemFont(ofSize: 16)
 			$0.textAlignment = .center
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			personControlStack.addArrangedSubview($0)
@@ -203,7 +207,8 @@ class ThirdVC: UIViewController {
 		let durationLabel: UILabel = {
 			$0.text = String(place.durationInDays) + " Days"
 			$0.textColor = .black
-			$0.font = UIFont.boldSystemFont(ofSize: 16)
+			$0.font = MyAppFont.makeSourceSansPro(size: 16, weight: .Regular)
+//			$0.font = UIFont.boldSystemFont(ofSize: 16)
 			durationStackView.addArrangedSubview($0)
 			return $0
 		}(UILabel())
@@ -213,7 +218,8 @@ class ThirdVC: UIViewController {
 		let descriptionLabel: UILabel = {
 			$0.text = "Description"
 			$0.textColor = .black
-			$0.font = UIFont.boldSystemFont(ofSize: 20)
+			$0.font = MyAppFont.makeMerriweather(size: 20, weight: .Bold)
+//			$0.font = UIFont.boldSystemFont(ofSize: 20)
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			placeInfoContainerView.addSubview($0)
 			return $0
@@ -223,7 +229,8 @@ class ThirdVC: UIViewController {
 			$0.text = place.description
 			$0.textColor = .black
 			$0.numberOfLines = 0
-			$0.font = UIFont.systemFont(ofSize: 18)
+			$0.font = MyAppFont.makeSourceSansPro(size: 18, weight: .Regular)
+//			$0.font = UIFont.systemFont(ofSize: 18)
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			placeInfoContainerView.addSubview($0)
 			return $0
@@ -232,7 +239,8 @@ class ThirdVC: UIViewController {
 		let priceLabel: UILabel = {
 			$0.text = "$\(place.price)"
 			$0.textColor = .appViolet
-			$0.font = UIFont.boldSystemFont(ofSize: 24)
+			$0.font = MyAppFont.makeSourceSansPro(size: 30, weight: .Bold)
+//			$0.font = UIFont.boldSystemFont(ofSize: 24)
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			placeInfoContainerView.addSubview($0)
 			return $0
@@ -241,7 +249,8 @@ class ThirdVC: UIViewController {
 		let packageLabel: UILabel = {
 			$0.text = "/Package"
 			$0.textColor = .appViolet
-			$0.font = UIFont.boldSystemFont(ofSize: 18)
+			$0.font = MyAppFont.makeSourceSansPro(size: 18, weight: .Bold)
+//			$0.font = UIFont.boldSystemFont(ofSize: 18)
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			placeInfoContainerView.addSubview($0)
 			return $0
@@ -250,7 +259,8 @@ class ThirdVC: UIViewController {
 		let bookNowButton: UIButton = {
 			$0.setTitle("Book Now", for: .normal)
 			$0.setTitleColor(.white, for: .normal)
-			$0.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+			$0.titleLabel?.font = MyAppFont.makeMerriweather(size: 18, weight: .Bold)
+//			$0.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
 			$0.backgroundColor = .appViolet
 			$0.widthAnchor.constraint(equalToConstant: 160).isActive = true
 			$0.heightAnchor.constraint(equalToConstant: 50).isActive = true
@@ -262,7 +272,7 @@ class ThirdVC: UIViewController {
 		
 		// Активация ограничений
 		NSLayoutConstraint.activate([
-			placeInfoContainerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 300),
+			placeInfoContainerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 270),
 			placeInfoContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
 			placeInfoContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 			placeInfoContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),

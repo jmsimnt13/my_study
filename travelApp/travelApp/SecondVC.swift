@@ -70,7 +70,8 @@ class SecondVC: UIViewController {
 		// Discover
 		let titleLabel = UILabel()
 		titleLabel.text = "Discover"
-		titleLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
+		titleLabel.font = MyAppFont.makeMerriweather(size: 27, weight: .Regular)
+//		titleLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
 		titleLabel.translatesAutoresizingMaskIntoConstraints = false
 		navigationBar.addSubview(titleLabel)
 		
@@ -140,7 +141,7 @@ class SecondVC: UIViewController {
 		// Ограничения для разделов (ДОДЕЛАТЬ!!!!)
 		NSLayoutConstraint.activate([
 			tabScrollView.topAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: 15),
-			tabScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 13),
+			tabScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
 			tabScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 			tabScrollView.heightAnchor.constraint(equalToConstant: 50), // Высота кнопок разделов
 			
@@ -150,7 +151,7 @@ class SecondVC: UIViewController {
 			tabsViewContainer.trailingAnchor.constraint(equalTo: tabScrollView.trailingAnchor),
 			tabsViewContainer.heightAnchor.constraint(equalTo: tabScrollView.heightAnchor),
 			
-			popularTab.leadingAnchor.constraint(equalTo: tabsViewContainer.leadingAnchor),
+			popularTab.leadingAnchor.constraint(equalTo: tabsViewContainer.leadingAnchor, constant: 13),
 			popularTab.centerYAnchor.constraint(equalTo: tabsViewContainer.centerYAnchor),
 			
 			featuredTab.leadingAnchor.constraint(equalTo: popularTab.trailingAnchor, constant: 16),
@@ -170,7 +171,7 @@ class SecondVC: UIViewController {
 			
 			americaTab.leadingAnchor.constraint(equalTo: africaTab.trailingAnchor, constant: 16),
 			americaTab.centerYAnchor.constraint(equalTo: tabsViewContainer.centerYAnchor),
-			americaTab.trailingAnchor.constraint(equalTo: tabsViewContainer.trailingAnchor),
+			americaTab.trailingAnchor.constraint(equalTo: tabsViewContainer.trailingAnchor, constant: -13),
 			
 //			tabsViewContainer.topAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: 8),
 //			tabsViewContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -234,12 +235,14 @@ class SecondVC: UIViewController {
 		
 		let recommendedLabel = UILabel()
 		recommendedLabel.text = "Recommended"
-		recommendedLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+		recommendedLabel.font = MyAppFont.makeMerriweather(size: 18, weight: .Bold)
+//		recommendedLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
 		recommendedLabel.translatesAutoresizingMaskIntoConstraints = false
 		recommendedSection.addSubview(recommendedLabel)
 		
 		let viewAllButton = UIButton(type: .system)
 		viewAllButton.setTitle("View All", for: .normal)
+		viewAllButton.titleLabel?.font = MyAppFont.makeMerriweather(size: 14, weight: .Regular)
 		viewAllButton.setTitleColor(.gray, for: .normal)
 		viewAllButton.translatesAutoresizingMaskIntoConstraints = false
 		recommendedSection.addSubview(viewAllButton)
@@ -350,7 +353,8 @@ extension SecondVC {
 		button.setTitle(title, for: .normal)
 		button.titleLabel?.textAlignment = .center
 		button.setTitleColor(isSelected ? .appPurple : .black, for: .normal)
-		button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+		button.titleLabel?.font = MyAppFont.makeSourceSansPro(size: 16, weight: .Regular)
+//		button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
 		button.addTarget(self, action: #selector(tabTapped(_ :)), for: .touchUpInside)
 		button.sizeToFit()
 		button.translatesAutoresizingMaskIntoConstraints = false
