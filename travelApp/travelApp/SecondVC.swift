@@ -172,6 +172,7 @@ class SecondVC: UIViewController {
 			americaTab.leadingAnchor.constraint(equalTo: africaTab.trailingAnchor, constant: 16),
 			americaTab.centerYAnchor.constraint(equalTo: tabsViewContainer.centerYAnchor),
 			americaTab.trailingAnchor.constraint(equalTo: tabsViewContainer.trailingAnchor, constant: -13),
+			//again
 			
 //			tabsViewContainer.topAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: 8),
 //			tabsViewContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
