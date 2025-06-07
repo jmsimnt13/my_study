@@ -71,6 +71,7 @@ class ThirdVC: UIViewController {
 		placeInfoContainerView = {
 			$0.backgroundColor = UIColor.white
 			$0.layer.cornerRadius = 37
+			$0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
 			$0.clipsToBounds = true
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			view.addSubview($0)

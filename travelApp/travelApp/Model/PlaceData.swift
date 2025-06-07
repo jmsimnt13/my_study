@@ -6,6 +6,11 @@
 //
 
 import Foundation
+import UIKit
+
+struct Constants {
+	static let smallScreen = UIScreen.main.nativeBounds.height <= 1334
+}
 
 struct PlaceData {
 	let title: String

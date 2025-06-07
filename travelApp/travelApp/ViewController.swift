@@ -15,6 +15,7 @@ class ViewController: UIViewController {
 		$0.contentMode = .scaleAspectFill
 		$0.clipsToBounds = true
 		$0.layer.cornerRadius = 37
+		$0.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
 		return $0
 	}(UIImageView())
 	
@@ -99,19 +100,19 @@ Enjoy the best expirience with us!
 			imageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.5),
 			
 			// Ограничения для заголовка
-			titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 450),
+			titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 20),
 			titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 38),
 			
 			// Ограничения для описания
-			descriptionLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 565),
+			descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
 			descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 38),
 //			descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -87),
 			
 			// Ограничения для кнопки перехода
-			nextBtn.widthAnchor.constraint(equalToConstant: 181),
+			nextBtn.widthAnchor.constraint(equalToConstant: Constants.smallScreen ? 150 : 181),
 			nextBtn.heightAnchor.constraint(equalToConstant: 50),
 			nextBtn.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 38),
-			nextBtn.topAnchor.constraint(equalTo: view.topAnchor, constant: 703),
+			nextBtn.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 20),
 		])
 	}
 	

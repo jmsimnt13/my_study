@@ -58,6 +58,7 @@ class SliderCell: UICollectionViewCell {
 		ratingStackView.addArrangedSubview(ratingLabel)
 		
 		// Heart Button
+		heartButton.backgroundColor = .white
 		heartButton.setImage(UIImage(named: "appHeartButton")?.withRenderingMode(.alwaysOriginal), for: .normal)
 		
 		//		// Установка изображения

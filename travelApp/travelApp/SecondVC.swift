@@ -192,21 +192,31 @@ class SecondVC: UIViewController {
 //			asiaTab.centerYAnchor.constraint(equalTo: tabsViewContainer.centerYAnchor)
 		])
 		
+		
+//		let sliderViewContainer = UIView()
+//		sliderViewContainer.backgroundColor = .clear
+//		sliderViewContainer.translatesAutoresizingMaskIntoConstraints = false
+//		view.addSubview(sliderViewContainer)
+		
 		// Коллекция с горизонтальной прокруткой
 		sliderCollectionView.register(SliderCell.self, forCellWithReuseIdentifier: "SliderCell")
 		sliderCollectionView.dataSource = self
 		sliderCollectionView.delegate = self
 		sliderCollectionView.showsHorizontalScrollIndicator = false
 		sliderCollectionView.backgroundColor = .clear
+		sliderCollectionView.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20) //сдвиг до прокрутки
 		sliderCollectionView.translatesAutoresizingMaskIntoConstraints = false
+		sliderCollectionView.isPagingEnabled = false // Отключил стандартную пагинацию
+//		sliderCollectionView.decelerationRate = .fast // Ускорение затухания прокрутки
+		
 		view.addSubview(sliderCollectionView)
 		
 		// Ограничения для нее
 		NSLayoutConstraint.activate([
-			sliderCollectionView.topAnchor.constraint(equalTo: tabsViewContainer.bottomAnchor, constant: 16),
-			sliderCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-			sliderCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-			sliderCollectionView.heightAnchor.constraint(equalToConstant: 250)
+			sliderCollectionView.topAnchor.constraint(equalTo: tabScrollView.bottomAnchor, constant: 16),
+			sliderCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+			sliderCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+			sliderCollectionView.heightAnchor.constraint(equalToConstant: 250),
 		])
 		
 		// Индикаторы под коллекцией
@@ -252,20 +262,21 @@ class SecondVC: UIViewController {
 		recommendedCollectionView.register(RecommendedCell.self, forCellWithReuseIdentifier: "RecommendedCell")
 		recommendedCollectionView.dataSource = self
 		recommendedCollectionView.delegate = self
+		recommendedCollectionView.showsVerticalScrollIndicator = false
 		recommendedCollectionView.backgroundColor = .clear
 		recommendedCollectionView.translatesAutoresizingMaskIntoConstraints = false
 		recommendedSection.addSubview(recommendedCollectionView)
 		
 		// Ограничения для секции "Recommended"
 		NSLayoutConstraint.activate([
-			recommendedSection.topAnchor.constraint(equalTo: pageControl.bottomAnchor, constant: 32),
-			recommendedSection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 13),
-			recommendedSection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -13),
+			recommendedSection.topAnchor.constraint(equalTo: pageControl.bottomAnchor),
+			recommendedSection.leadingAnchor.constraint(equalTo: view.leadingAnchor/*, constant: 13*/),
+			recommendedSection.trailingAnchor.constraint(equalTo: view.trailingAnchor/*, constant: -13*/),
 //			recommendedSection.heightAnchor.constraint(equalToConstant: 400),
 			recommendedSection.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 		
-			recommendedLabel.leadingAnchor.constraint(equalTo: recommendedSection.leadingAnchor, constant: 16),
 			recommendedLabel.topAnchor.constraint(equalTo: recommendedSection.topAnchor, constant: 16),
+			recommendedLabel.leadingAnchor.constraint(equalTo: recommendedSection.leadingAnchor, constant: 16),
 			
 			viewAllButton.trailingAnchor.constraint(equalTo: recommendedSection.trailingAnchor, constant: -16),
 			viewAllButton.centerYAnchor.constraint(equalTo: recommendedLabel.centerYAnchor),
@@ -298,7 +309,32 @@ extension SecondVC: UICollectionViewDataSource {
 			return cell
 		} else {
 			let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RecommendedCell", for: indexPath) as! RecommendedCell
-			cell.configure(with: placeData[indexPath.row])
+			// создаем идентификатор
+			let heartButtonKey = "heartButtonState_\(indexPath.item)"
+			// загрузка состояня из UserDefaults
+			let isHeartSelected = UserDefaults.standard.bool(forKey: heartButtonKey)
+			// обработка нажатия кнопки
+			cell.onHeartButtonTap = { // [weak self] tappedCell in
+//				guard let self = self else {return}
+				print(indexPath)
+				// находим индекс ячейки
+				if let index = collectionView.indexPath(for: $0)?.item {
+					// инверсия состояния кнопки
+					let newState = !UserDefaults.standard.bool(forKey: "heartButtonState_\(index)")
+					// сохранение нового состояния
+					UserDefaults.standard.set(newState, forKey: "heartButtonState_\(index)")
+					if UserDefaults.standard.bool(forKey: "heartButtonState_\(index)") {
+						print("Ячейка \(self.placeData[indexPath.row].title) добавлена в избранное")
+					} else {
+						print("Ячейка \(self.placeData[indexPath.row].title) удалена из избранного")
+					}
+					
+					// перегружаем ячейку для обновления вида
+					collectionView.reloadItems(at: [IndexPath(item: index, section: 0)])
+				}
+			}
+			// настройка ячейки
+			cell.configure(with: placeData[indexPath.row], isHeartSelected: isHeartSelected)
 			return cell
 		}
 	}
@@ -308,9 +344,15 @@ extension SecondVC: UICollectionViewDataSource {
 extension SecondVC: UICollectionViewDelegateFlowLayout {
 	func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 		if collectionView == sliderCollectionView {
-			return CGSize(width: 335, height: 250)
+			let size = CGSize(width: 335, height: 250)
+			print("Cell size: \(size)")
+			return size
 		} else {
-			return CGSize(width: 175, height: 175)
+			let spacer = (view.bounds.width * 0.05) * 3
+			let cellSize: CGFloat = (view.bounds.width - spacer) / 2
+			let size = CGSize(width: cellSize, height: cellSize) /*(width: 175, height: 175)*/
+			print("Recommended cell size: \(size)")
+			return size
 		}
 	}
 }
@@ -344,6 +386,23 @@ extension SecondVC: UIScrollViewDelegate {
 			pageControl.currentPage = indexPath.row
 		}
 	}
+	
+	// !!!!
+	func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+		guard let layout = sliderCollectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
+		
+		let cellWidthIncludingSpacing = layout.itemSize.width + layout.minimumLineSpacing
+		let contentInsetLeft = sliderCollectionView.contentInset.left
+		
+		// Вычисляем индекс ближайшей ячейки к левому краю
+		let rawIndex = (scrollView.contentOffset.x + contentInsetLeft) / cellWidthIncludingSpacing
+		let nearestIndex = round(rawIndex)
+		
+		// Вычисляем новую целевую позицию
+		let newOffsetX = nearestIndex * cellWidthIncludingSpacing - contentInsetLeft
+		targetContentOffset.pointee = CGPoint(x: newOffsetX, y: -scrollView.contentInset.top)
+	}
+	
 }
 
 extension SecondVC {
@@ -372,17 +431,18 @@ extension SecondVC {
 	private func createSliderLayout() -> UICollectionViewFlowLayout {
 		let layout = UICollectionViewFlowLayout()
 		layout.scrollDirection = .horizontal
-		layout.itemSize = CGSize(width: 335 /*view.frame.width - 32*/, height: 250)
+//		layout.itemSize = CGSize(width: 335 /*view.frame.width - 32*/, height: 250)
 		layout.minimumLineSpacing = 16
+		
 		return layout
 	}
 	
 	private func createRecommendedLayout() -> UICollectionViewFlowLayout {
 		let layout = UICollectionViewFlowLayout()
 		layout.scrollDirection = .vertical
-		layout.itemSize = CGSize(width: 175 /*(view.frame.width - 48) / 2*/, height: 175)
-		layout.minimumLineSpacing = 16
-		layout.minimumInteritemSpacing = 16
+//		layout.itemSize = CGSize(width: (view.frame.width - 15) / 2, height: 175)
+		layout.minimumLineSpacing = 15
+		layout.minimumInteritemSpacing = 15
 		return layout
 	}
 	
