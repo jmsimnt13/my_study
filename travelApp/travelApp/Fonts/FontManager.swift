@@ -10,7 +10,7 @@ import UIKit
 //["Merriweather-Regular", "Merriweather-Light", "Merriweather-Medium", "Merriweather-SemiBold", "Merriweather-Bold", "Merriweather-ExtraBold", "Merriweather-Black"]
 //["SourceSans3-Roman_Regular", "SourceSans3-Roman", , "SourceSans3-Roman_Medium", "SourceSans3-Roman_SemiBold", "SourceSans3-Roman_Bold", "SourceSans3-Roman_ExtraBold", "SourceSans3-Roman_Black"]
 
-class MyAppFont: UIFont {
+final class MyAppFont: UIFont {
 	enum MerriweatherFontWeight: String {
 		case Regular = "Merriweather-Regular"
 		case Medium = "Merriweather-Medium"

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+final class ViewController: UIViewController {
 	// UI элементы
 	// Главное изображение
 	private let imageView: UIImageView = {
@@ -109,10 +109,11 @@ Enjoy the best expirience with us!
 //			descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -87),
 			
 			// Ограничения для кнопки перехода
+//			nextBtn.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 20),
 			nextBtn.widthAnchor.constraint(equalToConstant: Constants.smallScreen ? 150 : 181),
 			nextBtn.heightAnchor.constraint(equalToConstant: 50),
 			nextBtn.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 38),
-			nextBtn.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 20),
+			nextBtn.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: Constants.smallScreen ? -20 : -16)
 		])
 	}
 	

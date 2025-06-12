@@ -7,18 +7,18 @@
 
 import UIKit
 
-class ThirdVC: UIViewController {
+final class ThirdVC: UIViewController {
 	
 	var placeData: PlaceData? // свойство куда передается информация о выбранном месте
 	
 	// Вынос контейнеров для корректной работы функции по закраске звезд для досутпа к placeData
 	// Следует ли все контейнеры вынести в свойства???
-	private lazy var placeInfoContainerView = UIView()
-	private lazy var ratingStackView = UIStackView()
+	lazy var placeInfoContainerView = UIView()
+	lazy var ratingStackView = UIStackView()
 	
 	// Для реализации тумблера с выбором дней отдыха
-	private lazy var personControlStack = UIStackView()
-	private lazy var personLabel = UILabel()
+	lazy var personControlStack = UIStackView()
+	lazy var personLabel = UILabel()
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -39,7 +39,7 @@ class ThirdVC: UIViewController {
 		// Подложка в виде изображения местности
 		let backgroundImageView: UIImageView = {
 			$0.image = UIImage(named: "\(place.imageAssetName)")
-			$0.contentMode = .scaleAspectFill
+			$0.contentMode = .scaleToFill
 			$0.clipsToBounds = true
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			view.addSubview($0)
@@ -50,7 +50,7 @@ class ThirdVC: UIViewController {
 			backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
 			backgroundImageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
 			backgroundImageView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-			backgroundImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -450),
+			backgroundImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.4)
 		])
 		
 		// Навигация (верх слева) только с кнпкой меню поверх фонового изображения
@@ -82,7 +82,6 @@ class ThirdVC: UIViewController {
 			$0.text = place.title
 			$0.textColor = .black
 			$0.font = MyAppFont.makeMerriweather(size: 24, weight: .Bold)
-//			$0.font = UIFont.boldSystemFont(ofSize: 24)
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			placeInfoContainerView.addSubview($0)
 			return $0
@@ -139,7 +138,6 @@ class ThirdVC: UIViewController {
 		let ratingLabel = UILabel()
 		ratingLabel.text = "\(place.userMark)"
 		ratingLabel.textColor = .black
-//		ratingLabel.font = UIFont.boldSystemFont(ofSize: 12)
 		ratingLabel.font = MyAppFont.makeSourceSansPro(size: 12, weight: .Bold)
 		ratingLabel.translatesAutoresizingMaskIntoConstraints = false
 		ratingStackView.addArrangedSubview(ratingLabel)
@@ -173,7 +171,6 @@ class ThirdVC: UIViewController {
 		personLabel = {
 			$0.text = "1"
 			$0.font = MyAppFont.makeSourceSansPro(size: 16, weight: .Bold)
-//			$0.font = UIFont.boldSystemFont(ofSize: 16)
 			$0.textAlignment = .center
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			personControlStack.addArrangedSubview($0)
@@ -209,7 +206,6 @@ class ThirdVC: UIViewController {
 			$0.text = String(place.durationInDays) + " Days"
 			$0.textColor = .black
 			$0.font = MyAppFont.makeSourceSansPro(size: 16, weight: .Regular)
-//			$0.font = UIFont.boldSystemFont(ofSize: 16)
 			durationStackView.addArrangedSubview($0)
 			return $0
 		}(UILabel())
@@ -220,7 +216,6 @@ class ThirdVC: UIViewController {
 			$0.text = "Description"
 			$0.textColor = .black
 			$0.font = MyAppFont.makeMerriweather(size: 20, weight: .Bold)
-//			$0.font = UIFont.boldSystemFont(ofSize: 20)
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			placeInfoContainerView.addSubview($0)
 			return $0
@@ -231,7 +226,6 @@ class ThirdVC: UIViewController {
 			$0.textColor = .black
 			$0.numberOfLines = 0
 			$0.font = MyAppFont.makeSourceSansPro(size: 18, weight: .Regular)
-//			$0.font = UIFont.systemFont(ofSize: 18)
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			placeInfoContainerView.addSubview($0)
 			return $0
@@ -241,7 +235,6 @@ class ThirdVC: UIViewController {
 			$0.text = "$\(place.price)"
 			$0.textColor = .appViolet
 			$0.font = MyAppFont.makeSourceSansPro(size: 30, weight: .Bold)
-//			$0.font = UIFont.boldSystemFont(ofSize: 24)
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			placeInfoContainerView.addSubview($0)
 			return $0
@@ -251,7 +244,6 @@ class ThirdVC: UIViewController {
 			$0.text = "/Package"
 			$0.textColor = .appViolet
 			$0.font = MyAppFont.makeSourceSansPro(size: 18, weight: .Bold)
-//			$0.font = UIFont.boldSystemFont(ofSize: 18)
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			placeInfoContainerView.addSubview($0)
 			return $0
@@ -261,11 +253,18 @@ class ThirdVC: UIViewController {
 			$0.setTitle("Book Now", for: .normal)
 			$0.setTitleColor(.white, for: .normal)
 			$0.titleLabel?.font = MyAppFont.makeMerriweather(size: 18, weight: .Bold)
-//			$0.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
 			$0.backgroundColor = .appViolet
-			$0.widthAnchor.constraint(equalToConstant: 160).isActive = true
-			$0.heightAnchor.constraint(equalToConstant: 50).isActive = true
-			$0.layer.cornerRadius = 25
+			
+			// добавил проверку с каким экраном мы имеем дело
+			if Constants.smallScreen {
+				$0.widthAnchor.constraint(equalToConstant: 130).isActive = true
+				$0.heightAnchor.constraint(equalToConstant: 40).isActive = true
+				$0.layer.cornerRadius = 20
+			} else {
+				$0.widthAnchor.constraint(equalToConstant: 160).isActive = true
+				$0.heightAnchor.constraint(equalToConstant: 50).isActive = true
+				$0.layer.cornerRadius = 25
+			}
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			placeInfoContainerView.addSubview($0)
 			return $0
@@ -273,7 +272,7 @@ class ThirdVC: UIViewController {
 		
 		// Активация ограничений
 		NSLayoutConstraint.activate([
-			placeInfoContainerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 270),
+			placeInfoContainerView.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: -37),
 			placeInfoContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
 			placeInfoContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 			placeInfoContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -289,7 +288,6 @@ class ThirdVC: UIViewController {
 			ratingStackView.leadingAnchor.constraint(equalTo: placeInfoContainerView.leadingAnchor, constant: 25),
 			
 			personControlStack.topAnchor.constraint(equalTo: ratingStackView.bottomAnchor, constant: 16),
-			//			personControlStack.centerXAnchor.constraint(equalTo: placeInfoContainerView.centerXAnchor),
 			personControlStack.leadingAnchor.constraint(equalTo: placeInfoContainerView.leadingAnchor, constant: 25),
 			
 			durationStackView.topAnchor.constraint(equalTo: ratingStackView.bottomAnchor, constant: 16),
@@ -304,7 +302,7 @@ class ThirdVC: UIViewController {
 			detailsLabel.trailingAnchor.constraint(equalTo: placeInfoContainerView.trailingAnchor, constant: -25),
 			
 			// $400/Package
-			priceLabel.bottomAnchor.constraint(equalTo: placeInfoContainerView.bottomAnchor, constant: -100),
+			priceLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -25),
 			priceLabel.leadingAnchor.constraint(equalTo: placeInfoContainerView.leadingAnchor, constant: 25),
 			packageLabel.leadingAnchor.constraint(equalTo: priceLabel.trailingAnchor),
 			packageLabel.centerYAnchor.constraint(equalTo: priceLabel.centerYAnchor),
@@ -314,35 +312,5 @@ class ThirdVC: UIViewController {
 			bookNowButton.centerYAnchor.constraint(equalTo: priceLabel.centerYAnchor),
 		])
 	}
-	
 }
 
-//MARK: useful
-extension ThirdVC {
-	
-	// Методы для увеличения/уменьшения числа персон
-	@objc func increasePersons() {
-		if let currentPersons = Int(personLabel.text ?? "0"), currentPersons < 10 { // Предположим, максимальное значение — 10 человек
-			personLabel.text = "\(currentPersons + 1)"
-		}
-	}
-	
-	@objc func decreasePersons() {
-		if let currentPersons = Int(personLabel.text ?? "0"), currentPersons > 1 { // Минимальное значение — 1 человек
-			personLabel.text = "\(currentPersons - 1)"
-		}
-	}
-	
-	// Функция для закрашивания звезд
-	func updateStarRating(rating: Double) {
-		let roundedRating = Int(rating.rounded())
-		
-		for i in 0..<5 {
-			if i < roundedRating {
-				ratingStackView.arrangedSubviews[i].tintColor = .appYellow
-			} else {
-				ratingStackView.arrangedSubviews[i].tintColor = .lightGray
-			}
-		}
-	}
-}
