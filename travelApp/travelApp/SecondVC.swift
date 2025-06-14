@@ -8,7 +8,8 @@
 import UIKit
 
 final class SecondVC: UIViewController {
-	var placeData: [PlaceData] = PlaceData.fillArray()
+	let networkManager = NetworkManager()
+	lazy var placeData: [PlaceData] = []
 	
 	// Коллекции
 	lazy var sliderCollectionView = UICollectionView(frame: .zero, collectionViewLayout: createSliderLayout())
@@ -23,6 +24,15 @@ final class SecondVC: UIViewController {
 		
 		// Настройка UI
 		setupUI()
+		
+		// Получение данных
+		PlaceData.fillArray(networkManager: networkManager){ [weak self] places in
+			self?.placeData = places
+			DispatchQueue.main.async {
+				self?.sliderCollectionView.reloadData()
+				self?.recommendedCollectionView.reloadData()
+			}
+		}
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
