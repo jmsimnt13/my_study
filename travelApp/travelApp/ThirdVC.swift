@@ -10,6 +10,7 @@ import UIKit
 final class ThirdVC: UIViewController {
 	
 	var placeData: PlaceData? // свойство куда передается информация о выбранном месте
+	var networkManager: NetworkManager? // свойство куда передаем ссылку на экземпляр сетевого менеджера
 	
 	// Вынос контейнеров для корректной работы функции по закраске звезд для досутпа к placeData
 	// Следует ли все контейнеры вынести в свойства???
@@ -38,13 +39,19 @@ final class ThirdVC: UIViewController {
 		
 		// Подложка в виде изображения местности
 		let backgroundImageView: UIImageView = {
-			$0.image = UIImage(named: "\(place.imageAssetName)")
+//			$0.image = UIImage(named: "\(place.imageAssetName)") установка изображения местности переехала
 			$0.contentMode = .scaleToFill
 			$0.clipsToBounds = true
 			$0.translatesAutoresizingMaskIntoConstraints = false
 			view.addSubview($0)
 			return $0
 		}(UIImageView())
+		
+		networkManager?.loadImage(urlString: placeData?.imageAssetUrl ?? "none") { image in
+			DispatchQueue.main.async {
+				backgroundImageView.image = image ?? UIImage(named: "appVillage")
+			}
+		}
 		
 		NSLayoutConstraint.activate([
 			backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),

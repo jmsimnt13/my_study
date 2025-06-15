@@ -13,7 +13,9 @@ class SliderCell: UICollectionViewCell {
 	lazy var ratingStackView = UIStackView()
 	let starImageView = UIView()
 	let ratingLabel = UILabel()
-	let heartButton = UIButton(type: .system)
+	let heartButton = UIButton()
+	// замыкание для обработки нажатия кнопки
+	var onHeartButtonTap: ((SliderCell) -> Void)?
 	
 	override init(frame: CGRect) {
 		super.init(frame: frame)
@@ -58,16 +60,13 @@ class SliderCell: UICollectionViewCell {
 		ratingStackView.addArrangedSubview(ratingLabel)
 		
 		// Heart Button
-		heartButton.backgroundColor = .white
-		heartButton.setImage(UIImage(named: "appHeartButton")?.withRenderingMode(.alwaysOriginal), for: .normal)
-		
-		//		// Установка изображения
-		//		if let image = UIImage(named: "appHeartButton") {
-		//			heartButton.setImage(image.withRenderingMode(.alwaysOriginal), for: .normal)
-		//		} else {
-		//			print("Изображение 'appHeartButton' не найдено")
-		//		}
-		
+		// Установка изображения
+		if let image = UIImage(named: "appHeartButton") {
+			heartButton.setImage(image, for: .normal)
+		} else {
+			print("Изображение 'appHeartButton' не найдено")
+		}
+		heartButton.addTarget(self, action: #selector(heartButtonIsTapped), for: .touchUpInside)
 		heartButton.layer.cornerRadius = 12
 		heartButton.clipsToBounds = true
 		heartButton.translatesAutoresizingMaskIntoConstraints = false
@@ -97,19 +96,23 @@ class SliderCell: UICollectionViewCell {
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
-	
-	func configure(with place: PlaceData) {
-//		print("Configuring cell with title: \(place.title)")
-		titleLabel.text = place.title
-		ratingLabel.text = "\(place.userMark)"
-		imageView.image = UIImage(named: "\(place.imageAssetName)")
-		ratingLabel.text = "\(place.userMark)"
-		// Заполняем цветом рейтинг
-		updateStarRating(rating: place.userMark)
-	}
 }
 
 extension SliderCell {
+	func configure(with place: PlaceData, isHeartSelected: Bool) {
+		titleLabel.text = place.title
+		ratingLabel.text = "\(place.userMark)"
+//		imageView.image = UIImage(named: "\(place.imageAssetName)") // устанока изображения переехала 
+		ratingLabel.text = "\(place.userMark)"
+		// Заполняем цветом рейтинг
+		updateStarRating(rating: place.userMark)
+		
+		// Загружаем состояни
+		heartButton.isSelected = isHeartSelected
+		
+		// Кнопка выглядит иначе в завимисимости от нахождения в избранном
+		heartButton.backgroundColor = isHeartSelected ? .appYellow : .white
+	}
 	
 	// Функция для закрашивания звезд
 	func updateStarRating(rating: Double) {
@@ -124,4 +127,17 @@ extension SliderCell {
 		}
 	}
 	
+	// Сохранение состояния кнопки
+	func buttonTapped(_ sender: UIButton) {
+		//Переключение состояния
+		sender.isSelected.toggle()
+		
+		//Сохранение сосотяния в UserDefaults
+		UserDefaults.standard.set(sender.isSelected, forKey: "isButtonSelected")
+	}
+	
+	@objc func heartButtonIsTapped() {
+		print("Heart button is tapped!")
+		onHeartButtonTap?(self)
+	}
 }

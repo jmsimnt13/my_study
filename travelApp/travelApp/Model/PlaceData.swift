@@ -29,7 +29,7 @@ struct PlaceData {
 	var userMark: Double
 	let price: Int
 	let durationInDays: Int
-	let imageAssetName: String
+	let imageAssetUrl: String
 	
 	// Заполнение массива мест
 	static func fillArray(networkManager: NetworkManager, completion: @escaping ([PlaceData]) -> Void) {

@@ -7,10 +7,13 @@
 
 import Foundation
 
-struct Responce: Decodable {
-//	let imageUrls: ImageUrls?
+struct ResponceGeoapify: Decodable {
 	let type: String // "type": "FeatureCollection",
 	let features: [Place]
+}
+
+struct ResponceUnsplash: Decodable {
+	let urls: ImageUrls
 }
 
 struct ImageUrls: Decodable {

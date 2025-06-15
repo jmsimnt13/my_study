@@ -61,7 +61,34 @@ extension SecondVC: UICollectionViewDataSource {
 		switch type {
 		case .horizontal:
 			let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SliderCell", for: indexPath) as! SliderCell
-			cell.configure(with: placeData[indexPath.row])
+			// создаем идентификатор
+			let heartButtonKeySlider = "heartButtonStateSlider_\(indexPath.item)"
+			// загрузка состояня из UserDefaults
+			let isHeartSelected = UserDefaults.standard.bool(forKey: heartButtonKeySlider)
+			// обработка нажатия кнопки
+			cell.onHeartButtonTap = {
+				print(indexPath)
+				// находим индекс ячейки
+				if let index = collectionView.indexPath(for: $0)?.item {
+					// инверсия состояния кнопки
+					let newState = !UserDefaults.standard.bool(forKey: "heartButtonStateSlider_\(index)")
+					// сохранение нового состояния
+					UserDefaults.standard.set(newState, forKey: "heartButtonStateSlider_\(index)")
+					if UserDefaults.standard.bool(forKey: "heartButtonStateSlider_\(index)") {
+						print("Ячейка \(self.placeData[indexPath.row].title) добавлена в избранное")
+					} else {
+						print("Ячейка \(self.placeData[indexPath.row].title) удалена из избранного")
+					}
+					// перегружаем ячейку для обновления вида
+					collectionView.reloadItems(at: [IndexPath(item: index, section: 0)])
+				}
+			}
+			networkManager.loadImage(urlString: placeData[indexPath.row].imageAssetUrl) { image in
+				DispatchQueue.main.async {
+					cell.imageView.image = image ?? UIImage(named: "appVillage")
+				}
+			}
+			cell.configure(with: placeData[indexPath.row], isHeartSelected: isHeartSelected)
 			return cell
 		case .vertical:
 			let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RecommendedCell", for: indexPath) as! RecommendedCell
@@ -85,6 +112,11 @@ extension SecondVC: UICollectionViewDataSource {
 					}
 					// перегружаем ячейку для обновления вида
 					collectionView.reloadItems(at: [IndexPath(item: index, section: 0)])
+				}
+			}
+			networkManager.loadImage(urlString: placeData[indexPath.row].imageAssetUrl) { image in
+				DispatchQueue.main.async {
+					cell.imageView.image = image ?? UIImage(named: "appVillage")
 				}
 			}
 			cell.configure(with: placeData[indexPath.row], isHeartSelected: isHeartSelected)
@@ -127,10 +159,12 @@ extension SecondVC: UICollectionViewDelegate {
 		print("IndexPath = \(indexPath.row)")
 		// получаем данные для выбранной ячейки
 		let selectedPlace = placeData[indexPath.row] // поместили в константу данные о текущей карточке
+		let networkManagerToThirdVC = networkManager
 		
 		// создаем экземпляр ThirdVC с передачей туда данных
 		let thirdVC = ThirdVC()
 		thirdVC.placeData = selectedPlace
+		thirdVC.networkManager = networkManagerToThirdVC
 		
 		// переключение на ThirdVC
 		navigationController?.pushViewController(thirdVC, animated: true)

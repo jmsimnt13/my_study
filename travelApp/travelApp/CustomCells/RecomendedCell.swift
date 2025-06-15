@@ -67,13 +67,6 @@ class RecommendedCell: UICollectionViewCell {
 		} else {
 			print("Изображение 'appHeartButton' не найдено")
 		}
-		
-//		// Установка изображения
-//		if let image = UIImage(named: "appHeartButton") {
-//			heartButton.setImage(image.withRenderingMode(.alwaysOriginal), for: .normal)
-//		} else {
-//			print("Изображение 'appHeartButton' не найдено")
-//		}
 		heartButton.addTarget(self, action: #selector(heartButtonIsTapped), for: .touchUpInside)
 		heartButton.layer.cornerRadius = 10
 		heartButton.clipsToBounds = true
@@ -95,7 +88,6 @@ class RecommendedCell: UICollectionViewCell {
 			ratingStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
 			
 			heartButton.centerYAnchor.constraint(equalTo: imageView.bottomAnchor),
-//			heartButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor, constant: -15),
 			heartButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
 			heartButton.widthAnchor.constraint(equalToConstant: 20),
 			heartButton.heightAnchor.constraint(equalToConstant: 20)
@@ -108,6 +100,20 @@ class RecommendedCell: UICollectionViewCell {
 }
 
 extension RecommendedCell {
+	func configure(with place: PlaceData, isHeartSelected: Bool) {
+		titleLabel.text = place.title
+		ratingLabel.text = "\(place.userMark)"
+//		imageView.image = UIImage(named: "\(place.imageAssetName)") // устанока изображения переехала 
+		ratingLabel.text = "\(place.userMark)"
+		// Заполняем цветом рейтинг
+		updateStarRating(rating: place.userMark)
+		
+		// Загружаем состояние
+		heartButton.isSelected = isHeartSelected
+		
+		// Кнопка выглядит иначе в зависимости от нахождения в избранном
+		heartButton.backgroundColor = isHeartSelected ? .appYellow : .white
+	}
 	
 	// Функция для закрашивания звезд
 	func updateStarRating(rating: Double) {
@@ -123,27 +129,12 @@ extension RecommendedCell {
 	}
 	
 	// Сохранение состояния кнопки
-	@IBAction func buttonTapped(_ sender: UIButton) {
+	func buttonTapped(_ sender: UIButton) {
 		//Переключение состояния
 		sender.isSelected.toggle()
 		
 		//Сохранение состояния в UserDefaults
 		UserDefaults.standard.set(sender.isSelected, forKey: "isButtonSelected")
-	}
-	
-	func configure(with place: PlaceData, isHeartSelected: Bool) {
-		titleLabel.text = place.title
-		ratingLabel.text = "\(place.userMark)"
-		imageView.image = UIImage(named: "\(place.imageAssetName)")
-		ratingLabel.text = "\(place.userMark)"
-		// Заполняем цветом рейтинг
-		updateStarRating(rating: place.userMark)
-		
-		// Загружаем состояние
-		heartButton.isSelected = isHeartSelected
-		
-		// Кнопка выглядит иначе в зависимости от нахождения в избранном
-		heartButton.backgroundColor = isHeartSelected ? .appYellow : .white
 	}
 	
 	@objc func heartButtonIsTapped() {
