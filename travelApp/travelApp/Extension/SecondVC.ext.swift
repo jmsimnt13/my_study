@@ -83,11 +83,17 @@ extension SecondVC: UICollectionViewDataSource {
 					collectionView.reloadItems(at: [IndexPath(item: index, section: 0)])
 				}
 			}
-			networkManager.loadImage(urlString: placeData[indexPath.row].imageAssetUrl) { image in
+			// NEW
+			networkManager?.loadImage(urlString: placeData[indexPath.row].imageAssetUrl, name: placeData[indexPath.row].title) { image in
 				DispatchQueue.main.async {
-					cell.imageView.image = image ?? UIImage(named: "appVillage")
+					if collectionView.indexPathsForVisibleItems.contains(indexPath) {
+						if let updateCell = collectionView.cellForItem(at: indexPath) as? SliderCell {
+							updateCell.imageView.image = image ?? UIImage(named: "appVillage")
+						}
+					}
 				}
 			}
+			// NEW
 			cell.configure(with: placeData[indexPath.row], isHeartSelected: isHeartSelected)
 			return cell
 		case .vertical:
@@ -114,11 +120,17 @@ extension SecondVC: UICollectionViewDataSource {
 					collectionView.reloadItems(at: [IndexPath(item: index, section: 0)])
 				}
 			}
-			networkManager.loadImage(urlString: placeData[indexPath.row].imageAssetUrl) { image in
+			// NEW
+			networkManager?.loadImage(urlString: placeData[indexPath.row].imageAssetUrl, name: placeData[indexPath.row].title) { image in
 				DispatchQueue.main.async {
-					cell.imageView.image = image ?? UIImage(named: "appVillage")
+					if collectionView.indexPathsForVisibleItems.contains(indexPath) {
+						if let updateCell = collectionView.cellForItem(at: indexPath) as? RecommendedCell {
+							updateCell.imageView.image = image ?? UIImage(named: "appVillage")
+						}
+					}
 				}
 			}
+			// NEW
 			cell.configure(with: placeData[indexPath.row], isHeartSelected: isHeartSelected)
 			return cell
 		}

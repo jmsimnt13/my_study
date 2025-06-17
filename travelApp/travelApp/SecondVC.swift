@@ -8,7 +8,7 @@
 import UIKit
 
 final class SecondVC: UIViewController {
-	let networkManager = NetworkManager()
+	var networkManager: NetworkManager?
 	lazy var placeData: [PlaceData] = []
 	
 	// Коллекции
@@ -26,7 +26,7 @@ final class SecondVC: UIViewController {
 		setupUI()
 		
 		// Получение данных
-		PlaceData.fillArray(networkManager: networkManager){ [weak self] places in
+		PlaceData.fillArray(networkManager: networkManager ?? NetworkManager()){ [weak self] places in
 			self?.placeData = places
 			DispatchQueue.main.async {
 				self?.sliderCollectionView.reloadData()

@@ -8,6 +8,7 @@
 import UIKit
 
 final class ViewController: UIViewController {
+	let networkManagerToSecondVC = NetworkManager()
 	// UI элементы
 	// Главное изображение
 	private let imageView: UIImageView = {
@@ -125,6 +126,7 @@ Enjoy the best expirience with us!
 	// Функция для осуществления действия
 	@objc private func nextBtnTupped() {
 		let secondVC = SecondVC()
+		secondVC.networkManager = networkManagerToSecondVC
 		secondVC.modalPresentationStyle = .fullScreen
 		navigationController?.pushViewController(secondVC, animated: true)
 //		UIView.transition(with: self.view.window!, duration: 0.5, options: .transitionCrossDissolve, animations: {

@@ -47,7 +47,7 @@ final class ThirdVC: UIViewController {
 			return $0
 		}(UIImageView())
 		
-		networkManager?.loadImage(urlString: placeData?.imageAssetUrl ?? "none") { image in
+		networkManager?.loadImage(urlString: placeData?.imageAssetUrl ?? "none", name: placeData?.title ?? "none") { image in
 			DispatchQueue.main.async {
 				backgroundImageView.image = image ?? UIImage(named: "appVillage")
 			}
