@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		83A433022E0872A900D00D61 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 83A433012E0872A900D00D61 /* Kingfisher */; };
+		83A433052E0873F000D00D61 /* netfox in Frameworks */ = {isa = PBXBuildFile; productRef = 83A433042E0873F000D00D61 /* netfox */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		83A30D972DD2770F00371E74 /* travelApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = travelApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +41,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83A433052E0873F000D00D61 /* netfox in Frameworks */,
+				83A433022E0872A900D00D61 /* Kingfisher in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +85,8 @@
 			);
 			name = travelApp;
 			packageProductDependencies = (
+				83A433012E0872A900D00D61 /* Kingfisher */,
+				83A433042E0873F000D00D61 /* netfox */,
 			);
 			productName = travelApp;
 			productReference = 83A30D972DD2770F00371E74 /* travelApp.app */;
@@ -107,6 +116,10 @@
 			);
 			mainGroup = 83A30D8E2DD2770F00371E74;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				83A433002E0872A800D00D61 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				83A433032E0873F000D00D61 /* XCRemoteSwiftPackageReference "netfox" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 83A30D982DD2770F00371E74 /* Products */;
 			projectDirPath = "";
@@ -341,6 +354,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		83A433002E0872A800D00D61 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.3.3;
+			};
+		};
+		83A433032E0873F000D00D61 /* XCRemoteSwiftPackageReference "netfox" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kasketis/netfox";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.21.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		83A433012E0872A900D00D61 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 83A433002E0872A800D00D61 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+		83A433042E0873F000D00D61 /* netfox */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 83A433032E0873F000D00D61 /* XCRemoteSwiftPackageReference "netfox" */;
+			productName = netfox;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 83A30D8F2DD2770F00371E74 /* Project object */;
 }

@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import Kingfisher
 
 // 1 - url куда мы будем отправлять запрос
 // 2 - ключ доступа
@@ -14,22 +15,25 @@ import UIKit
 
 // 4 - выполнить запрос
 //client_id
+
 class NetworkManager {
-	let apiKeyForUnsplash: String = "5rXeAnsgJrCwDiFAQC5QRvvp3cDk3yliR_LMWh1MSJI"
-	let apiKeyForGeoapify: String = "f680f379bcf149a783f5858ad873466a"
-	let urlForUnsplash: String = "https://api.unsplash.com"
-	let urlForGeoapify: String = "https://api.geoapify.com"
-	let filterFieldForGeo: String = "circle:12.4924,41.8902,50000"
-	let limitForGeo: String = "5"
+	static let networkManagerShared = NetworkManager()
 	
-	let imageCache = NSCache<NSString, UIImage>()
+	private let apiKeyForUnsplash: String = "5rXeAnsgJrCwDiFAQC5QRvvp3cDk3yliR_LMWh1MSJI"
+	private let apiKeyForGeoapify: String = "f680f379bcf149a783f5858ad873466a"
+	private let urlForUnsplash: String = "https://api.unsplash.com"
+	private let urlForGeoapify: String = "https://api.geoapify.com"
+	private let filterFieldForGeo: String = "circle:12.4924,41.8902,50000"
+	private let limitForGeo: String = "6"
+	
+	private init() {}
 	
 	/// photos/random
 	/// /v2/places?
 	/// https://api.geoapify.com/v2/places?categories=tourism.sights&filter=circle:12.4924,41.8902,10000&limit=10&apiKey=f680f379bcf149a783f5858ad873466a
 	///  https://api.geoapify.com/v2/places?categories=tourism.sights&filter=circle:92.872586,56.0091173,750000&bias=proximity:92.872586,56.0091173&limit=20&apiKey=YOUR_API_KEY
 	/// разобраться как прикрутить изображение по этому url к моему изображению https://images.unsplash.com/photo-1657566638409-f7fa1a761b42?crop=entropy\u0026cs=tinysrgb\u0026fit=max\u0026fm=jpg\u0026ixid=M3w3NjI2ODd8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NDk5NzM3NTh8\u0026ixlib=rb-4.1.0\u0026q=80\u0026w=1080
-
+	
 	func fetchPlaces(completion: @escaping ([PlaceData]) -> Void) {
 		var urlComponentsGeoapify = URLComponents(string: urlForGeoapify)
 		urlComponentsGeoapify?.path = "/v2/places"
@@ -42,7 +46,7 @@ class NetworkManager {
 		
 		guard let url = urlComponentsGeoapify?.url else {
 			print("invalid url")
-			return
+			return completion([])
 		}
 		
 		var request = URLRequest(url: url)
@@ -66,10 +70,10 @@ class NetworkManager {
 				return
 			}
 			
-//			// отладка json'a
-//			if let jsonString = String(data: data, encoding: .utf8) {
-//				print("JSON Response: \(jsonString)")
-//			}
+			//			// отладка json'a
+			//			if let jsonString = String(data: data, encoding: .utf8) {
+			//				print("JSON Response: \(jsonString)")
+			//			}
 			
 			do {
 				let result = try JSONDecoder().decode(ResponceGeoapify.self, from: data)
@@ -108,100 +112,93 @@ class NetworkManager {
 				}
 			} catch {
 				print("Decoding error: \(error.localizedDescription)")
+				return completion([])
 			}
 		}.resume()
 	}
 	
 	func fetchImage(query: String, completion: @escaping (String?) -> Void) {
-		if let cachedImage = imageCache.object(forKey: query as NSString) {
-			print("Image will load from cache for: \(query)")
+		guard var urlComponents = URLComponents(string: urlForUnsplash)  else {
 			completion(nil)
 			return
-		} else {
-			
-			guard var urlComponents = URLComponents(string: urlForUnsplash)  else {
-				completion(nil)
-				return
-			}
-			
-			urlComponents.path = "/photos/random"
-			
-			var components = urlComponents
-			components.queryItems = [
-				URLQueryItem(name: "client_id", value: apiKeyForUnsplash),
-				URLQueryItem(name: "query", value: query),
-				URLQueryItem(name: "orientation", value: "landscape")
-			]
-			
-			guard let url = components.url else {
-				completion(nil)
-				return
-			}
-			
-			var request = URLRequest(url: url)
-			request.httpMethod = "GET"
-			
-			URLSession.shared.dataTask(with: url) { data, resp, err in
-				guard err == nil else {
-					print(err!.localizedDescription)
-					completion(nil)
-					return
-				}
-				
-				guard let httpResponse = resp as? HTTPURLResponse else {
-					print("Invalid response from Unsplash")
-					return
-				}
-				
-				print("HTTP Status Code Unsplash: \(httpResponse.statusCode)")
-				
-				guard let data else {
-					completion(nil)
-					return
-				}
-				
-				//			отладка json'a
-				//			if let jsonString = String(data: data, encoding: .utf8) {
-				//				print("JSON Response from Unsplash: \(jsonString)")
-				//			}
-				
-				do {
-					let result = try JSONDecoder().decode(ResponceUnsplash.self, from: data)
-					completion(result.urls.regular)
-				} catch {
-					print("Unsplash decoding error: \(error.localizedDescription)")
-					completion(nil)
-				}
-			}.resume()
 		}
+		
+		urlComponents.path = "/photos/random"
+		
+		var components = urlComponents
+		components.queryItems = [
+			URLQueryItem(name: "client_id", value: apiKeyForUnsplash),
+			URLQueryItem(name: "query", value: query),
+			URLQueryItem(name: "orientation", value: "landscape")
+		]
+		
+		guard let url = components.url else {
+			completion(nil)
+			return
+		}
+		
+		var request = URLRequest(url: url)
+		request.httpMethod = "GET"
+		
+		URLSession.shared.dataTask(with: url) { data, resp, err in
+			guard err == nil else {
+				print(err!.localizedDescription)
+				completion(nil)
+				return
+			}
+			
+			guard let httpResponse = resp as? HTTPURLResponse else {
+				print("Invalid response from Unsplash")
+				return
+			}
+			
+			print("HTTP Status Code Unsplash: \(httpResponse.statusCode)")
+			
+			guard let data else {
+				completion(nil)
+				return
+			}
+			
+			//			отладка json'a
+			//			if let jsonString = String(data: data, encoding: .utf8) {
+			//				print("JSON Response from Unsplash: \(jsonString)")
+			//			}
+			
+			do {
+				let result = try JSONDecoder().decode(ResponceUnsplash.self, from: data)
+				completion(result.urls.regular)
+			} catch {
+				print("Unsplash decoding error: \(error.localizedDescription)")
+				completion(nil)
+			}
+		}.resume()
 	}
 	
 	func loadImage(urlString: String, name: String, completion: @escaping (UIImage?) -> Void) {
 		print("Load image for \(name)")
-		
-		if let cachedImage = imageCache.object(forKey: name as NSString) {
-			print("Image loaded from cache: \(name)")
+		print("Check Kingfisher...")
+		if let cachedImage = KingfisherManager.shared.cache.retrieveImageInMemoryCache(forKey: urlString) {
+			print("\(name) will load from cache")
 			completion(cachedImage)
 			return
-		} else {
-			guard let url = URL(string: urlString) else {
+		}
+		
+		guard let url = URL(string: urlString) else {
+			print("Wrong URL for Unsplash...")
+			completion(nil)
+			return
+		}
+		
+		KingfisherManager.shared.retrieveImage(with: url) { result in
+			switch result {
+			case .success(let value):
+				print("Image \(name) loaded successfully")
+				completion(value.image)
+			case .failure(let error):
+				print("There is an error for \(name): \(error.localizedDescription)")
 				completion(nil)
-				return
 			}
-			
-			print("Downloading image from URL: \(urlString)")
-			URLSession.shared.dataTask(with: url) { data, resp, err in
-				guard let data = data, err == nil else {
-					print("There is problem with data")
-					completion(nil)
-					return
-				}
-				let image = UIImage(data: data)
-				self.imageCache.setObject(image!, forKey: name as NSString)
-				DispatchQueue.main.async {
-					completion(image)
-				}
-			}.resume()
 		}
 	}
+	
 }

@@ -30,11 +30,4 @@ struct PlaceData {
 	let price: Int
 	let durationInDays: Int
 	let imageAssetUrl: String
-	
-	// Заполнение массива мест
-	static func fillArray(networkManager: NetworkManager, completion: @escaping ([PlaceData]) -> Void) {
-		networkManager.fetchPlaces { places in
-			completion(places)
-		}
-	}
 }
